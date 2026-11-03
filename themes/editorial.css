@@ -126,6 +126,12 @@
     --text-min-ratio: var(--ratio-minor-third);
     --text-max-ratio: var(--ratio-perfect-fourth);
 
+    /* Display sizes for hero statement headlines */
+    --display-min-size:  44;
+    --display-max-size:  96;
+    --display-s-min-size: 34;
+    --display-s-max-size: 64;
+
     /* Spacing scale */
     --space-min-size:  16;
     --space-max-size:  20;

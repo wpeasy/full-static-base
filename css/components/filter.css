@@ -1,0 +1,82 @@
+/* ==========================================================================
+   FILTER  ·  .filter
+   Elements: __toolbar  __search  __tags  __chip  __status  __grid  __item  __empty
+   Search field + toggle chips + a grid of items (js/grid-filter.js, Alpine `gridFilter`).
+   Items are hidden with the `hidden` attribute, so `.filter__item[hidden]` must stay display:none.
+   A11y: chips are <button aria-pressed>; __status is a polite live region; the toolbar is
+   x-cloak because it does nothing without JS (all items stay visible).
+   Reduced motion: no movement is defined here; the script skips Flip under `reduce`.
+   ========================================================================== */
+
+@layer components {
+  .filter {
+    --filter-gap: var(--space-m);
+    --filter-chip-bg: var(--color-surface-alt);
+    --filter-chip-bg-active: var(--color-primary);
+    --filter-chip-text-active: var(--color-on-primary);
+
+    display: grid;
+    gap: var(--filter-gap);
+  }
+
+  .filter__toolbar {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: end;
+    gap: var(--space-s) var(--space-m);
+  }
+
+  .filter__search { flex: 1 1 16rem; max-inline-size: 28rem; }
+
+  .filter__tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2xs);
+  }
+
+  .filter__chip {
+    padding: var(--space-2xs) var(--space-s);
+    color: var(--color-text);
+    background-color: var(--filter-chip-bg);
+    border: var(--border-width) solid var(--color-border);
+    border-radius: var(--radius-full);
+    font: inherit;
+    font-size: var(--text-s);
+    cursor: pointer;
+    transition: background-color var(--transition), border-color var(--transition);
+  }
+  .filter__chip:hover { border-color: var(--color-border-strong); }
+  .filter__chip[aria-pressed="true"] {
+    color: var(--filter-chip-text-active);
+    background-color: var(--filter-chip-bg-active);
+    border-color: var(--filter-chip-bg-active);
+  }
+
+  .filter__status {
+    flex-basis: 100%;
+    margin: 0;
+    color: var(--color-text-muted);
+    font-size: var(--text-s);
+  }
+
+  .filter__grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(min(100%, var(--grid-min, 14rem)), 1fr));
+    gap: var(--filter-gap);
+    padding: 0;
+    margin: 0;
+    list-style: none;
+  }
+
+  .filter__item[hidden] { display: none; }
+
+  .filter__empty {
+    padding: var(--space-l);
+    margin: 0;
+    color: var(--color-text-muted);
+    text-align: center;
+    border: var(--border-width) dashed var(--color-border);
+    border-radius: var(--radius-card);
+  }
+  .filter__empty[hidden] { display: none; }
+}

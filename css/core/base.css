@@ -98,7 +98,10 @@
   pre code { padding: 0; background: none; }
 
   ul, ol { padding-inline-start: 1.25em; }
-  li + li { margin-block-start: var(--space-3xs); }
+  /* Plain content lists only. A bare `li + li` also offset every item but the first when a
+     classed list (nav, chips, badges) was laid out as a row with flex/grid. Classed lists
+     set their own spacing; .prose has its own rule. */
+  :is(ul, ol):not([class]) > li + li { margin-block-start: var(--space-3xs); }
 
   table { width: 100%; }
   th, td { padding: var(--space-xs) var(--space-s); text-align: start; border-bottom: var(--border-width) solid var(--color-border); }

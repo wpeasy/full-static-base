@@ -10,7 +10,10 @@
   <script src="js/theme-init.js"></script>
   <link rel="stylesheet" href="css/main.css">
 
+  <script src="js/vendor/gsap.min.js?v=3.13.0" defer></script>
+  <script src="js/vendor/Flip.min.js?v=3.13.0" defer></script>
   <script src="js/components.js" defer></script>
+  <script src="js/grid-filter.js" defer></script>
   <script src="js/vendor/alpine.min.js" defer></script>
 </head>
 <body>
@@ -257,6 +260,52 @@
               </div>
             </template>
           </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="filter">
+      <div class="container stack stack--l">
+        <header class="section-header">
+          <p class="section-header__eyebrow">Pattern</p>
+          <h2>Filterable grid</h2>
+          <p class="section-header__lead">Search and topic chips; GSAP Flip animates the changes unless reduced motion is on.</p>
+        </header>
+        <div class="filter" x-data="gridFilter">
+          <div class="filter__toolbar" x-cloak>
+            <div class="field filter__search">
+              <label class="field__label" for="filter-search">Search topics</label>
+              <input class="field__input" id="filter-search" type="search" autocomplete="off" @input="setQuery($event.target.value)">
+            </div>
+            <div class="filter__tags" role="group" aria-label="Filter by topic">
+              <button class="filter__chip" type="button" :aria-pressed="tag === 'all'" @click="setTag('all')">All</button>
+              <button class="filter__chip" type="button" :aria-pressed="tag === 'design'" @click="setTag('design')">Design</button>
+              <button class="filter__chip" type="button" :aria-pressed="tag === 'accessibility'" @click="setTag('accessibility')">Accessibility</button>
+              <button class="filter__chip" type="button" :aria-pressed="tag === 'motion'" @click="setTag('motion')">Motion</button>
+            </div>
+            <p class="filter__status" role="status" aria-live="polite" x-text="status"></p>
+          </div>
+          <ul class="filter__grid" x-ref="grid">
+            <li class="filter__item" data-tags="design" :hidden="!matches($el, query, tag)">
+              <article class="card card--raised"><div class="card__body"><h3 class="card__title">Colour ramps</h3><p class="card__text">Ten steps of light, dark and alpha.</p></div></article>
+            </li>
+            <li class="filter__item" data-tags="design" :hidden="!matches($el, query, tag)">
+              <article class="card card--raised"><div class="card__body"><h3 class="card__title">Fluid type</h3><p class="card__text">Sizes that scale between two viewports.</p></div></article>
+            </li>
+            <li class="filter__item" data-tags="accessibility" :hidden="!matches($el, query, tag)">
+              <article class="card card--raised"><div class="card__body"><h3 class="card__title">Focus rings</h3><p class="card__text">Visible on every interactive element.</p></div></article>
+            </li>
+            <li class="filter__item" data-tags="accessibility" :hidden="!matches($el, query, tag)">
+              <article class="card card--raised"><div class="card__body"><h3 class="card__title">Contrast pairs</h3><p class="card__text">Text colours chosen from luminance.</p></div></article>
+            </li>
+            <li class="filter__item" data-tags="motion" :hidden="!matches($el, query, tag)">
+              <article class="card card--raised"><div class="card__body"><h3 class="card__title">Reduced motion</h3><p class="card__text">Movement only when it is welcome.</p></div></article>
+            </li>
+            <li class="filter__item" data-tags="motion" :hidden="!matches($el, query, tag)">
+              <article class="card card--raised"><div class="card__body"><h3 class="card__title">Flip animation</h3><p class="card__text">Cards glide to their new places.</p></div></article>
+            </li>
+          </ul>
+          <p class="filter__empty" hidden :hidden="count > 0">No topics match. Try a different search or topic.</p>
         </div>
       </div>
     </section>

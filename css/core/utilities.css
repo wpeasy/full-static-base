@@ -130,7 +130,9 @@
      on it stays readable with no extra CSS. They also work in dark mode.
 
        u-surface-1 / -2 / -3   neutral steps: page, alt, sunken
-       u-surface-accent        soft tint of the primary colour
+       u-surface-accent        soft tint of the primary colour; set --accent-bg, --accent-text, --accent-heading,
+                               --accent-muted, --accent-link(-hover), --accent-border, --accent-button(-hover),
+                               --accent-on-button in the theme to re-point it (e.g. a fixed light block)
        u-surface-primary       solid primary
        u-surface-secondary     solid secondary
        u-surface-inverse       opposite of the page theme (dark on light, light on dark)
@@ -142,16 +144,16 @@
   .u-surface-1, .u-surface-2, .u-surface-3 { color: var(--color-text); }
 
   .u-surface-accent {
-    --surface-bg: light-dark(var(--primary-light-9), var(--primary-dark-8));
-    --surface-text: light-dark(var(--primary-dark-8), var(--primary-light-9));
-    --surface-heading: light-dark(var(--primary-dark-9), var(--primary-light-10));
-    --surface-muted: light-dark(var(--primary-dark-5), var(--primary-light-6));
-    --surface-link: light-dark(var(--primary), var(--primary-light-4));
-    --surface-link-hover: light-dark(var(--primary-dark-3), var(--primary-light-6));
-    --surface-border: light-dark(var(--primary-light-7), var(--primary-dark-5));
-    --surface-button: light-dark(var(--primary), var(--primary-light-2));
-    --surface-button-hover: light-dark(var(--primary-dark-2), var(--primary-light-4));
-    --surface-on-button: var(--white);
+    --surface-bg: var(--accent-bg, light-dark(var(--primary-light-9), var(--primary-dark-8)));
+    --surface-text: var(--accent-text, light-dark(var(--primary-dark-8), var(--primary-light-9)));
+    --surface-heading: var(--accent-heading, light-dark(var(--primary-dark-9), var(--primary-light-10)));
+    --surface-muted: var(--accent-muted, light-dark(var(--primary-dark-5), var(--primary-light-6)));
+    --surface-link: var(--accent-link, light-dark(var(--primary), var(--primary-light-4)));
+    --surface-link-hover: var(--accent-link-hover, light-dark(var(--primary-dark-3), var(--primary-light-6)));
+    --surface-border: var(--accent-border, light-dark(var(--primary-light-7), var(--primary-dark-5)));
+    --surface-button: var(--accent-button, light-dark(var(--primary), var(--primary-light-2)));
+    --surface-button-hover: var(--accent-button-hover, light-dark(var(--primary-dark-2), var(--primary-light-4)));
+    --surface-on-button: var(--accent-on-button, var(--white));
   }
   .u-surface-primary {
     --surface-bg: light-dark(var(--primary), var(--primary-dark-2));

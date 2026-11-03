@@ -26,6 +26,7 @@ All semantic colours are `light-dark(light, dark)`; they flip with `data-theme` 
 | Token | Notes |
 |---|---|
 | `--text-2xs … --text-5xl` | fluid; `--text-m` is body. Steps -3…6 of the type ratio |
+| `--text-display` `--text-display-s` | fluid hero statement sizes; set `--display-(s-)min/max-size` (px) in the theme, no ratio |
 | `--font-body` `--font-heading` `--font-mono` | stacks |
 | `--weight-body/medium/heading/bold` | |
 | `--leading-body` `--leading-heading` `--tracking-body` `--tracking-heading` | |
@@ -57,7 +58,7 @@ Ratios (theme): `--ratio-minor-second 1.067 · major-second 1.125 · minor-third
 
 ## Surfaces (utilities)
 
-`u-surface-1 | 2 | 3 | accent | primary | secondary | inverse`: set background and re-point `--color-text/-muted`, `--color-h1…h6`, `--color-link(-hover)`, `--color-border`, `--color-primary*` for everything inside. Don't nest colour surfaces.
+`u-surface-1 | 2 | 3 | accent | primary | secondary | inverse` (accent is re-pointable with theme `--accent-bg/-text/-heading/-muted/-link/-border/-button…`): set background and re-point `--color-text/-muted`, `--color-h1…h6`, `--color-link(-hover)`, `--color-border`, `--color-primary*` for everything inside. Don't nest colour surfaces.
 
 ## Utilities (prefix `u-`)
 

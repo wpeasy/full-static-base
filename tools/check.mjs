@@ -12,7 +12,11 @@ import { fileURLToPath } from 'node:url';
 
 const root = join(dirname(fileURLToPath(import.meta.url)), '..');
 const findings = [];
-const report = (level, file, line, message) => findings.push({ level, file: relative(root, file), line, message });
+const report = (level, file, line, message) => {
+  const f = { level, file: relative(root, file), line, message };
+  // The same finding can come from more than one pass (see variantPasses): report it once
+  if (!findings.some((x) => x.level === f.level && x.file === f.file && x.line === f.line && x.message === f.message)) findings.push(f);
+};
 const error = (...a) => report('error', ...a);
 const warn = (...a) => report('warn', ...a);
 
@@ -159,117 +163,140 @@ function stripTemplates(html) {
   return out;
 }
 
+// Pages may hold alternative designs side by side: <div data-variant="a">…</div><div data-variant="b">…</div>.
+// Each variant is checked on its own with the others blanked, so one <h1>, unique ids and heading
+// order hold per variant. Pages without data-variant get a single pass.
+function variantPasses(html) {
+  const blocks = [];
+  for (const m of html.matchAll(/<([a-z][a-z0-9]*)\b[^>]*\sdata-variant="([^"]+)"[^>]*>/gi)) {
+    const tag = new RegExp(`<(/?)${m[1]}\\b[^>]*>`, 'gi');
+    tag.lastIndex = m.index;
+    let depth = 0, end = html.length, t;
+    while ((t = tag.exec(html))) {
+      depth += t[1] ? -1 : 1;
+      if (!depth) { end = tag.lastIndex; break; }
+    }
+    blocks.push({ id: m[2], start: m.index, end });
+  }
+  const ids = [...new Set(blocks.map((b) => b.id))];
+  if (!ids.length) return [html];
+  return ids.map((id) => blocks.filter((b) => b.id !== id).reduce((out, b) => out.slice(0, b.start) + blank(out.slice(b.start, b.end)) + out.slice(b.end), html));
+}
+
 const htmlFiles = readdirSync(root).filter((f) => f.endsWith('.html')).map((f) => join(root, f));
 const sharedParts = {};
 const normalise = (s) => s.replace(/\s+/g, ' ').replace(/ aria-current="page"/g, '').replace(/nav__link--current/g, '').replace(/class="nav__link\s+"/g, 'class="nav__link"').trim();
 
 for (const file of htmlFiles) {
   const original = readFileSync(file, 'utf8');
-  const html = stripTemplates(original.replace(/<!--[\s\S]*?-->/g, blank));
-  const isGuide = /data-page="styleguide"/.test(html);
-  const here = (re) => { const m = html.match(re); return m ? lineOf(html, m.index) : 1; };
+  const base = stripTemplates(original.replace(/<!--[\s\S]*?-->/g, blank));
+  for (const html of variantPasses(base)) {
+    const isGuide = /data-page="styleguide"/.test(html);
+    const here = (re) => { const m = html.match(re); return m ? lineOf(html, m.index) : 1; };
 
-  if (!/^\s*<!doctype html>/i.test(html)) error(file, 1, 'missing <!doctype html>');
-  if (!/<html[^>]*\blang="[a-z]/i.test(html)) error(file, 1, '<html> needs a lang attribute');
-  const title = html.match(/<title>([^<]*)<\/title>/i);
-  if (!title || !title[1].trim()) error(file, 1, 'missing or empty <title>');
-  const viewport = html.match(/<meta[^>]*name="viewport"[^>]*>/i);
-  if (!viewport) error(file, 1, 'missing viewport meta');
-  else if (/user-scalable\s*=\s*(no|0)|maximum-scale\s*=\s*1(\.0)?\b/i.test(viewport[0])) error(file, here(/name="viewport"/), 'viewport must not disable zoom');
-  if (!isGuide && !/<meta[^>]*name="description"/i.test(html)) error(file, 1, 'missing meta description');
+    if (!/^\s*<!doctype html>/i.test(html)) error(file, 1, 'missing <!doctype html>');
+    if (!/<html[^>]*\blang="[a-z]/i.test(html)) error(file, 1, '<html> needs a lang attribute');
+    const title = html.match(/<title>([^<]*)<\/title>/i);
+    if (!title || !title[1].trim()) error(file, 1, 'missing or empty <title>');
+    const viewport = html.match(/<meta[^>]*name="viewport"[^>]*>/i);
+    if (!viewport) error(file, 1, 'missing viewport meta');
+    else if (/user-scalable\s*=\s*(no|0)|maximum-scale\s*=\s*1(\.0)?\b/i.test(viewport[0])) error(file, here(/name="viewport"/), 'viewport must not disable zoom');
+    if (!isGuide && !/<meta[^>]*name="description"/i.test(html)) error(file, 1, 'missing meta description');
 
-  // Landmarks, skip link, headings
-  const mains = [...html.matchAll(/<main\b[^>]*>/gi)];
-  if (mains.length !== 1) error(file, 1, `expected exactly one <main>, found ${mains.length}`);
-  else if (!/\bid="main"/.test(mains[0][0])) error(file, here(/<main\b/i), '<main> should have id="main" (skip link target)');
-  const firstLink = html.match(/<(a|button|input|select|textarea)\b[^>]*>/i);
-  if (!firstLink || !/skip-link/.test(firstLink[0])) error(file, here(/<body/i), 'the skip link must be the first focusable element');
-  const navs = [...html.matchAll(/<nav\b[^>]*>/gi)];
-  if (navs.length > 1) for (const n of navs) if (!/aria-label(ledby)?=/.test(n[0])) error(file, lineOf(html, n.index), 'multiple <nav>s: each needs aria-label or aria-labelledby');
-  const h1s = [...html.matchAll(/<h1\b/gi)];
-  if (h1s.length !== 1) error(file, 1, `expected exactly one <h1>, found ${h1s.length}`);
-  let prev = 0;
-  for (const h of html.matchAll(/<h([1-6])\b/gi)) {
-    const level = Number(h[1]);
-    if (prev && level > prev + 1) error(file, lineOf(html, h.index), `heading level skips from h${prev} to h${level}`);
-    prev = level;
-  }
-
-  // Classes: BEM or u-*, and defined in the CSS (static class attributes only)
-  for (const m of html.matchAll(/(?<![:@\w-])class="([^"]*)"/g)) {
-    for (const cls of m[1].split(/\s+/).filter(Boolean)) {
-      if (cls.includes('$') || cls.includes('{')) continue;
-      if (!bem.test(cls)) error(file, lineOf(html, m.index), `class "${cls}" is not BEM (block__element--modifier) or u-*`);
-      else if (!definedClasses.has(cls)) error(file, lineOf(html, m.index), `class "${cls}" is not defined in any CSS file (create it, or fix the name)`);
-      else if (/^[a-z][a-z0-9-]*__[a-z0-9-]+__/.test(cls)) error(file, lineOf(html, m.index), `class "${cls}" nests elements: use block__element`);
+    // Landmarks, skip link, headings
+    const mains = [...html.matchAll(/<main\b[^>]*>/gi)];
+    if (mains.length !== 1) error(file, 1, `expected exactly one <main>, found ${mains.length}`);
+    else if (!/\bid="main"/.test(mains[0][0])) error(file, here(/<main\b/i), '<main> should have id="main" (skip link target)');
+    const firstLink = html.match(/<(a|button|input|select|textarea)\b[^>]*>/i);
+    if (!firstLink || !/skip-link/.test(firstLink[0])) error(file, here(/<body/i), 'the skip link must be the first focusable element');
+    const navs = [...html.matchAll(/<nav\b[^>]*>/gi)];
+    if (navs.length > 1) for (const n of navs) if (!/aria-label(ledby)?=/.test(n[0])) error(file, lineOf(html, n.index), 'multiple <nav>s: each needs aria-label or aria-labelledby');
+    const h1s = [...html.matchAll(/<h1\b/gi)];
+    if (h1s.length !== 1) error(file, 1, `expected exactly one <h1>, found ${h1s.length}`);
+    let prev = 0;
+    for (const h of html.matchAll(/<h([1-6])\b/gi)) {
+      const level = Number(h[1]);
+      if (prev && level > prev + 1) error(file, lineOf(html, h.index), `heading level skips from h${prev} to h${level}`);
+      prev = level;
     }
-  }
 
-  // Images, icons, buttons, links, controls
-  for (const m of html.matchAll(/<img\b[^>]*>/gi)) {
-    if (!/\salt=/.test(m[0])) error(file, lineOf(html, m.index), '<img> needs an alt attribute (empty for decorative)');
-    if (!/\swidth=/.test(m[0]) || !/\sheight=/.test(m[0])) warn(file, lineOf(html, m.index), '<img> should set width and height');
-  }
-  for (const m of html.matchAll(/<svg\b[^>]*class="icon[^"]*"[^>]*>/gi)) {
-    if (!/aria-hidden="true"|role="img"/.test(m[0])) warn(file, lineOf(html, m.index), 'icon svg should be aria-hidden="true" (decorative) or role="img" with a label');
-  }
-  for (const m of html.matchAll(/<button\b[^>]*>/gi)) {
-    if (!/\stype=/.test(m[0])) error(file, lineOf(html, m.index), '<button> needs an explicit type');
-  }
-  for (const m of html.matchAll(/<(div|span|li|p|section|article)\b[^>]*\s@click[^>]*>/gi)) {
-    error(file, lineOf(html, m.index), `@click on <${m[1]}>: use a <button> or <a> so it is keyboard accessible`);
-  }
-  for (const m of html.matchAll(/tabindex="([1-9]\d*)"/g)) error(file, lineOf(html, m.index), 'positive tabindex disrupts focus order');
-  for (const m of html.matchAll(/\sstyle="([^"]*)"/g)) {
-    if (m[1].split(';').map((d) => d.trim()).filter(Boolean).some((d) => !d.startsWith('--'))) error(file, lineOf(html, m.index), 'inline style may only set custom properties (--x: …)');
-  }
-  for (const m of html.matchAll(/<a\b[^>]*>([^<]*)<\/a>/gi)) {
-    if (/^\s*(click here|here|read more|more)\s*$/i.test(m[1])) warn(file, lineOf(html, m.index), `link text "${m[1].trim()}" is not descriptive`);
-    if (/\shref="#"/.test(m[0])) warn(file, lineOf(html, m.index), 'placeholder href="#"');
-  }
-
-  // Duplicate ids and label association
-  const ids = new Map();
-  for (const m of html.matchAll(/\sid="([^"$]+)"/g)) {
-    if (ids.has(m[1])) error(file, lineOf(html, m.index), `duplicate id "${m[1]}"`);
-    ids.set(m[1], true);
-  }
-  for (const m of html.matchAll(/<(input|select|textarea)\b[^>]*>/gi)) {
-    if (/type="(hidden|submit|button|reset|image)"/.test(m[0])) continue;
-    const id = (m[0].match(/\sid="([^"]+)"/) || [])[1];
-    const labelled = /aria-label=|aria-labelledby=/.test(m[0]) || (id && new RegExp(`<label[^>]*\\sfor="${id}"`).test(html));
-    if (!labelled) error(file, lineOf(html, m.index), `<${m[1]}> has no label (use <label for>, aria-label or aria-labelledby)`);
-  }
-  for (const m of html.matchAll(/<table\b/gi)) {
-    const rest = html.slice(m.index, html.indexOf('</table>', m.index));
-    if (!/<caption|aria-label/.test(rest)) warn(file, lineOf(html, m.index), '<table> should have a <caption> or aria-label');
-    if (!/<th\b/.test(rest)) error(file, lineOf(html, m.index), '<table> needs header cells (<th scope>)');
-  }
-
-  // Local assets and sprite symbols exist; in-page anchors resolve
-  for (const m of html.matchAll(/\s(?:href|src)="([^"]+)"/g)) {
-    const url = m[1];
-    if (/^(https?:|mailto:|tel:|data:|\/\/)/.test(url) || url.includes('${')) continue;
-    if (url.startsWith('#')) {
-      if (url.length > 1 && !ids.has(url.slice(1))) error(file, lineOf(html, m.index), `anchor ${url} has no matching id`);
-      continue;
+    // Classes: BEM or u-*, and defined in the CSS (static class attributes only)
+    for (const m of html.matchAll(/(?<![:@\w-])class="([^"]*)"/g)) {
+      for (const cls of m[1].split(/\s+/).filter(Boolean)) {
+        if (cls.includes('$') || cls.includes('{')) continue;
+        if (!bem.test(cls)) error(file, lineOf(html, m.index), `class "${cls}" is not BEM (block__element--modifier) or u-*`);
+        else if (!definedClasses.has(cls)) error(file, lineOf(html, m.index), `class "${cls}" is not defined in any CSS file (create it, or fix the name)`);
+        else if (/^[a-z][a-z0-9-]*__[a-z0-9-]+__/.test(cls)) error(file, lineOf(html, m.index), `class "${cls}" nests elements: use block__element`);
+      }
     }
-    const [pathPart, frag] = url.split('#');
-    if (!pathPart) continue;
-    const target = join(root, pathPart);
-    if (!existsSync(target)) { error(file, lineOf(html, m.index), `missing file ${pathPart}`); continue; }
-    if (frag && pathPart.endsWith('.svg') && !new RegExp(`id="${frag}"`).test(readFileSync(target, 'utf8'))) error(file, lineOf(html, m.index), `sprite has no #${frag} symbol`);
-  }
 
-  // Shared header/footer must match the template on real pages
-  if (!isGuide) {
-    const header = html.match(/<header class="nav"[\s\S]*?<\/header>/);
-    const footer = html.match(/<footer class="footer"[\s\S]*?<\/footer>/);
-    for (const [key, part] of [['header', header], ['footer', footer]]) {
-      if (!part) { error(file, 1, `missing shared ${key} (copy it from _template.html)`); continue; }
-      const norm = normalise(part[0]);
-      if (!sharedParts[key]) sharedParts[key] = { norm, file };
-      else if (sharedParts[key].norm !== norm) error(file, lineOf(html, part.index), `shared ${key} differs from ${relative(root, sharedParts[key].file)}; keep it identical on every page`);
+    // Images, icons, buttons, links, controls
+    for (const m of html.matchAll(/<img\b[^>]*>/gi)) {
+      if (!/\salt=/.test(m[0])) error(file, lineOf(html, m.index), '<img> needs an alt attribute (empty for decorative)');
+      if (!/\swidth=/.test(m[0]) || !/\sheight=/.test(m[0])) warn(file, lineOf(html, m.index), '<img> should set width and height');
+    }
+    for (const m of html.matchAll(/<svg\b[^>]*class="icon[^"]*"[^>]*>/gi)) {
+      if (!/aria-hidden="true"|role="img"/.test(m[0])) warn(file, lineOf(html, m.index), 'icon svg should be aria-hidden="true" (decorative) or role="img" with a label');
+    }
+    for (const m of html.matchAll(/<button\b[^>]*>/gi)) {
+      if (!/\stype=/.test(m[0])) error(file, lineOf(html, m.index), '<button> needs an explicit type');
+    }
+    for (const m of html.matchAll(/<(div|span|li|p|section|article)\b[^>]*\s@click[^>]*>/gi)) {
+      error(file, lineOf(html, m.index), `@click on <${m[1]}>: use a <button> or <a> so it is keyboard accessible`);
+    }
+    for (const m of html.matchAll(/tabindex="([1-9]\d*)"/g)) error(file, lineOf(html, m.index), 'positive tabindex disrupts focus order');
+    for (const m of html.matchAll(/\sstyle="([^"]*)"/g)) {
+      if (m[1].split(';').map((d) => d.trim()).filter(Boolean).some((d) => !d.startsWith('--'))) error(file, lineOf(html, m.index), 'inline style may only set custom properties (--x: …)');
+    }
+    for (const m of html.matchAll(/<a\b[^>]*>([^<]*)<\/a>/gi)) {
+      if (/^\s*(click here|here|read more|more)\s*$/i.test(m[1])) warn(file, lineOf(html, m.index), `link text "${m[1].trim()}" is not descriptive`);
+      if (/\shref="#"/.test(m[0])) warn(file, lineOf(html, m.index), 'placeholder href="#"');
+    }
+
+    // Duplicate ids and label association
+    const ids = new Map();
+    for (const m of html.matchAll(/\sid="([^"$]+)"/g)) {
+      if (ids.has(m[1])) error(file, lineOf(html, m.index), `duplicate id "${m[1]}"`);
+      ids.set(m[1], true);
+    }
+    for (const m of html.matchAll(/<(input|select|textarea)\b[^>]*>/gi)) {
+      if (/type="(hidden|submit|button|reset|image)"/.test(m[0])) continue;
+      const id = (m[0].match(/\sid="([^"]+)"/) || [])[1];
+      const labelled = /aria-label=|aria-labelledby=/.test(m[0]) || (id && new RegExp(`<label[^>]*\\sfor="${id}"`).test(html));
+      if (!labelled) error(file, lineOf(html, m.index), `<${m[1]}> has no label (use <label for>, aria-label or aria-labelledby)`);
+    }
+    for (const m of html.matchAll(/<table\b/gi)) {
+      const rest = html.slice(m.index, html.indexOf('</table>', m.index));
+      if (!/<caption|aria-label/.test(rest)) warn(file, lineOf(html, m.index), '<table> should have a <caption> or aria-label');
+      if (!/<th\b/.test(rest)) error(file, lineOf(html, m.index), '<table> needs header cells (<th scope>)');
+    }
+
+    // Local assets and sprite symbols exist; in-page anchors resolve
+    for (const m of html.matchAll(/\s(?:href|src)="([^"]+)"/g)) {
+      const url = m[1];
+      if (/^(https?:|mailto:|tel:|data:|\/\/)/.test(url) || url.includes('${')) continue;
+      if (url.startsWith('#')) {
+        if (url.length > 1 && !ids.has(url.slice(1))) error(file, lineOf(html, m.index), `anchor ${url} has no matching id`);
+        continue;
+      }
+      const pathPart = url.split(/[?#]/)[0]; // ignore ?v=1.2.3 cache-busters
+      const frag = url.includes('#') ? url.split('#')[1] : '';
+      if (!pathPart) continue;
+      const target = join(root, pathPart);
+      if (!existsSync(target)) { error(file, lineOf(html, m.index), `missing file ${pathPart}`); continue; }
+      if (frag && pathPart.endsWith('.svg') && !new RegExp(`id="${frag}"`).test(readFileSync(target, 'utf8'))) error(file, lineOf(html, m.index), `sprite has no #${frag} symbol`);
+    }
+
+    // Shared header/footer must match the template on real pages
+    if (!isGuide) {
+      const header = html.match(/<header class="nav"[\s\S]*?<\/header>/);
+      const footer = html.match(/<footer class="footer"[\s\S]*?<\/footer>/);
+      for (const [key, part] of [['header', header], ['footer', footer]]) {
+        if (!part) { error(file, 1, `missing shared ${key} (copy it from _template.html)`); continue; }
+        const norm = normalise(part[0]);
+        if (!sharedParts[key]) sharedParts[key] = { norm, file };
+        else if (sharedParts[key].norm !== norm) error(file, lineOf(html, part.index), `shared ${key} differs from ${relative(root, sharedParts[key].file)}; keep it identical on every page`);
+      }
     }
   }
 }

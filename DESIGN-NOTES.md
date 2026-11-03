@@ -9,3 +9,6 @@ Format: `YYYY-MM-DD · files · what changed · why`
 -->
 
 - _No deviations yet._
+
+Base changes (not site deviations):
+- 2026-11-03 · css/core/base.css · `li + li` spacing scoped to `:is(ul, ol):not([class]) > li + li` · it offset every item but the first when a classed list (nav, chips, badges) was laid out as a row

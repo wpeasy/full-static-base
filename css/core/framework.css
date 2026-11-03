@@ -297,6 +297,20 @@
     calc(var(--text-4xl-max) / 16 * 1rem)
   );
 
+  /* ---- Display: hero statement headlines. Sizes set directly in the theme (no ratio) ---- */
+  --text-display-slope: calc((var(--display-max-size) - var(--display-min-size)) / (var(--fluid-max-vw) - var(--fluid-min-vw)));
+  --text-display: clamp(
+    calc(var(--display-min-size) / 16 * 1rem),
+    calc((var(--display-min-size) - var(--fluid-min-vw) * var(--text-display-slope)) / 16 * 1rem + var(--text-display-slope) * 100vw),
+    calc(var(--display-max-size) / 16 * 1rem)
+  );
+  --text-display-s-slope: calc((var(--display-s-max-size) - var(--display-s-min-size)) / (var(--fluid-max-vw) - var(--fluid-min-vw)));
+  --text-display-s: clamp(
+    calc(var(--display-s-min-size) / 16 * 1rem),
+    calc((var(--display-s-min-size) - var(--fluid-min-vw) * var(--text-display-s-slope)) / 16 * 1rem + var(--text-display-s-slope) * 100vw),
+    calc(var(--display-s-max-size) / 16 * 1rem)
+  );
+
   --text-5xl-min: calc(var(--text-min-size) * pow(var(--text-min-ratio), 6));
   --text-5xl-max: calc(var(--text-max-size) * pow(var(--text-max-ratio), 6));
   --text-5xl-slope: calc((var(--text-5xl-max) - var(--text-5xl-min)) / (var(--fluid-max-vw) - var(--fluid-min-vw)));

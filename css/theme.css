@@ -123,6 +123,20 @@
     --text-min-ratio: var(--ratio-minor-third);
     --text-max-ratio: var(--ratio-major-third);
 
+    /* Accent surface (u-surface-accent) defaults to a soft tint of --primary. To use a fixed light block
+       in both modes, uncomment and adjust (text must stay readable on --accent-bg):
+         --accent-bg: var(--surface-light-9);      --accent-text: var(--surface-dark-8);
+         --accent-heading: var(--surface-dark-10); --accent-muted: var(--surface-dark-5);
+         --accent-link: var(--primary-dark-2);     --accent-link-hover: var(--primary-dark-4);
+         --accent-border: var(--surface-light-7);
+         --accent-button: var(--primary-dark-2);   --accent-button-hover: var(--primary-dark-4); */
+
+    /* Display sizes for hero statement headlines (--text-display, --text-display-s), px at min / max viewport */
+    --display-min-size:  44;
+    --display-max-size:  96;
+    --display-s-min-size: 34;
+    --display-s-max-size: 64;
+
     /* Spacing scale */
     --space-min-size:  16;
     --space-max-size:  20;

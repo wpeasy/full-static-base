@@ -38,6 +38,17 @@ reduce.addEventListener('change', (e) => e.matches && stopAnimation());
 
 Covers: `scrollTo`/`scrollIntoView` behaviour, Web Animations API, GSAP/other libraries (`gsap.matchMedia()` with a `(prefers-reduced-motion: no-preference)` condition), carousels/sliders, parallax, counters, typed text, canvas/WebGL, Lottie, video/GIF autoplay. Listen for the `change` event: the preference can change while the page is open.
 
+## GSAP Flip (filterable grids)
+
+`js/grid-filter.js` animates list changes with Flip. The rules it follows apply to any Flip use:
+
+1. **Reduced motion first.** `matchMedia('(prefers-reduced-motion: reduce)').matches` → call the change directly and return. No tween, no fade.
+2. One entry point: `update(change)`. Inside it: `Flip.killFlipsOf(items)`, `Flip.getState(items)`, run `change()`, then in `$nextTick` call `Flip.from(state, { absolute: true, onEnter, onLeave })` so Alpine has applied the DOM changes first.
+3. Hide with the `hidden` attribute (`:hidden="…"` plus `.item[hidden] { display: none }`), not `x-show`.
+4. `absolute: true` takes items out of flow, so the grid collapses and content below jumps. Record `grid.offsetHeight` before the change, measure the new height after it, then `gsap.set(grid, { height: from })` and `gsap.to(grid, { height: to, clearProps: 'height' })` with the same duration and ease as the Flip.
+5. Durations come from the `--duration-*` tokens (read with `getComputedStyle`), not literals.
+6. Known limit: fire updates one event at a time (clicks, keystrokes). Two `update()` calls in the same tick can leave items mid-flip.
+
 ## Content rules
 
 - Video/animated backgrounds: don't autoplay under `reduce`; show a still poster. Provide pause/stop for any motion lasting more than 5 seconds, regardless of preference.

@@ -31,9 +31,19 @@ Reuse before you create; change a component when the design needs it (see AGENTS
 | `check` | checkbox/radio + label | `__input __label` | native |
 | `error-summary` | form error list | `__title __list __link` | focused by `formValidation` |
 | `theme-toggle` | persistent dark-mode button | `__icon` (`--sun`/`--moon`) | Alpine `themeToggle` + `js/theme-init.js` |
+| `filter` | search + topic chips + filterable grid | `__toolbar __search __tags __chip __status __grid __item __empty` | Alpine `gridFilter` (`js/grid-filter.js`), optional GSAP Flip |
 | `icon` | SVG sprite icon | `--s --l` | `images/icons.svg#name` |
 
 Layout objects (`container section stack cluster grid`) live in `css/core/layout.css`; utilities and surfaces in `css/core/utilities.css`. Names in [TOKENS.md](TOKENS.md).
+
+## Recipe: filterable grid (`filter`)
+
+Needs `js/grid-filter.js` and, for animation, vendored `gsap` + `Flip` (see `js/vendor/README.md`; load order: GSAP, Flip, `grid-filter.js`, Alpine). Live example: `components.html#filter`.
+
+- Every item stays in the HTML (works without JS). Give each `<li class="filter__item">` a `data-tags="a b"` and `:hidden="!matches($el, query, tag)"`. Use `hidden`, **not** `x-show`; pass `query` and `tag` as arguments so Alpine tracks them. Optional `data-search` overrides the searched text.
+- Toolbar is `x-cloak`. Chips are `<button type="button" :aria-pressed="tag === 'x'" @click="setTag('x')">`; the search input calls `setQuery($event.target.value)`.
+- `__status` is a polite live region; `__empty` has `hidden :hidden="count > 0"`.
+- All changes go through `update(change)`: it runs Flip (`absolute: true`, fades for enter/leave) and tweens the grid height so content below does not jump. Under `prefers-reduced-motion: reduce` it just runs `change()`. See `docs/motion.md`.
 
 ## Snippets
 
