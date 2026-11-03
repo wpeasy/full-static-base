@@ -2,6 +2,14 @@
 
 Framework versions follow `VERSION`. Upgrading a project = overwrite `css/core/*`, `tools/*`, `docs/*`, `AGENTS.md`; keep `css/theme.css` and your own components/pages.
 
+## 2.0.0 (breaking: new folder layout)
+- **Only `public/` is published.** Pages, `css/`, `js/`, `fonts/`, `images/`, `data/`, `sitemap.xml`, `robots.txt`, `_headers`, `_redirects` and `.htaccess` moved into `public/` (`git mv`, history kept). Docs, tools, themes, `_template.html`, AGENTS.md and the quick references stay at the repo root and are never deployed. Deploy rule: `docs/deploy.md`.
+- `tools/check.mjs` reads from `public/`, validates `_template.html` at the root (links resolved against `public/`), errors when a page links outside `public/`, warns about development files inside `public/`.
+- `tools/sync-shared.mjs`, `build-sitemap.mjs`, `bundle-css.mjs` (`public/css/main.bundle.css`, git-ignored) and `browser-checks.mjs` work under `public/`; `tools/serve.mjs` serves only `public/` (anything else is a 404), takes an optional port argument (default 8765), and replaces `python3 -m http.server` everywhere in the docs.
+- Guides that lived inside published folders moved out: `fonts/README.md` → `docs/fonts.md`, `js/vendor/README.md` → `docs/vendor.md`, `images/README.md` → `docs/image-files.md`.
+- AGENTS.md section 3 rewritten (path convention: docs paths are relative to `public/` unless they start with `tools/`, `docs/` or `themes/`); commands, upgrade note, workflows and skills updated.
+- Upgrading an existing site: move your published files into `public/` first, then overwrite the library files.
+
 ## 1.3.0
 - **JSON-driven pages with one template:** `data/items.json`, list page `items.html`, template `item.html` served at `/item/<slug>` (`_redirects`, `.htaccess`, `tools/serve.mjs`), loader `js/items-data.js`, `js/items-list.js`, `js/item-profile.js`, new `profile` component, `tools/build-sitemap.mjs`. `tools/sync-shared.mjs` and `check.mjs` support root-absolute pages (`<html data-root-absolute>`). Guide: `docs/data-driven-pages.md`.
 - **SEO and schema by default:** `docs/seo.md`, `js/seo.js` (`setSeo`, `setMeta`, `setLink`, `setJsonLd`, schema builders), default meta/Open Graph/JSON-LD block in `_template.html` and the example pages; new AGENTS.md rule, Definition of done items and workflow/skill steps (new-site, new-page, audit). `check.mjs` warns on missing canonical/OG, title/description length and duplicates, errors on invalid JSON-LD.

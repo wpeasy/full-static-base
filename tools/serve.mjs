@@ -1,18 +1,19 @@
 #!/usr/bin/env node
 // Dependency-free static server for local preview, with the same rewrites the host will have.
-// Usage: node tools/serve.mjs [--port 8765]     (or PORT=9000)
+// Serves public/ as the web root: anything outside it (AGENTS.md, tools/, docs/, _template.html) is a 404.
+// Usage: node tools/serve.mjs [port]     (default 8765; also --port 9000 or PORT=9000)
 // - Rewrites come from `_redirects` lines ending in 200 (e.g. `/item/*  /item.html  200`).
 // - Unknown paths get 404.html with a 404 status. Responses are never cached.
 // python3's http.server cannot rewrite, so use this for sites with a single-template page.
 
 import { createServer } from 'node:http';
 import { readFileSync, existsSync, statSync } from 'node:fs';
-import { join, extname, normalize, dirname } from 'node:path';
+import { join, extname, normalize, dirname, sep } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
-const root = join(dirname(fileURLToPath(import.meta.url)), '..');
-const argPort = process.argv.indexOf('--port');
-const port = Number(argPort > -1 ? process.argv[argPort + 1] : process.env.PORT) || 8765;
+const root = join(dirname(fileURLToPath(import.meta.url)), '..', 'public');
+const flag = process.argv.indexOf('--port');
+const port = Number(flag > -1 ? process.argv[flag + 1] : process.argv[2] || process.env.PORT) || 8765;
 
 const types = {
   '.html': 'text/html; charset=utf-8', '.css': 'text/css; charset=utf-8', '.js': 'text/javascript; charset=utf-8',
@@ -33,8 +34,8 @@ if (existsSync(redirectsFile)) {
 
 const fileFor = (urlPath) => {
   let rel = normalize(decodeURIComponent(urlPath)).replace(/^([/\\])+/, '');
-  if (rel.startsWith('..')) return null;
   let file = join(root, rel);
+  if (!file.startsWith(root + sep) && file !== root) return null; // never leave public/
   if (existsSync(file) && statSync(file).isDirectory()) file = join(file, 'index.html');
   return existsSync(file) && statSync(file).isFile() ? file : null;
 };

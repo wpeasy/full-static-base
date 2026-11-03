@@ -1,4 +1,7 @@
-# js/vendor/
+# Vendored scripts (`public/js/vendor/`)
+
+Paths are relative to `public/`.
+
 
 Third-party scripts, committed as-is. No CDN, no build step.
 

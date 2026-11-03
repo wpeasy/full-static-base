@@ -1,6 +1,6 @@
 # Components index
 
-Reuse before you create; change a component when the design needs it (see AGENTS.md §1). Live examples of every variant: `components.html`. Composition examples: `index.html` (landing), `article.html`, `contact.html`. One file per block in `css/components/`, imported by `css/main.css`.
+Paths are relative to `public/` (see AGENTS.md section 3). Reuse before you create; change a component when the design needs it (see AGENTS.md §1). Live examples of every variant: `components.html`. Composition examples: `index.html` (landing), `article.html`, `contact.html`. One file per block in `css/components/`, imported by `css/main.css`.
 
 | Block | Purpose | Variants / elements | Behaviour |
 |---|---|---|---|
@@ -39,7 +39,7 @@ Layout objects (`container section stack cluster grid`) live in `css/core/layout
 
 ## Recipe: filterable grid (`filter`)
 
-Needs `js/grid-filter.js` and, for animation, vendored `gsap` + `Flip` (see `js/vendor/README.md`; load order: GSAP, Flip, `grid-filter.js`, Alpine). Live example: `components.html#filter`.
+Needs `js/grid-filter.js` and, for animation, vendored `gsap` + `Flip` (see `docs/vendor.md`; load order: GSAP, Flip, `grid-filter.js`, Alpine). Live example: `components.html#filter`.
 
 - Every item stays in the HTML (works without JS). Give each `<li class="filter__item">` a `data-tags="a b"` and `:hidden="!matches($el, query, tag)"`. Use `hidden`, **not** `x-show`; pass `query` and `tag` as arguments so Alpine tracks them. Optional `data-search` overrides the searched text.
 - Toolbar is `x-cloak`. Chips are `<button type="button" :aria-pressed="tag === 'x'" @click="setTag('x')">`; the search input calls `setQuery($event.target.value)`.

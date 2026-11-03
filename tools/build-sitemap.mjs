@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-// Rewrites the item URLs in sitemap.xml between <!-- items:start --> and <!-- items:end --> from data/items.json.
+// Rewrites the item URLs in public/sitemap.xml between <!-- items:start --> and <!-- items:end --> from public/data/items.json.
 // Usage: node tools/build-sitemap.mjs [collection] [singular]     (defaults: items item)
 // Needs site.url in the JSON (e.g. "https://example.com"). Keep slugify() identical to js/items-data.js.
 // Also check that robots.txt points at the same sitemap URL (this script warns if it does not).
@@ -8,7 +8,7 @@ import { readFileSync, writeFileSync, existsSync } from 'node:fs';
 import { join, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
-const root = join(dirname(fileURLToPath(import.meta.url)), '..');
+const root = join(dirname(fileURLToPath(import.meta.url)), '..', 'public');
 const [collection = 'items', singular = 'item'] = process.argv.slice(2);
 const slugify = (s) => s.normalize('NFKD').replace(/[̀-ͯ]/g, '').toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '');
 

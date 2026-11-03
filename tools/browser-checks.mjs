@@ -1,8 +1,8 @@
 #!/usr/bin/env node
 // Optional browser checks (dev-only): axe accessibility scan + screenshots.
 // Setup once:  cd tools && npm install && npx playwright install chromium
-// Run:         python3 -m http.server 8000   (in another terminal, from the project root)
-//              node tools/browser-checks.mjs [baseUrl=http://localhost:8000]
+// Run:         node tools/serve.mjs   (in another terminal)
+//              node tools/browser-checks.mjs [baseUrl=http://localhost:8765]
 // Output: tools/screenshots/<page>-<theme>-<width>.png and an axe summary.
 // Each page is scanned in light and dark, at 320 / 768 / 1280 px, and with reduced motion emulated.
 
@@ -11,8 +11,8 @@ import { join, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const here = dirname(fileURLToPath(import.meta.url));
-const root = join(here, '..');
-const base = process.argv[2] || 'http://localhost:8000';
+const root = join(here, '..', 'public');
+const base = process.argv[2] || 'http://localhost:8765';
 
 let chromium, AxeBuilder;
 try {

@@ -10,7 +10,8 @@ import { readFileSync, readdirSync, existsSync, statSync } from 'node:fs';
 import { join, relative, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
-const root = join(dirname(fileURLToPath(import.meta.url)), '..');
+const root = join(dirname(fileURLToPath(import.meta.url)), '..'); // repo root: never published
+const site = join(root, 'public');   // the only published folder
 const findings = [];
 const report = (level, file, line, message) => {
   const f = { level, file: relative(root, file), line, message };
@@ -33,7 +34,7 @@ const lineOf = (src, index) => src.slice(0, index).split('\n').length;
 const blank = (s) => s.replace(/[^\n]/g, ' '); // keep line numbers when removing text
 
 // ---------------------------------------------------------------- CSS
-const cssFiles = walk(join(root, 'css'), (p) => p.endsWith('.css') && !p.endsWith('bundle.css'));
+const cssFiles = walk(join(site, 'css'), (p) => p.endsWith('.css') && !p.endsWith('bundle.css'));
 
 const stripComments = (css) => css.replace(/\/\*[\s\S]*?\*\//g, blank);
 
@@ -54,7 +55,7 @@ const definedClasses = new Set();
 const bem = /^(?:u-[a-z0-9]+(?:-[a-z0-9]+)*|[a-z][a-z0-9]*(?:-[a-z0-9]+)*(?:__[a-z0-9]+(?:-[a-z0-9]+)*)?(?:--[a-z0-9]+(?:-[a-z0-9]+)*)?)$/;
 
 for (const file of cssFiles) {
-  const name = relative(join(root, 'css'), file);
+  const name = relative(join(site, 'css'), file);
   const raw = readFileSync(file, 'utf8');
   const css = stripComments(raw);
   const isThemeLike = ['theme.css', 'core/framework.css'].includes(name);
@@ -120,19 +121,19 @@ for (const file of cssFiles) {
 }
 
 // main.css imports every component and every import exists
-const mainPath = join(root, 'css/main.css');
+const mainPath = join(site, 'css/main.css');
 if (existsSync(mainPath)) {
   const main = readFileSync(mainPath, 'utf8');
   const imported = [...main.matchAll(/@import\s+url\(["']([^"']+)["']\)/g)].map((m) => m[1]);
-  for (const p of imported) if (!existsSync(join(root, 'css', p))) error(mainPath, 1, `imports missing file ${p}`);
-  for (const f of cssFiles.filter((p) => relative(join(root, 'css'), p).startsWith('components/'))) {
-    const rel = relative(join(root, 'css'), f);
+  for (const p of imported) if (!existsSync(join(site, 'css', p))) error(mainPath, 1, `imports missing file ${p}`);
+  for (const f of cssFiles.filter((p) => relative(join(site, 'css'), p).startsWith('components/'))) {
+    const rel = relative(join(site, 'css'), f);
     if (!imported.includes(rel)) error(mainPath, 1, `${rel} is not imported by css/main.css`);
   }
 } else error(mainPath, 1, 'css/main.css is missing');
 
 // ---------------------------------------------------------------- JS
-for (const file of walk(join(root, 'js'), (p) => p.endsWith('.js'))) {
+for (const file of walk(join(site, 'js'), (p) => p.endsWith('.js'))) {
   const src = readFileSync(file, 'utf8');
   const motion = /\b(scrollTo|scrollIntoView|\.animate\(|requestAnimationFrame|gsap\.|autoplay|IntersectionObserver)\b/;
   const m = src.match(motion);
@@ -183,14 +184,27 @@ function variantPasses(html) {
   return ids.map((id) => blocks.filter((b) => b.id !== id).reduce((out, b) => out.slice(0, b.start) + blank(out.slice(b.start, b.end)) + out.slice(b.end), html));
 }
 
-const htmlFiles = readdirSync(root).filter((f) => f.endsWith('.html')).map((f) => join(root, f));
+// Published pages, plus _template.html from the repo root (source of the shared header/footer;
+// its relative links resolve against public/ because that is where the copies end up)
+const htmlFiles = [join(root, '_template.html'), ...readdirSync(site).filter((f) => f.endsWith('.html')).map((f) => join(site, f))].filter(existsSync);
+
+// Only public/ is deployed: development material must stay outside it
+const devNames = new Set(['tools', 'docs', 'themes', '_template.html', 'AGENTS.md', 'CLAUDE.md', 'node_modules', '.claude', '.git']);
+const scanSite = (dir) => {
+  for (const name of readdirSync(dir)) {
+    const path = join(dir, name);
+    if (devNames.has(name) || (name.endsWith('.md') && name !== 'llms.md')) warn(path, 1, 'development file inside public/: move it outside (only public/ is deployed)');
+    else if (statSync(path).isDirectory() && name !== 'node_modules') scanSite(path);
+  }
+};
+scanSite(site);
 const sharedParts = {};
 const seenTitles = new Map(), seenDescriptions = new Map();
 const metaContent = (html, re) => (html.match(re) || [])[1];
 const seoLimits = { title: 60, description: 160 };
 
 // Raster images should be WebP (or SVG/AVIF): flag leftovers in images/
-for (const f of walk(join(root, 'images'), (p) => /\.(jpe?g|png|gif)$/i.test(p))) warn(f, 1, 'convert to WebP (see docs/images.md), keep only the .webp');
+for (const f of walk(join(site, 'images'), (p) => /\.(jpe?g|png|gif)$/i.test(p))) warn(f, 1, 'convert to WebP (see docs/images.md), keep only the .webp');
 const normalise = (s) => s.replace(/\s+/g, ' ').replace(/\b(href|src)="\//g, '$1="') /* single-template pages use root-absolute paths */.replace(/ aria-current="page"/g, '').replace(/nav__link--current/g, '').replace(/class="nav__link\s+"/g, 'class="nav__link"').trim();
 
 for (const file of htmlFiles) {
@@ -308,7 +322,8 @@ for (const file of htmlFiles) {
       const pathPart = url.split(/[?#]/)[0]; // ignore ?v=1.2.3 cache-busters
       const frag = url.includes('#') ? url.split('#')[1] : '';
       if (!pathPart) continue;
-      const target = join(root, pathPart);
+      const target = join(site, pathPart);
+      if (relative(site, target).startsWith('..')) { error(file, lineOf(html, m.index), `${pathPart} points outside public/ (only public/ is deployed)`); continue; }
       if (!existsSync(target)) { error(file, lineOf(html, m.index), `missing file ${pathPart}`); continue; }
       if (frag && pathPart.endsWith('.svg') && !new RegExp(`id="${frag}"`).test(readFileSync(target, 'utf8'))) error(file, lineOf(html, m.index), `sprite has no #${frag} symbol`);
     }

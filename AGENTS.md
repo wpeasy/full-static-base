@@ -13,6 +13,7 @@ Static HTML + CSS sites, built and maintained by AI agents and edited by hand in
 | Content from JSON with one template page | [docs/data-driven-pages.md](docs/data-driven-pages.md) |
 | Step-by-step: new site / page / component / audit | [docs/workflows.md](docs/workflows.md) |
 | Forms, browser support, security headers | [docs/forms.md](docs/forms.md), [docs/browser-support.md](docs/browser-support.md), [docs/security.md](docs/security.md) |
+| Deploying (publish `public/` only) | [docs/deploy.md](docs/deploy.md) |
 | Why this site deviates from the base | [DESIGN-NOTES.md](DESIGN-NOTES.md) |
 
 ## 1. This is a foundation, not a cage
@@ -21,7 +22,7 @@ The framework gives you consistent tokens, sensible defaults and tested patterns
 
 Prefer the smallest change that works, in this order:
 
-1. **Theme** (`css/theme.css`): colours, fonts, scale sizes and ratios, radius scale, heading styles, component roles. Often enough on its own. Presets live in `themes/`.
+1. **Theme** (`public/css/theme.css`): colours, fonts, scale sizes and ratios, radius scale, heading styles, component roles. Often enough on its own. Presets live in `themes/` (repo root).
 2. **Compose** existing layout objects, utilities and surfaces.
 3. **Variant**: add a `block--modifier` or a `--block-*` custom property to an existing component.
 4. **New component**: a new BEM block in `css/components/` when nothing fits.
@@ -65,31 +66,45 @@ These apply at **every level**: markup, CSS, JavaScript, components, content, an
 
 ## 3. Structure
 
+**Only `public/` is published.** Everything outside it is development material and must never be deployed. Set the host's publish directory (or document root) to `public`.
+
+**Path convention:** paths in these docs (`css/...`, `js/...`, `images/...`, `fonts/...`, `data/...`, page names like `index.html`) are relative to `public/`, unless they start with `tools/`, `docs/` or `themes/` (repo root). Pages themselves link to each other and to assets with paths relative to `public/` (or root-absolute `/css/...` on template pages).
+
 ```
-index.html article.html contact.html   example pages (landing, article, form): reference implementations; replace with real pages
-styleguide.html, components.html       token style guide + component gallery (keep in sync)
-_template.html                  copy for every new page (also the source of the shared header/footer)
-404.html sitemap.xml robots.txt _headers   site boilerplate (headers template: docs/security.md)
-css/main.css                    the ONLY stylesheet pages link; @imports everything
-css/theme.css                   per-site theme: edit this first
-css/core/framework.css          derived tokens (ramps, a11y pairs, scales). Engine
-css/core/base.css               reset + element defaults + motion safety net
-css/core/layout.css             container, section, stack, cluster, grid
-css/core/utilities.css          u-* helpers and u-surface-*
-css/components/*.css            one BEM block per file (add an @import to main.css)
-js/theme-init.js                sync script in <head>: applies the saved theme before first paint
-js/components.js                shared Alpine components (nav, tabs, toasts, themeToggle, $reducedMotion)
-js/forms.js                     accessible form validation (formValidation)
-js/seo.js                       setSeo/setMeta/setLink/setJsonLd + schema builders (window.Seo)
-js/items-data.js, items-list.js, item-profile.js, grid-filter.js   JSON-driven list + single template page (docs/data-driven-pages.md)
-data/*.json                     content collections; item.html is the template for /item/<slug>
-_redirects .htaccess            rewrite /item/* to item.html
-js/*.js                         other small readable Alpine components
-js/vendor/                      pinned local copies: Alpine.js, GSAP + Flip + ScrollTrigger (see README)
-images/ fonts/                  assets (see their README.md); images/icons.svg sprite
-themes/*.css                    starting presets for css/theme.css
-tools/                          dev-only: check.mjs, sync-shared.mjs, bundle-css.mjs, browser-checks.mjs
+Repo root: development, never published
+AGENTS.md CLAUDE.md             this file (CLAUDE.md just imports it)
+TOKENS.md COMPONENTS.md         quick references
+DESIGN-NOTES.md CHANGELOG.md VERSION
+_template.html                  source of the shared header/footer and the default <head> block; copy it for new pages
+docs/                           guides (accessibility, motion, SEO, images, data-driven pages, workflows, fonts, vendor …)
+themes/*.css                    starting presets: copy one over public/css/theme.css
+tools/                          check.mjs, sync-shared.mjs, serve.mjs, build-sitemap.mjs, bundle-css.mjs, browser-checks.mjs
+.claude/ .vscode/ .editorconfig .gitignore
+
+public/                         the ONLY deployed folder; files are served exactly as written (no build step)
+  index.html article.html contact.html     example pages (landing, article, form): reference implementations; replace with real pages
+  items.html item.html data/items.json     JSON-driven list + the single template page for /item/<slug>
+  styleguide.html components.html          token style guide + component gallery (keep in sync)
+  404.html sitemap.xml robots.txt          site boilerplate
+  _headers _redirects .htaccess            host config: must live inside public/ to take effect (docs/security.md)
+  css/main.css                  the ONLY stylesheet pages link; @imports everything
+  css/fonts.css                 self-hosted @font-face rules, imported first (docs/fonts.md)
+  css/theme.css                 per-site theme: edit this first
+  css/core/framework.css        derived tokens (ramps, a11y pairs, scales). Engine
+  css/core/base.css             reset + element defaults + motion safety net
+  css/core/layout.css           container, section, stack, cluster, grid
+  css/core/utilities.css        u-* helpers and u-surface-*
+  css/components/*.css          one BEM block per file (add an @import to main.css)
+  js/theme-init.js              sync script in <head>: applies the saved theme before first paint
+  js/components.js              shared Alpine components (nav, tabs, toasts, themeToggle, $reducedMotion)
+  js/forms.js                   accessible form validation (formValidation)
+  js/seo.js                     setSeo/setMeta/setLink/setJsonLd + schema builders (window.Seo)
+  js/items-data.js items-list.js item-profile.js grid-filter.js   JSON-driven list + template (docs/data-driven-pages.md)
+  js/vendor/                    pinned local copies: Alpine.js, GSAP + Flip + ScrollTrigger (docs/vendor.md)
+  images/ fonts/                assets (docs/images.md, docs/image-files.md, docs/fonts.md); images/icons.svg sprite
 ```
+
+Rules: no guide, note, tool, theme preset or `_template.html` inside `public/` (`tools/check.mjs` warns); no published page may reference a file outside `public/` (it errors). Deploy: Netlify / Cloudflare Pages publish directory `public`; Apache document root `public`; GitHub Pages deploy the `public` folder.
 
 Cascade layers (declared in `theme.css` and `framework.css`): `reset, tokens, base, layout, components, utilities`.
 
@@ -117,9 +132,9 @@ Cascade layers (declared in `theme.css` and `framework.css`): `reset, tokens, ba
 
 1. Understand the brief; list sections and map each to components. Note gaps (they become variants or new components, per section 1).
 2. Set the theme (or choose a preset) before building pages.
-3. Build from `_template.html`. Reuse before you create. Study the example pages (`index.html`, `article.html`, `contact.html`) for how components compose. Edit the shared header/footer in `_template.html` only, then run `node tools/sync-shared.mjs`.
+3. Build from `_template.html`. Reuse before you create. Study the example pages (`index.html`, `article.html`, `contact.html`) for how components compose. Edit the shared header/footer in `_template.html` (repo root) only, then run `node tools/sync-shared.mjs`, which updates the pages in `public/`.
 4. Check light and dark, 320px / 768px / 1280px, keyboard only, and reduced motion.
-5. Run `node tools/check.mjs` and fix everything it reports. Preview with `node tools/serve.mjs`.
+5. Run `node tools/check.mjs` and fix everything it reports. Preview with `node tools/serve.mjs` (serves `public/`).
 6. Keep `components.html`, `COMPONENTS.md`, `TOKENS.md` and `DESIGN-NOTES.md` current with what you changed.
 
 ## 7. Definition of done
@@ -139,12 +154,12 @@ Cascade layers (declared in `theme.css` and `framework.css`): `reset, tokens, ba
 ## 8. Commands
 
 ```bash
-node tools/serve.mjs              # preview at http://localhost:8765 (rewrites /item/* to item.html; use instead of python's http.server)
-node tools/build-sitemap.mjs     # item URLs in sitemap.xml from data/items.json
+node tools/serve.mjs              # preview public/ at http://localhost:8765 (rewrites /item/* to item.html; add a port to change it). Not python's http.server, which cannot rewrite
+node tools/build-sitemap.mjs     # item URLs in public/sitemap.xml from public/data/items.json
 node tools/check.mjs             # guardrails: tokens, BEM, semantics, a11y, motion, imports
-node tools/sync-shared.mjs       # copy the _template.html header/footer into every page (--dry to preview)
+node tools/sync-shared.mjs       # copy the _template.html header/footer into every page in public/ (--dry to preview)
 node tools/browser-checks.mjs    # optional: axe scan + screenshots (see tools/README.md)
-node tools/bundle-css.mjs        # production: inline css/main.css imports -> css/main.bundle.css
+node tools/bundle-css.mjs        # production: inline public/css/main.css imports -> public/css/main.bundle.css (git-ignored)
 ```
 
-Upgrading the framework in an existing site: overwrite `css/core/*`, `tools/*`, `docs/*`, `AGENTS.md`, `TOKENS.md`, `COMPONENTS.md` from the newer version (see `CHANGELOG.md`/`VERSION`), keep `css/theme.css`, your components and pages, then re-apply anything listed in `DESIGN-NOTES.md`.
+Upgrading the framework in an existing site: overwrite `public/css/core/*`, `tools/*`, `docs/*`, `AGENTS.md`, `TOKENS.md`, `COMPONENTS.md` from the newer version (see `CHANGELOG.md`/`VERSION`), keep `public/css/theme.css`, your components and pages, then re-apply anything listed in `DESIGN-NOTES.md`.

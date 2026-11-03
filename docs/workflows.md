@@ -5,17 +5,17 @@ Each workflow assumes you've read `AGENTS.md`. The Claude skills in `.claude/ski
 ## New site
 
 1. Gather the brief: audience, brand colours/fonts (if any), tone, pages, content, imagery, required features.
-2. Pick a starting preset from `themes/` closest to the tone and copy it over `css/theme.css`; then tune brand colours (OKLCH), fonts, `--text-*` and `--space-*` sizes/ratios, `--radius-scale`, heading styles and component roles. Self-host fonts (`fonts/README.md`).
+2. Pick a starting preset from `themes/` closest to the tone and copy it over `public/css/theme.css`; then tune brand colours (OKLCH), fonts, `--text-*` and `--space-*` sizes/ratios, `--radius-scale`, heading styles and component roles. Self-host fonts (`docs/fonts.md`).
 3. Open `index.html` (style guide) in both themes; fix anything that looks wrong at the theme level before building pages. Check contrast of brand colours (the `-a11y` pairs adapt automatically).
 4. Plan the sitemap; list each page's sections and the component per section; note gaps (AGENTS.md section 1 says how to fill them).
-5. Fill `_template.html` (site name, nav, footer, favicon, social meta, default SEO block) once. That header/footer is the canonical copy for every page.
+5. Fill `_template.html` (repo root; site name, nav, footer, favicon, social meta, default SEO block) once. That header/footer is the canonical copy for every page.
 6. Build pages (next workflow). Update `sitemap.xml`, `robots.txt` (real domain), `404.html`. Convert supplied images to WebP (docs/images.md). For a list of entities use docs/data-driven-pages.md.
 7. Write the Organization/WebSite schema for the home page (docs/seo.md) and **list the business facts you still need from the client** (address, phone, hours, social profiles, logo, share image); never invent them.
 8. Run the Definition of done in AGENTS.md. Record deliberate deviations in `DESIGN-NOTES.md`.
 
 ## New page
 
-1. Copy `_template.html` to `<slug>.html`. Set `<title>`, meta description, canonical, Open Graph, the single `<h1>`, `aria-current="page"` on the nav link.
+1. Copy `_template.html` to `public/<slug>.html` (fix its relative links if you nest it). Set `<title>`, meta description, canonical, Open Graph, the single `<h1>`, `aria-current="page"` on the nav link.
 2. Structure: `main#main` → sections (`.section`, optional `u-surface-*`) → `.container` → layout objects (`.stack`, `.grid`, `.cluster`) → components. Alternate section surfaces for rhythm.
 3. **Write a real title and description** from the page content (≤60 / ≤160 characters), set canonical, Open Graph and Twitter tags. **Choose the schema type from the table in docs/seo.md** and write the JSON-LD. If the page has a breadcrumb, **add `BreadcrumbList`**. Images: WebP, `loading="eager"` inside the first 1920×1080 screen, `lazy` elsewhere.
 3a. Pick heading levels by outline, restyle with `u-h*` if needed. Write real content, real alt text, descriptive link text.

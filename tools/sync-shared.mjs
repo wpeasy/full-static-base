@@ -1,4 +1,5 @@
 #!/usr/bin/env node
+// Reads _template.html from the repo root and updates the pages in public/ only.
 // Copies the shared <header class="nav"> and <footer class="footer"> from _template.html into every
 // real page, then marks the current page's nav link with aria-current="page".
 // Pages with <html data-root-absolute> (single-template pages served from deeper URLs such as /item/<slug>)
@@ -11,7 +12,8 @@ import { readFileSync, writeFileSync, readdirSync } from 'node:fs';
 import { join, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
-const root = join(dirname(fileURLToPath(import.meta.url)), '..');
+const root = join(dirname(fileURLToPath(import.meta.url)), '..'); // repo root: holds _template.html
+const site = join(root, 'public');  // pages to update
 const dry = process.argv.includes('--dry');
 const headerRe = /<header class="nav"[\s\S]*?<\/header>/;
 const footerRe = /<footer class="footer"[\s\S]*?<\/footer>/;
@@ -21,8 +23,8 @@ const header = template.match(headerRe)?.[0];
 const footer = template.match(footerRe)?.[0];
 if (!header || !footer) { console.error('_template.html must contain <header class="nav"> and <footer class="footer">'); process.exit(1); }
 
-for (const name of readdirSync(root).filter((f) => f.endsWith('.html') && f !== '_template.html')) {
-  const path = join(root, name);
+for (const name of readdirSync(site).filter((f) => f.endsWith('.html'))) {
+  const path = join(site, name);
   const original = readFileSync(path, 'utf8');
   if (/data-page="styleguide"/.test(original)) continue;
 

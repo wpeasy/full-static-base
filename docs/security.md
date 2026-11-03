@@ -1,6 +1,6 @@
 # Security headers & CSP
 
-The site is static, so the main protections are HTTP headers set by the host. `_headers` (Netlify / Cloudflare Pages format) is a ready template; translate it for nginx, Apache or other hosts. Replace `example.com` and the form endpoint before launch.
+The site is static, so the main protections are HTTP headers set by the host. `public/_headers` (Netlify / Cloudflare Pages format) is a ready template (host config files live inside `public/` because only that folder is published); translate it for nginx, Apache or other hosts. Replace `example.com` and the form endpoint before launch.
 
 ## Content-Security-Policy and Alpine
 

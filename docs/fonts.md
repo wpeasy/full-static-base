@@ -1,4 +1,7 @@
-# fonts/
+# Fonts (`public/fonts/`)
+
+Paths are relative to `public/`.
+
 
 Self-host fonts as `.woff2` here (no third-party font CDNs). The pattern:
 

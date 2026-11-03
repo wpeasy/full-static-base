@@ -1,14 +1,14 @@
 # tools/
 
-Dev-only helpers. Nothing here ships with the site; the site has no build step.
+Dev-only helpers. Nothing here ships with the site (only `public/` is deployed); the site has no build step. Every tool reads and writes under `public/` (except `check.mjs`, which also validates `_template.html` at the repo root).
 
 | Command | What it does | Needs |
 |---|---|---|
 | `node tools/check.mjs` | Guardrails: tokens not literals, BEM, no IDs/`!important`, motion gating, HTML semantics, a11y basics, shared header/footer, asset links, `main.css` imports. Exit 1 on errors. | Node only |
-| `node tools/serve.mjs [--port n]` | Static preview server (default 8765) that applies the `_redirects` 200 rewrites (`/item/*` → `item.html`), serves `404.html`, never caches | Node only |
-| `node tools/build-sitemap.mjs [collection] [singular]` | Rewrites item URLs in `sitemap.xml` between `<!-- items:start -->` / `<!-- items:end -->` from `data/items.json` (`site.url`) | Node only |
-| `node tools/bundle-css.mjs` | Inline `css/main.css` imports into `css/main.bundle.css` for deploy | Node only |
-| `node tools/browser-checks.mjs` | axe WCAG scan, horizontal-overflow and console-error checks, screenshots at 320/768/1280 in light/dark with reduced motion | `cd tools && npm install && npx playwright install chromium`, plus a running local server |
+| `node tools/serve.mjs [--port n]` | Static preview server for `public/` (default port 8765; `node tools/serve.mjs 9000` to change) that applies the `_redirects` 200 rewrites (`/item/*` → `item.html`), serves `404.html`, never caches. Anything outside `public/` (AGENTS.md, tools/, _template.html) is a 404 | Node only |
+| `node tools/build-sitemap.mjs [collection] [singular]` | Rewrites item URLs in `public/sitemap.xml` between `<!-- items:start -->` / `<!-- items:end -->` from `public/data/items.json` (`site.url`) | Node only |
+| `node tools/bundle-css.mjs` | Inline `public/css/main.css` imports into `public/css/main.bundle.css` for deploy (git-ignored) | Node only |
+| `node tools/browser-checks.mjs` | axe WCAG scan, horizontal-overflow and console-error checks, screenshots at 320/768/1280 in light/dark with reduced motion | `cd tools && npm install && npx playwright install chromium`, plus `node tools/serve.mjs` running (scans http://localhost:8765) |
 
 ### Pages with side-by-side alternatives
 
@@ -20,6 +20,10 @@ A page may hold several designs of the same section, e.g. for choosing between d
 ```
 
 `check.mjs` runs the HTML checks once per variant with the others blanked out, so each variant needs its own single `<h1>`, unique ids and unskipped heading order. Findings that repeat across passes are reported once. Pages without `data-variant` are checked once. Local file references ignore `?query` and `#fragment` (`js/vendor/x.js?v=1.2.3` is fine).
+
+### Published folder
+
+`check.mjs` errors if a page in `public/` links to a file outside `public/`, and warns if `public/` contains development files (`*.md`, `tools`, `docs`, `themes`, `_template.html`). `sync-shared.mjs` reads `_template.html` from the repo root and updates only the pages in `public/`.
 
 ### SEO, images and structured data
 

@@ -1,5 +1,5 @@
 .DS_Store
 node_modules/
 tools/screenshots/
-css/main.bundle.css
+public/css/main.bundle.css
 .claude/settings.local.json

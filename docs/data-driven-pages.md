@@ -1,6 +1,6 @@
 # Data-driven pages (JSON + one template)
 
-For a list of entities (people, products, locations), keep the content in **one JSON file** and show it with **one template page** filled by JavaScript. No build step, no generated pages. Worked example: `data/items.json`, `items.html` (list), `item.html` (template), `js/items-data.js`, `js/items-list.js`, `js/item-profile.js`, `js/seo.js`.
+For a list of entities (people, products, locations), keep the content in **one JSON file** and show it with **one template page** filled by JavaScript. No build step, no generated pages. All paths are relative to `public/`. Worked example: `data/items.json`, `items.html` (list), `item.html` (template), `js/items-data.js`, `js/items-list.js`, `js/item-profile.js`, `js/seo.js`.
 
 > Do not generate one static HTML file per entity with a script. The pattern here is client-side by design.
 
@@ -27,7 +27,7 @@ Scheme: `/<singular>/<slug>` (for example `/item/amelie-dubois`), all answered b
 | Apache | `.htaccess`: `RewriteRule ^item/[^/.]+/?$ /item.html [L]` |
 | Local | `node tools/serve.mjs` (reads `_redirects`; port 8765, `--port` to change; 404.html fallback; no caching) |
 
-`python3 -m http.server` cannot rewrite; use `serve.mjs`. `item.html?slug=amelie-dubois` also works as a fallback.
+`python3 -m http.server` cannot rewrite; use `serve.mjs` (it serves `public/` only; `_redirects` and `.htaccess` live in `public/` so the host picks them up). `item.html?slug=amelie-dubois` also works as a fallback.
 
 **Root-absolute paths**: the template is served from a deeper path (`/item/x`), so every asset and link in it starts with `/` (`/css/main.css`). Mark it with `<html data-root-absolute>`; `node tools/sync-shared.mjs` then prefixes the shared header and footer, and `check.mjs` ignores a leading `/` when comparing them.
 
