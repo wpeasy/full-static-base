@@ -3,3 +3,5 @@ node_modules/
 tools/screenshots/
 public/css/main.bundle.css
 .claude/settings.local.json
+.wrangler/
+dist/

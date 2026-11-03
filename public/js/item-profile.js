@@ -1,4 +1,5 @@
 // Page logic for the single template page item.html. status: loading | ready | missing | error.
+// Only `loading` sets aria-busy on <main class="page">; every other value clears it (docs/js-rendered-pages.md).
 // SEO comes from the same JSON as the content (js/seo.js). Needs js/seo.js and js/items-data.js first.
 
 document.addEventListener('alpine:init', () => {
@@ -44,20 +45,20 @@ document.addEventListener('alpine:init', () => {
     seoReady() {
       const { site, item } = this;
       const { builders } = Seo;
-      const path = ItemData.pageUrl(item.slug);
+      const url = ItemData.url(`item/${item.slug}`);
       const title = item.seoTitle || `${item.name} | ${item.role} in ${item.place} | ${site.name}`;
       const description = item.seoDescription || `${item.summary} ${site.collection.cta}`;
       Seo.setSeo({
-        site, title, description, path, type: 'profile',
+        site, title, description, url, type: 'profile',
         graph: [
           builders.organisation(site),
           builders.website(site),
-          builders.webPage({ type: 'ProfilePage', path, name: title, description, mainEntity: `${Seo.abs(path)}#person` }),
-          builders.person({ path, name: item.name, jobTitle: item.role, description: item.summary, place: item.place }),
-          builders.breadcrumb(path, [
-            { name: 'Home', path: '/' },
-            { name: site.collection.name, path: site.collection.path },
-            { name: item.name, path },
+          builders.webPage({ type: 'ProfilePage', url, name: title, description, mainEntity: `${url}#person` }),
+          builders.person({ url, name: item.name, jobTitle: item.role, description: item.summary, place: item.place }),
+          builders.breadcrumb(url, [
+            { name: 'Home', url: ItemData.url() },
+            { name: site.collection.name, url: ItemData.url(site.collection.path) },
+            { name: item.name, url },
           ]),
         ],
       });

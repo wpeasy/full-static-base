@@ -6,7 +6,7 @@
 document.addEventListener('alpine:init', () => {
   Alpine.data('itemList', () => {
     const list = {
-      loadState: 'loading', // loading | ready | error
+      status: 'loading', // loading | ready | error. Only `loading` sets aria-busy on <main class="page">
       site: {},
       items: [],
       topics: [],
@@ -21,7 +21,7 @@ document.addEventListener('alpine:init', () => {
       labelOf(id) {
         return this.topics.find((topic) => topic.id === id)?.label || id;
       },
-      pageUrl: (slug) => ItemData.pageUrl(slug),
+      pageUrl: (slug) => ItemData.href(slug),
 
       async init() {
         try {
@@ -30,27 +30,28 @@ document.addEventListener('alpine:init', () => {
           this.topics = Object.entries(data.topics).map(([id, label]) => ({ id, label }));
           this.items = data.items;
           this.total = this.count = data.items.length;
-          this.loadState = 'ready';
+          this.status = 'ready';
           this.seo();
         } catch (error) {
           console.error(error);
-          this.loadState = 'error';
+          this.status = 'error';
         }
       },
 
       seo() {
         const { site, items } = this;
         const { builders } = Seo;
-        const { name, description, path } = site.collection;
+        const { name, description } = site.collection;
+        const url = ItemData.url(site.collection.path);
         const title = `${name} | ${site.name}`;
         Seo.setSeo({
-          site, title, description, path,
+          site, title, description, url,
           graph: [
             builders.organisation(site),
             builders.website(site),
-            builders.webPage({ path, name: title, description }),
-            builders.itemList({ path, name, items: items.map((item) => ({ name: item.name, path: ItemData.pageUrl(item.slug) })) }),
-            builders.breadcrumb(path, [{ name: 'Home', path: '/' }, { name, path }]),
+            builders.webPage({ url, name: title, description }),
+            builders.itemList({ url, name, items: items.map((item) => ({ name: item.name, url: ItemData.url(`item/${item.slug}`) })) }),
+            builders.breadcrumb(url, [{ name: 'Home', url: ItemData.url() }, { name, url }]),
           ],
         });
       },

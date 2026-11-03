@@ -28,7 +28,7 @@ const GridFilter = () => ({
       return (tag === 'all' || tags.includes(tag)) && (!q || text.includes(q));
     },
 
-    get status() {
+    get summary() {
       return `${this.count} of ${this.total} shown`;
     },
 

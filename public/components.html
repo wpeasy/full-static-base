@@ -283,7 +283,7 @@
               <button class="filter__chip" type="button" :aria-pressed="tag === 'accessibility'" @click="setTag('accessibility')">Accessibility</button>
               <button class="filter__chip" type="button" :aria-pressed="tag === 'motion'" @click="setTag('motion')">Motion</button>
             </div>
-            <p class="filter__status" role="status" aria-live="polite" x-text="status"></p>
+            <p class="filter__status" role="status" aria-live="polite" x-text="summary"></p>
           </div>
           <ul class="filter__grid" x-ref="grid">
             <li class="filter__item" data-tags="design" :hidden="!matches($el, query, tag)">
@@ -331,6 +331,20 @@
             <p>Sam leads design and has built systems for small teams and large ones.</p>
             <p><a class="button" href="contact.html">Get in touch</a></p>
           </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="skeleton">
+      <div class="container stack stack--l">
+        <header class="section-header">
+          <p class="section-header__eyebrow">Pattern</p>
+          <h2>Page loading shell and skeleton</h2>
+          <p class="section-header__lead">For a <code>main</code> filled by JavaScript: <code>page</code> hides the content while <code>aria-busy="true"</code>, <code>skeleton</code> shapes appear only after 150ms and shimmer while busy. Shown here as static shapes; the live behaviour is on <a href="items.html">items.html</a> (docs/js-rendered-pages.md).</p>
+        </header>
+        <div class="grid">
+          <div class="skeleton" aria-hidden="true"><span class="skeleton__block"></span><span class="skeleton__line skeleton__line--title"></span><span class="skeleton__line"></span><span class="skeleton__line skeleton__line--short"></span></div>
+          <div class="skeleton" aria-hidden="true"><span class="skeleton__avatar"></span><span class="skeleton__line"></span><span class="skeleton__line"></span><span class="skeleton__line skeleton__line--short"></span></div>
         </div>
       </div>
     </section>

@@ -33,6 +33,8 @@ Paths are relative to `public/` (see AGENTS.md section 3). Reuse before you crea
 | `theme-toggle` | persistent dark-mode button | `__icon` (`--sun`/`--moon`) | Alpine `themeToggle` + `js/theme-init.js` |
 | `filter` | search + topic chips + filterable grid | `__toolbar __search __tags __chip __status __grid __item __empty` | Alpine `gridFilter` (`js/grid-filter.js`), optional GSAP Flip |
 | `profile` | detail view of one entity (filled from JSON) | `__aside __avatar __facts __fact __label __value __tags __body __role __missing` | Alpine `itemProfile` (`js/item-profile.js`), `[hidden]` blocks |
+| `page` | wrapper for a JS-filled `<main>`: hides content and footer while `aria-busy`, entrance animation, skeleton overlay | `__skeleton __content` | `aria-busy="true" :aria-busy="status === 'loading'"`, docs/js-rendered-pages.md |
+| `skeleton` | placeholder shapes while loading | `__line(--title --short) __block __avatar` | decorative (`aria-hidden`), shimmer only while `.page` is busy |
 | `icon` | SVG sprite icon | `--s --l` | `images/icons.svg#name` |
 
 Layout objects (`container section stack cluster grid`) live in `css/core/layout.css`; utilities and surfaces in `css/core/utilities.css`. Names in [TOKENS.md](TOKENS.md).
@@ -49,6 +51,10 @@ Needs `js/grid-filter.js` and, for animation, vendored `gsap` + `Flip` (see `doc
 ## Recipe: JSON-driven list + template page
 
 `items.html` (list: `filter` + `card`s from `x-for`) and `item.html` (template: `profile`) are filled from `data/items.json`. Full guide: [docs/data-driven-pages.md](docs/data-driven-pages.md); SEO from the same JSON: [docs/seo.md](docs/seo.md). In the data-driven list the base class method is `elements()` and filtering uses `matchesItem(item, query, tag)`.
+
+## Recipe: JS-rendered page (`page` + `skeleton`)
+
+Wrap a `<main>` that Alpine fills in `.page` with a `.page__skeleton` (aria-hidden overlay) and `.page__content` (everything else, including colourful bands). One `status` property (`loading | ready | missing | error`); only `loading` sets `aria-busy`. Full guide: [docs/js-rendered-pages.md](docs/js-rendered-pages.md); Alpine template rules: [docs/alpine.md](docs/alpine.md). Live: `items.html`, `item.html`.
 
 ## Snippets
 

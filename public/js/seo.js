@@ -1,14 +1,19 @@
 // SEO helpers: set <title>, meta, canonical and JSON-LD from data, plus reusable schema builders.
 // Plain script, no Alpine. Exposes window.Seo. Load before the scripts that call it.
-//   Seo.setSeo({ site, title, description, path, type: 'profile', graph: [...], noindex: false })
+//   Seo.setSeo({ site, title, description, url, type: 'profile', graph: [...], noindex: false })
+// `url` is the page's full absolute URL: build it with Seo.siteUrl('item/sam-rivera').
 // JSON-LD is a data block (type="application/ld+json"): it is never executed, so it is CSP-safe.
-// Absolute URLs use location.origin, so the same code is right on localhost and on the live domain.
+// Absolute URLs are location.origin + the site base path, which is derived from this script's own URL
+// (<base>/js/seo.js), so the code is right on localhost, on a domain root and under /repo-name/ (GitHub Pages).
 // Keep the static tags in each HTML file as the fallback for no-JS visitors and link-preview scrapers.
 
 (() => {
   const LIMITS = { title: 60, description: 160 };
+  const base = new URL('../', document.currentScript.src).pathname; // '/' or '/repo-name/'
   const origin = () => location.origin;
-  const abs = (path) => new URL(path, origin()).href;
+  const siteRoot = () => origin() + base;
+  const abs = (path) => new URL(String(path).replace(/^\//, ''), siteRoot()).href; // site-relative path or full URL -> full URL
+  const siteUrl = abs;
   const head = document.head;
 
   function setMeta(attr, key, content) {
@@ -36,10 +41,9 @@
     if (text.length > LIMITS[kind]) console.warn(`SEO: ${kind} is ${text.length} characters (aim for ${LIMITS[kind]} or fewer): ${text}`);
   }
 
-  function setSeo({ site = {}, title, description, path = location.pathname, type = 'website', graph, noindex = false }) {
+  function setSeo({ site = {}, title, description, url = location.origin + location.pathname, type = 'website', graph, noindex = false }) {
     warnLength('title', title);
     warnLength('description', description);
-    const url = abs(path);
     document.title = title;
     setMeta('name', 'description', description);
     setLink('canonical', noindex ? '' : url);
@@ -66,14 +70,14 @@
 
   // ---- Schema builders: return nodes with stable @ids so pages reference rather than duplicate ----
   const ids = {
-    organisation: () => `${origin()}/#organization`,
-    website: () => `${origin()}/#website`,
+    organisation: () => `${siteRoot()}#organization`,
+    website: () => `${siteRoot()}#website`,
   };
 
   // Only properties present in the data are emitted. Never invent facts.
   function organisation(site) {
     const o = site.organisation || {};
-    const node = { '@type': o.type || 'Organization', '@id': ids.organisation(), name: o.name || site.name, url: `${origin()}/` };
+    const node = { '@type': o.type || 'Organization', '@id': ids.organisation(), name: o.name || site.name, url: siteRoot() };
     if (o.description) node.description = o.description;
     if (o.logo) node.logo = abs(o.logo);
     if (o.sameAs?.length) node.sameAs = o.sameAs;
@@ -98,18 +102,17 @@
   }
 
   function website(site) {
-    return { '@type': 'WebSite', '@id': ids.website(), url: `${origin()}/`, name: site.name, inLanguage: site.language, publisher: { '@id': ids.organisation() } };
+    return { '@type': 'WebSite', '@id': ids.website(), url: siteRoot(), name: site.name, inLanguage: site.language, publisher: { '@id': ids.organisation() } };
   }
 
-  function webPage({ type = 'WebPage', path, name, description, mainEntity }) {
-    const url = abs(path);
+  function webPage({ type = 'WebPage', url, name, description, mainEntity }) {
     const node = { '@type': type, '@id': `${url}#webpage`, url, name, description, isPartOf: { '@id': ids.website() } };
     if (mainEntity) node.mainEntity = { '@id': mainEntity };
     return node;
   }
 
-  function person({ path, name, jobTitle, description, image, place }) {
-    const node = { '@type': 'Person', '@id': `${abs(path)}#person`, name, url: abs(path), worksFor: { '@id': ids.organisation() } };
+  function person({ url, name, jobTitle, description, image, place }) {
+    const node = { '@type': 'Person', '@id': `${url}#person`, name, url, worksFor: { '@id': ids.organisation() } };
     if (jobTitle) node.jobTitle = jobTitle;
     if (description) node.description = description;
     if (image) node.image = abs(image);
@@ -117,22 +120,22 @@
     return node;
   }
 
-  function breadcrumb(path, trail) {
+  function breadcrumb(url, trail) {
     return {
       '@type': 'BreadcrumbList',
-      '@id': `${abs(path)}#breadcrumb`,
-      itemListElement: trail.map((step, i) => ({ '@type': 'ListItem', position: i + 1, name: step.name, item: abs(step.path) })),
+      '@id': `${url}#breadcrumb`,
+      itemListElement: trail.map((step, i) => ({ '@type': 'ListItem', position: i + 1, name: step.name, item: step.url })),
     };
   }
 
-  function itemList({ path, name, items }) {
+  function itemList({ url, name, items }) {
     return {
       '@type': 'ItemList',
-      '@id': `${abs(path)}#itemlist`,
+      '@id': `${url}#itemlist`,
       name,
-      itemListElement: items.map((item, i) => ({ '@type': 'ListItem', position: i + 1, name: item.name, url: abs(item.path) })),
+      itemListElement: items.map((item, i) => ({ '@type': 'ListItem', position: i + 1, name: item.name, url: item.url })),
     };
   }
 
-  window.Seo = { setMeta, setLink, setJsonLd, setSeo, abs, builders: { organisation, offerCatalog, website, webPage, person, breadcrumb, itemList } };
+  window.Seo = { base, setMeta, setLink, setJsonLd, setSeo, abs, siteUrl, builders: { organisation, offerCatalog, website, webPage, person, breadcrumb, itemList } };
 })();

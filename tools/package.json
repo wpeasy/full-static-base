@@ -6,10 +6,14 @@
   "scripts": {
     "check": "node check.mjs",
     "bundle": "node bundle-css.mjs",
-    "browser": "node browser-checks.mjs"
+    "browser": "node browser-checks.mjs",
+    "cf:dev": "wrangler dev --config ../wrangler.jsonc",
+    "cf:deploy": "wrangler deploy --config ../wrangler.jsonc",
+    "cf:login": "wrangler login"
   },
   "devDependencies": {
     "@axe-core/playwright": "4.10.2",
-    "playwright": "1.49.1"
+    "playwright": "1.49.1",
+    "wrangler": "4.156.2"
   }
 }

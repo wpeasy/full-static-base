@@ -1,0 +1,14 @@
+// Cloudflare Workers Static Assets. Run from tools/: npm run cf:dev | cf:deploy | cf:login (docs/hosting.md).
+// Only public/ is uploaded. _headers and _redirects inside public/ are honoured.
+{
+  "name": "full-static-site",
+  "main": "worker/index.js",
+  "compatibility_date": "2026-11-01",
+  "assets": {
+    "directory": "./public",
+    "binding": "ASSETS",
+    // The Worker runs first only for the template URLs; everything else is served straight from assets
+    "run_worker_first": ["/item/*"],
+    "not_found_handling": "404-page"
+  }
+}

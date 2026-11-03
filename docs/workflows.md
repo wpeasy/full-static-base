@@ -18,7 +18,8 @@ Each workflow assumes you've read `AGENTS.md`. The Claude skills in `.claude/ski
 1. Copy `_template.html` to `public/<slug>.html` (fix its relative links if you nest it). Set `<title>`, meta description, canonical, Open Graph, the single `<h1>`, `aria-current="page"` on the nav link.
 2. Structure: `main#main` → sections (`.section`, optional `u-surface-*`) → `.container` → layout objects (`.stack`, `.grid`, `.cluster`) → components. Alternate section surfaces for rhythm.
 3. **Write a real title and description** from the page content (≤60 / ≤160 characters), set canonical, Open Graph and Twitter tags. **Choose the schema type from the table in docs/seo.md** and write the JSON-LD. If the page has a breadcrumb, **add `BreadcrumbList`**. Images: WebP, `loading="eager"` inside the first 1920×1080 screen, `lazy` elsewhere.
-3a. Pick heading levels by outline, restyle with `u-h*` if needed. Write real content, real alt text, descriptive link text.
+3a. If `<main>` is filled by JavaScript, use the `page` wrapper, `aria-busy` and a skeleton (docs/js-rendered-pages.md; template rules in docs/alpine.md).
+3b. Pick heading levels by outline, restyle with `u-h*` if needed. Write real content, real alt text, descriptive link text.
 4. **Add the page to `sitemap.xml`.** Note any missing business facts for the client. For new nav/footer links, edit `_template.html` and run `node tools/sync-shared.mjs` so every page stays identical.
 5. Verify: keyboard pass, light/dark, 320/768/1280, reduced motion emulation, `node tools/check.mjs`.
 
@@ -43,3 +44,11 @@ Allowed when the design needs it (AGENTS.md section 1). Edit the source, keep to
 2. Walk each page: outline (headings/landmarks), keyboard, focus visibility, contrast in both themes, forms, images, 200% zoom, 320px, reduced-motion emulation.
 3. Look for drift: literals instead of tokens, duplicate components, one-off overrides, undocumented deviations. Fold repeated patterns into components or tokens.
 4. Report findings by severity (blocks users / hurts users / polish) with file and line, then fix on request.
+
+## Testing motion and loading states
+
+- **Use a real, visible browser window.** A hidden or background preview pane freezes CSS animations and `requestAnimationFrame` (GSAP's ticker stops too), so animations appear not to run and timing numbers are wrong.
+- **Measure before guessing.** Use the Performance API: `performance.getEntriesByType('paint')` (first paint), `'resource'` (when the JSON arrived), and a `PerformanceObserver` for `layout-shift`. Typical question: was the data ready before first paint? Compare the JSON's `responseEnd` with `first-paint`.
+- To see a skeleton, delay the JSON beyond 150ms (network throttling); a fast or cached load must not show it. Check the entrance animation on a cached load too.
+- **Always hard-refresh after a deploy** (and after a Pages export): a host or browser cache can serve old CSS/JS with new HTML. Rules: docs/security.md.
+- JS-filled pages: docs/js-rendered-pages.md. Hosting and export: docs/hosting.md.

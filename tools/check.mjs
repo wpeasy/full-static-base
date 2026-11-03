@@ -58,6 +58,9 @@ for (const file of cssFiles) {
   const name = relative(join(site, 'css'), file);
   const raw = readFileSync(file, 'utf8');
   const css = stripComments(raw);
+  for (const m of css.matchAll(/@view-transition/g)) {
+    warn(file, lineOf(css, m.index), '@view-transition: the old page stays visible behind the new one and reads as a flash (docs/js-rendered-pages.md)');
+  }
   const isThemeLike = ['theme.css', 'core/framework.css'].includes(name);
   const isComponent = name.startsWith('components/');
   const isStyleguide = name.endsWith('styleguide.css');
@@ -184,6 +187,20 @@ function variantPasses(html) {
   return ids.map((id) => blocks.filter((b) => b.id !== id).reduce((out, b) => out.slice(0, b.start) + blank(out.slice(b.start, b.end)) + out.slice(b.end), html));
 }
 
+// End index of the element whose opening tag starts at `start` (same tag nesting, comments/templates already handled by the caller)
+function elementEnd(html, start) {
+  const name = (html.slice(start).match(/^<([a-z][a-z0-9]*)/i) || [])[1];
+  if (!name) return start;
+  const tag = new RegExp(`<(/?)${name}\\b[^>]*>`, 'gi');
+  tag.lastIndex = start;
+  let depth = 0, t;
+  while ((t = tag.exec(html))) {
+    depth += t[1] ? -1 : 1;
+    if (!depth) return tag.lastIndex;
+  }
+  return html.length;
+}
+
 // Published pages, plus _template.html from the repo root (source of the shared header/footer;
 // its relative links resolve against public/ because that is where the copies end up)
 const htmlFiles = [join(root, '_template.html'), ...readdirSync(site).filter((f) => f.endsWith('.html')).map((f) => join(site, f))].filter(existsSync);
@@ -228,6 +245,26 @@ for (const file of htmlFiles) {
   for (const m of base.matchAll(/<script\b[^>]*type="application\/ld\+json"[^>]*>([\s\S]*?)<\/script>/gi)) {
     try { JSON.parse(m[1]); } catch (e) { error(file, lineOf(base, m.index), `JSON-LD is not valid JSON: ${e.message}`); }
   }
+  // JS-rendered pages (docs/js-rendered-pages.md): a <main> filled by Alpine needs aria-busy, and colourful
+  // static sections must sit inside .page__content, otherwise they flash under an empty shell
+  if (!/data-page="styleguide"/.test(base) && file !== join(root, '_template.html')) {
+    const mainAt = base.search(/<main\b/i);
+    if (mainAt > -1) {
+      const mainTag = base.slice(mainAt).match(/^<main\b[^>]*>/i)[0];
+      const mainEnd = elementEnd(base, mainAt);
+      const jsFilled = /\sx-data\b/.test(mainTag) || /<template\b[^>]*\sx-for\b/i.test(original.slice(mainAt, mainEnd).replace(/<form[\s\S]*?<\/form>/gi, '')) /* form error lists are not page content */;
+      if (jsFilled && !/\saria-busy=/.test(mainTag)) warn(file, lineOf(base, mainAt), '<main> is filled by JavaScript: add class="page" aria-busy="true" :aria-busy="status === \'loading\'" (docs/js-rendered-pages.md)');
+      const contentAt = base.search(/<[a-z]+\b[^>]*class="[^"]*\bpage__content\b/i);
+      if (contentAt > -1 && /\bpage\b/.test(mainTag.match(/class="([^"]*)"/)?.[1] || '')) {
+        const contentEnd = elementEnd(base, contentAt);
+        for (const m of base.slice(mainAt, mainEnd).matchAll(/<[a-z]+\b[^>]*class="[^"]*\b(u-surface-[\w-]+|cta)\b[^"]*"/gi)) {
+          const index = mainAt + m.index;
+          if (index < contentAt || index >= contentEnd) warn(file, lineOf(base, index), `"${m[1]}" is outside .page__content: it would show under the empty loading shell`);
+        }
+      }
+    }
+  }
+  for (const m of base.matchAll(/@view-transition/g)) warn(file, lineOf(base, m.index), '@view-transition: the old page stays visible behind the new one and reads as a flash (docs/js-rendered-pages.md)');
   for (const html of variantPasses(base)) {
     const isGuide = /data-page="styleguide"/.test(html);
     const here = (re) => { const m = html.match(re); return m ? lineOf(html, m.index) : 1; };
@@ -340,6 +377,22 @@ for (const file of htmlFiles) {
       }
     }
   }
+}
+
+// ---------------------------------------------------------------- _headers
+// Unversioned CSS/JS must revalidate: a max-age leaves visitors on new HTML with old CSS/JS after a deploy.
+// Allowed: no-cache / max-age=0, or `immutable` (a promise that the file names carry a version).
+const headersFile = join(site, '_headers');
+if (existsSync(headersFile)) {
+  const lines = readFileSync(headersFile, 'utf8').split('\n');
+  let rule = '';
+  lines.forEach((line, i) => {
+    if (/^\S/.test(line) && !line.startsWith('#')) rule = line.trim();
+    const cc = line.match(/^\s+Cache-Control\s*:\s*(.*)$/i);
+    if (!cc || !/^\/(css|js)\//.test(rule)) return;
+    const age = Number((cc[1].match(/(?:^|[\s,])max-age=(\d+)/) || [])[1] || 0);
+    if (age > 0 && !/immutable/.test(cc[1])) warn(headersFile, i + 1, `${rule} has max-age=${age} without a version scheme: use no-cache, or version the file names and add immutable (AGENTS.md, docs/security.md)`);
+  });
 }
 
 // ---------------------------------------------------------------- report

@@ -1,0 +1,67 @@
+/* page: wrapper for a <main> whose content is filled by JavaScript (docs/js-rendered-pages.md)
+   Markup:  <main id="main" class="page" aria-busy="true" :aria-busy="status === 'loading'" x-data="…">
+              <div class="page__skeleton" aria-hidden="true">…skeleton…</div>
+              <div class="page__content">everything else, incl. colourful bands and banners</div>
+            </main>
+   Elements: __skeleton (absolute overlay, shown only after a short delay), __content
+   State:    [aria-busy="true"] while loading. Only `loading` sets it; ready, missing and error clear it.
+   Busy styling applies only under @media (scripting: enabled): without JavaScript nothing is hidden.
+   While busy the content is invisible but keeps its space (min-block-size) and the footer is hidden, so
+   nothing flashes and nothing shifts when the data arrives.
+   A11y: aria-busy tells assistive tech the region is updating; the skeleton is aria-hidden.
+   Motion (no-preference only): entrance is a CSS animation, not a transition, so it also plays when the
+   data was ready before first paint. Skeleton waits --page-skeleton-delay so fast or cached loads never
+   show it. With reduce: no skeleton, content simply appears. Do not use @view-transition here. */
+
+@layer components {
+  .page {
+    --page-busy-min-height: 70svh;
+    --page-skeleton-delay: 150ms;
+    position: relative;
+  }
+
+  .page__skeleton {
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  @media (scripting: enabled) {
+    .page[aria-busy="true"] {
+      min-block-size: var(--page-busy-min-height);
+    }
+
+    .page[aria-busy="true"] > .page__content,
+    .page[aria-busy="true"] ~ .footer {
+      opacity: 0;
+      visibility: hidden;
+    }
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    @keyframes page-enter {
+      from { opacity: 0; transform: translateY(var(--space-s)); }
+    }
+
+    @keyframes page-skeleton-in {
+      from { opacity: 0; }
+    }
+
+    .page:not([aria-busy="true"]) > .page__content,
+    .page:not([aria-busy="true"]) ~ .footer {
+      animation: page-enter var(--duration-slow) var(--ease-out) both;
+    }
+
+    .page__skeleton {
+      transition: opacity var(--duration-fast) var(--ease-out);
+    }
+
+    @media (scripting: enabled) {
+      .page[aria-busy="true"] > .page__skeleton {
+        opacity: 1;
+        animation: page-skeleton-in var(--duration-base) var(--ease-out) var(--page-skeleton-delay) backwards;
+      }
+    }
+  }
+}

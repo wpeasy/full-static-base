@@ -49,11 +49,11 @@ SEO and schema are part of every page, not an add-on. A page without a real titl
 Do not hand-write a second copy of titles, descriptions or schema. `js/seo.js` builds them from the data (see [data-driven-pages.md](data-driven-pages.md)):
 
 ```js
-Seo.setSeo({ site, title, description, path, type: 'profile', graph: [ …builders ], noindex: false });
+Seo.setSeo({ site, title, description, url, type: 'profile', graph: [ …builders ], noindex: false });
 ```
 
 - `setSeo` updates `<title>`, description, canonical, robots, theme-color, Open Graph, Twitter tags and the JSON-LD block (`setMeta`, `setLink`, `setJsonLd` are exported too).
-- URLs are made absolute with `location.origin`, so the same code is correct on localhost and on the live domain.
+- `url` is the page's **full URL**: build it with `ItemData.url('item/sam-rivera')` or `Seo.siteUrl('item/sam-rivera')`, which are `location.origin` + the site base path (derived from the script's own URL). The same code is correct on localhost, on a domain root and under `/repo-name/`. Builders (`webPage`, `person`, `breadcrumb`, `itemList`) also take full URLs.
 - Derived defaults: `${name} | ${role} in ${place} | ${site.name}` and `${summary} ${cta}`. An item may override with `seoTitle` / `seoDescription`.
 - It `console.warn`s when a title or description exceeds the limits.
 - Builders in `Seo.builders`: `organisation`, `offerCatalog`, `website`, `webPage`, `person`, `breadcrumb`, `itemList`. They only emit properties present in the data.

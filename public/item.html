@@ -21,6 +21,7 @@
   <meta property="og:image:alt" content="Site name">
   <meta name="twitter:card" content="summary_large_image">
 
+  <link rel="preload" href="/data/items.json" as="fetch" crossorigin="anonymous">
   <script src="/js/theme-init.js"></script>
   <link rel="stylesheet" href="/css/main.css">
 
@@ -57,7 +58,17 @@
     </div>
   </header>
 
-  <main id="main" x-data="itemProfile">
+  <main id="main" class="page" aria-busy="true" :aria-busy="status === 'loading'" x-data="itemProfile">
+    <div class="page__skeleton" aria-hidden="true">
+      <div class="section">
+        <div class="container container--narrow stack stack--l">
+          <span class="skeleton__line skeleton__line--short"></span>
+          <div class="skeleton"><span class="skeleton__line skeleton__line--title"></span><span class="skeleton__line skeleton__line--short"></span></div>
+          <div class="skeleton"><span class="skeleton__avatar"></span><span class="skeleton__line"></span><span class="skeleton__line"></span><span class="skeleton__line skeleton__line--short"></span></div>
+        </div>
+      </div>
+    </div>
+    <div class="page__content">
     <article class="section" aria-labelledby="item-title">
       <div class="container container--narrow stack stack--l">
         <nav class="breadcrumb" aria-label="Breadcrumb">
@@ -104,6 +115,7 @@
         </div>
       </div>
     </article>
+    </div>
   </main>
 
   <footer class="footer">

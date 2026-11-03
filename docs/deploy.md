@@ -11,6 +11,8 @@
 
 Host config files live **inside** `public/` for that reason: `_headers`, `_redirects` and `.htaccess`. `robots.txt` and `sitemap.xml` too.
 
+Host specifics (Cloudflare Workers, Netlify, Apache, GitHub Pages) and a comparison table: [hosting.md](hosting.md). Caching rules: [security.md](security.md).
+
 ## Before launch
 
 1. Replace `example.com` in `public/_headers`, `public/robots.txt`, `public/sitemap.xml`, canonical and Open Graph tags (docs/seo.md).

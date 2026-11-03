@@ -25,6 +25,7 @@ Scheme: `/<singular>/<slug>` (for example `/item/amelie-dubois`), all answered b
 |---|---|
 | Netlify / Cloudflare Pages | `_redirects`: `/item/*  /item.html  200` |
 | Apache | `.htaccess`: `RewriteRule ^item/[^/.]+/?$ /item.html [L]` |
+| Cloudflare Workers, GitHub Pages | see docs/hosting.md |
 | Local | `node tools/serve.mjs` (reads `_redirects`; port 8765, `--port` to change; 404.html fallback; no caching) |
 
 `python3 -m http.server` cannot rewrite; use `serve.mjs` (it serves `public/` only; `_redirects` and `.htaccess` live in `public/` so the host picks them up). `item.html?slug=amelie-dubois` also works as a fallback.
@@ -33,11 +34,16 @@ Scheme: `/<singular>/<slug>` (for example `/item/amelie-dubois`), all answered b
 
 ## 3. Loader: `js/<collection>-data.js`
 
-Fetches the JSON **once** (the promise is cached), resolves the URL relative to the script (`new URL('../data/items.json', document.currentScript.src)`), adds each item's `slug`, and exposes `window.ItemData` = `{ load(), slugify(), pageUrl(slug), slugFromLocation() }`. `slugFromLocation()` reads `/item/<slug>`, `/item/<slug>/` or `?slug=`. To add a collection, copy the file and change the constants.
+Exposes `window.ItemData` = `{ base, load(), slugify(), href(slug), url(path), slugFromLocation() }`. To add a collection, copy the file and change the constants.
+
+- **Base path from the script's own URL**, never hard-coded: `const base = new URL('../', document.currentScript.src).pathname;` gives `/` at a domain root and `/repo-name/` on a GitHub Pages project site. Every link the script builds uses `href(slug)` (includes the base) and every canonical or schema URL uses `url(path)` (`location.origin + base + path`).
+- **Preload** the JSON in the `<head>` of every page that uses it: `<link rel="preload" href="/data/items.json" as="fetch" crossorigin="anonymous">`.
+- **Stale-while-revalidate in `sessionStorage`**: `load()` returns the cached copy at once (reads and writes are in `try/catch`; the site works without storage), fetches a fresh copy in the background and stores it for the next page. **An edit to the JSON can therefore appear one page late within a browser session**; a new tab or session sees it straight away.
+- Each item gets its `slug`; the load happens once per page. `slugFromLocation()` reads `/item/<slug>`, `/item/<slug>/` or `?slug=`.
 
 ## 4. The template page
 
-`js/item-profile.js` is `Alpine.data('itemProfile')` with `status`: `loading | ready | missing | error`.
+`js/item-profile.js` is `Alpine.data('itemProfile')` with `status`: `loading | ready | missing | error`. Wrap the page in `<main class="page" aria-busy="true" :aria-busy="status === 'loading'">` (docs/js-rendered-pages.md); only `loading` sets `aria-busy`. Template rules: docs/alpine.md.
 
 - Give the component an **empty-shaped object** so bindings work before data arrives.
 - Fill with `x-text`, `:href` and `<template x-for>`. For conditional blocks use **`:hidden`**, not `x-show`, with `[hidden] { display: none }` rules (`css/components/profile.css`).
@@ -55,7 +61,7 @@ Fetches the JSON **once** (the promise is cached), resolves the URL relative to 
 
 ## 5. The list page
 
-`js/items-list.js` extends the generic `gridFilter` (`js/grid-filter.js`). Cards are `<template x-for="item in items" :key="item.slug">`; chips come from the lookup table. Filtering and search match on the **data fields** (`matchesItem(item, query, tag)`), not on `textContent`, which is empty when an item is first inserted. `query` and `tag` are passed in so Alpine tracks them. The GSAP Flip behaviour (including the held and eased grid height) and the reduced-motion rule are unchanged: see docs/motion.md.
+`js/items-list.js` extends the generic `gridFilter` (`js/grid-filter.js`). Cards are `<template x-for="item in items" :key="item.slug">`; chips come from the lookup table. Filtering and search match on the **data fields** (`matchesItem(item, query, tag)`), not on `textContent`, which is empty when an item is first inserted. `query` and `tag` are passed in so Alpine tracks them. The page `status` is `loading | ready | error`; the filter's live-region text is `summary`. The GSAP Flip behaviour (including the held and eased grid height) and the reduced-motion rule are unchanged: see docs/motion.md.
 
 Note: the base class method is `elements()`, because `items` is the data array here.
 

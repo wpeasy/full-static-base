@@ -49,6 +49,18 @@ Covers: `scrollTo`/`scrollIntoView` behaviour, Web Animations API, GSAP/other li
 5. Durations come from the `--duration-*` tokens (read with `getComputedStyle`), not literals.
 6. Known limit: fire updates one event at a time (clicks, keystrokes). Two `update()` calls in the same tick can leave items mid-flip.
 
+## Decorative SVG lines
+
+Do not draw a line with `stroke-dashoffset` + `pathLength` when the path also has `vector-effect: non-scaling-stroke`: dash lengths are then measured in **screen pixels**, not path units, so the draw pops instead of animating. Reveal the whole `<svg>` left to right with a `clip-path: inset()` tween instead. `Motion.sweep(svg, { duration, delay })` in `js/motion-shared.js` does this (Web Animations API, `--duration-*` tokens, RTL aware) and does nothing under `reduce`, so the line is simply visible.
+
+## Counters and reveals that run once
+
+Use an `IntersectionObserver` (`Motion.once(element, callback)`), not ScrollTrigger `once`. After a reload the browser restores the scroll position: the observer reports elements already on screen immediately and elements **above** the viewport as `boundingClientRect.bottom < 0`, so the callback still fires. Under `reduce` call back anyway and show the final value.
+
+## Loading states
+
+Skeletons, the loading shell and the entrance animation of JS-rendered pages: [js-rendered-pages.md](js-rendered-pages.md). Entrances are CSS **animations**, not transitions, and cross-document View Transitions are a trap there.
+
 ## Content rules
 
 - Video/animated backgrounds: don't autoplay under `reduce`; show a still poster. Provide pause/stop for any motion lasting more than 5 seconds, regardless of preference.
@@ -60,4 +72,5 @@ Covers: `scrollTo`/`scrollIntoView` behaviour, Web Animations API, GSAP/other li
 
 - Chrome DevTools → Rendering → "Emulate CSS media feature prefers-reduced-motion: reduce"; or macOS Settings → Accessibility → Display → Reduce motion.
 - Confirm: nothing slides, bounces, parallaxes or auto-plays; the page remains fully usable and identical in content.
+- Test motion in a real, visible browser window: a hidden preview pane freezes CSS animations and `requestAnimationFrame` (docs/workflows.md).
 - `node tools/check.mjs` flags `@keyframes`/`animation` outside a `no-preference` block and smooth scrolling that isn't gated.

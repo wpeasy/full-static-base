@@ -2,6 +2,15 @@
 
 Framework versions follow `VERSION`. Upgrading a project = overwrite `css/core/*`, `tools/*`, `docs/*`, `AGENTS.md`; keep `css/theme.css` and your own components/pages.
 
+## 2.1.0
+- **Caching:** `_headers` (and `.htaccess`) give `/css/*`, `/js/*` and HTML `no-cache`, `/data/*` `max-age=300, stale-while-revalidate=86400`, fonts stay `immutable`. New rule "never cache unversioned CSS/JS with a max-age" in AGENTS.md and the Definition of done; explained in `docs/security.md`. `check.mjs` warns on a `max-age` for `/css/*` or `/js/*` without `immutable`.
+- **JS-rendered pages:** new `page` and `skeleton` components, `docs/js-rendered-pages.md`, `docs/alpine.md`. `items.html` and `item.html` use them (one `status` property, `aria-busy` only while `loading`, CSS-animation entrance, skeleton after 150ms, no View Transitions). `check.mjs` warns on a JS-filled `<main>` without `aria-busy`, colourful sections outside `.page__content`, and `@view-transition`.
+- **Data loading:** `js/items-data.js` preloads the JSON (`<link rel="preload" as="fetch">`), caches it in `sessionStorage` (stale-while-revalidate; an edit can appear one page late) and derives the site base path from its own script URL (`ItemData.href`, `ItemData.url`). `js/seo.js` derives the same base; **`Seo.setSeo` and the builders now take a full `url` instead of a `path`** (upgrade note).
+- **Upgrade note:** `gridFilter`'s live-region getter `status` is renamed `summary`.
+- **Motion:** `js/motion-shared.js` (`Motion.sweep`, `Motion.once`, `Motion.reduced`); docs/motion.md on SVG line reveals and run-once counters.
+- **Hosting:** `docs/hosting.md` (comparison table, Cloudflare Workers, GitHub Pages); `wrangler.jsonc`, `worker/index.js`, `cf:*` scripts in `tools/package.json`; `tools/export-pages.mjs` and `tools/deploy-pages.mjs`; `.wrangler/` and `dist/` git-ignored.
+- Testing note in `docs/workflows.md`: hidden preview panes freeze animations; measure with the Performance API; hard-refresh after a deploy.
+
 ## 2.0.0 (breaking: new folder layout)
 - **Only `public/` is published.** Pages, `css/`, `js/`, `fonts/`, `images/`, `data/`, `sitemap.xml`, `robots.txt`, `_headers`, `_redirects` and `.htaccess` moved into `public/` (`git mv`, history kept). Docs, tools, themes, `_template.html`, AGENTS.md and the quick references stay at the repo root and are never deployed. Deploy rule: `docs/deploy.md`.
 - `tools/check.mjs` reads from `public/`, validates `_template.html` at the root (links resolved against `public/`), errors when a page links outside `public/`, warns about development files inside `public/`.

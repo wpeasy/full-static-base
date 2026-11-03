@@ -8,13 +8,23 @@
   Permissions-Policy: camera=(), microphone=(), geolocation=(), payment=()
   Strict-Transport-Security: max-age=31536000; includeSubDomains
 
+# Never put Cache-Control in the /* block: hosts merge matching rules, and some join duplicate values.
+/
+  Cache-Control: no-cache
 /*.html
   Cache-Control: no-cache
+/item/*
+  Cache-Control: no-cache
 
+# Unversioned files: revalidate on every load (cheap 304 via ETag). A max-age here leaves visitors on
+# new HTML with old CSS/JS after a deploy. Only add a long max-age if the file name carries a version.
 /css/*
-  Cache-Control: public, max-age=3600, must-revalidate
+  Cache-Control: no-cache
 /js/*
-  Cache-Control: public, max-age=3600, must-revalidate
+  Cache-Control: no-cache
+
+/data/*
+  Cache-Control: public, max-age=300, stale-while-revalidate=86400
 /images/*
   Cache-Control: public, max-age=86400
 /fonts/*

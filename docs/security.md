@@ -22,7 +22,17 @@ The site is static, so the main protections are HTTP headers set by the host. `p
 
 ## Caching
 
-Files aren't fingerprinted, so assets use a short cache with revalidation (`max-age=3600, must-revalidate`); HTML is always revalidated. If you fingerprint or version asset URLs, switch to `max-age=31536000, immutable`.
+**Never cache unversioned CSS or JS with a `max-age`.** If `/css/*` or `/js/*` carry `max-age=3600`, a visitor can load new HTML with the old CSS or JS for an hour after a deploy: an unstyled flash, new scripts not running, old scripts breaking on new markup. The rules in `_headers`:
+
+| Path | `Cache-Control` | Why |
+|---|---|---|
+| `/`, `/*.html`, `/item/*` | `no-cache` | always revalidate |
+| `/css/*`, `/js/*` | `no-cache` | revalidate on every load; an unchanged file costs one cheap `304` (ETag) |
+| `/data/*` | `public, max-age=300, stale-while-revalidate=86400` | content changes rarely; fast repeat loads |
+| `/images/*` | `public, max-age=86400` | |
+| `/fonts/*` | `public, max-age=31536000, immutable` | never edited in place |
+
+Keep a long `immutable` cache only for fonts and for files whose **name** is versioned (`app.3f2a1c.js`). A `?v=` query on a file is not enough on every host. Don't put `Cache-Control` in the `/*` block: hosts merge matching rules and some join duplicate values. `tools/check.mjs` warns when `_headers` gives `/css/*` or `/js/*` a `max-age` without `immutable`. Hosts with no header control (GitHub Pages) are covered in docs/hosting.md.
 
 ## Forms
 

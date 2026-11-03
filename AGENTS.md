@@ -11,9 +11,10 @@ Static HTML + CSS sites, built and maintained by AI agents and edited by hand in
 | SEO, meta tags, JSON-LD schema | [docs/seo.md](docs/seo.md) |
 | Images: WebP, eager/lazy | [docs/images.md](docs/images.md) |
 | Content from JSON with one template page | [docs/data-driven-pages.md](docs/data-driven-pages.md) |
+| JS-filled pages: loading shell, skeleton, entrance | [docs/js-rendered-pages.md](docs/js-rendered-pages.md), [docs/alpine.md](docs/alpine.md) |
 | Step-by-step: new site / page / component / audit | [docs/workflows.md](docs/workflows.md) |
 | Forms, browser support, security headers | [docs/forms.md](docs/forms.md), [docs/browser-support.md](docs/browser-support.md), [docs/security.md](docs/security.md) |
-| Deploying (publish `public/` only) | [docs/deploy.md](docs/deploy.md) |
+| Deploying (publish `public/` only), host specifics, caching | [docs/deploy.md](docs/deploy.md), [docs/hosting.md](docs/hosting.md), [docs/security.md](docs/security.md) |
 | Why this site deviates from the base | [DESIGN-NOTES.md](DESIGN-NOTES.md) |
 
 ## 1. This is a foundation, not a cage
@@ -127,6 +128,9 @@ Cascade layers (declared in `theme.css` and `framework.css`): `reset, tokens, ba
 - JSON-LD blocks are data, not scripts: allowed. No bundlers, transpilers, TypeScript, JSX or npm packages. Vendor third-party libraries into `js/vendor/` with a pinned version.
 - Interactive widgets follow their WAI-ARIA Authoring Practices pattern (keyboard, roles, focus management). Add `x-cloak` to anything hidden at load.
 - Pages must remain usable without JavaScript where feasible: content in HTML, enhancement in Alpine.
+- A `<main>` filled by JavaScript uses the `page` wrapper with `aria-busy` and one `status` property (docs/js-rendered-pages.md). Alpine template rules (`:hidden`, arguments, data fields, one `<h1>`): docs/alpine.md.
+- Data loaders derive the site base path from their own script URL (`new URL('../', document.currentScript.src).pathname`), never a hard-coded `/`, and build page, canonical and schema URLs from `location.origin + base`.
+- **Caching: never cache unversioned CSS or JS with a `max-age`.** `/css/*`, `/js/*` and HTML are `no-cache` (revalidate); only fonts and files with a version in their name get a long `immutable` cache (docs/security.md). Otherwise visitors get new HTML with old CSS/JS after a deploy.
 
 ## 6. Working method
 
@@ -145,6 +149,7 @@ Cascade layers (declared in `theme.css` and `framework.css`): `reset, tokens, ba
 - [ ] Alt text, labels, accessible names, `lang`, `<title>`, meta description present
 - [ ] SEO: real title (≤60) and description (≤160), canonical, Open Graph + Twitter tags, JSON-LD of the right type that parses, page in `sitemap.xml`, missing business facts listed for the client
 - [ ] Images are WebP/SVG, `loading="eager"` inside the first 1920×1080 screen and `loading="lazy"` elsewhere, with `width`/`height`
+- [ ] Caching: `_headers` gives `/css/*` and `/js/*` no `max-age` (unless the file name is versioned); JS-filled `<main>` has `aria-busy`
 - [ ] All movement gated by `prefers-reduced-motion: no-preference`; JS motion checks `$reducedMotion()`
 - [ ] Tokens only: no literals. BEM (or `u-*`) for every class in CSS and HTML; no IDs/`!important`
 - [ ] Both themes and 320 / 768 / 1280 widths checked, no horizontal scroll, no console errors
