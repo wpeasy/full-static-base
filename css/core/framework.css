@@ -1,0 +1,453 @@
+/* ==========================================================================
+   FRAMEWORK ENGINE  ·  css/core/framework.css   (version: see /VERSION)
+   --------------------------------------------------------------------------
+   Tokens derived from the theme in css/theme.css: colour ramps, a11y text
+   pairings, fluid type / space / radii scales, shadows, motion, stacking.
+   Do not edit per site. Change css/theme.css instead. Upgrading the framework
+   means overwriting css/core/* and leaving css/theme.css alone.
+   ========================================================================== */
+
+@layer reset, tokens, base, layout, components, utilities;
+
+/* ==========================================================================
+   2. ENGINE  (derived from the theme – do not edit per site)
+   ========================================================================== */
+@layer tokens {
+  :root {
+    /* ---- 2.1 Constants ---- */
+    --white: oklch(1 0 none);   /* hue "none" so mixes keep the brand hue */
+    --black: oklch(0 0 none);
+
+    --ratio-minor-second:    1.067;
+    --ratio-major-second:    1.125;
+    --ratio-minor-third:     1.2;
+    --ratio-major-third:     1.25;
+    --ratio-perfect-fourth:  1.333;
+    --ratio-augmented-fourth:1.414;
+    --ratio-perfect-fifth:   1.5;
+    --ratio-golden:          1.618;
+
+    /* ---- 2.2 Colour ramps (color-mix in OKLCH) ----
+       --{color}-light-1..10  step toward white
+       --{color}-dark-1..10   step toward black
+       --{color}-alpha-1..10  5 · 10 · 20 · 30 · 40 · 50 · 60 · 70 · 80 · 90 % opacity */
+  /* primary: light (toward white) / dark (toward black) / alpha (transparency) */
+  --primary-light-1: color-mix(in oklch, var(--primary), var(--white) calc(var(--ramp-light-step) * 1));
+  --primary-light-2: color-mix(in oklch, var(--primary), var(--white) calc(var(--ramp-light-step) * 2));
+  --primary-light-3: color-mix(in oklch, var(--primary), var(--white) calc(var(--ramp-light-step) * 3));
+  --primary-light-4: color-mix(in oklch, var(--primary), var(--white) calc(var(--ramp-light-step) * 4));
+  --primary-light-5: color-mix(in oklch, var(--primary), var(--white) calc(var(--ramp-light-step) * 5));
+  --primary-light-6: color-mix(in oklch, var(--primary), var(--white) calc(var(--ramp-light-step) * 6));
+  --primary-light-7: color-mix(in oklch, var(--primary), var(--white) calc(var(--ramp-light-step) * 7));
+  --primary-light-8: color-mix(in oklch, var(--primary), var(--white) calc(var(--ramp-light-step) * 8));
+  --primary-light-9: color-mix(in oklch, var(--primary), var(--white) calc(var(--ramp-light-step) * 9));
+  --primary-light-10: color-mix(in oklch, var(--primary), var(--white) calc(var(--ramp-light-step) * 10));
+
+  --primary-dark-1: color-mix(in oklch, var(--primary), var(--black) calc(var(--ramp-dark-step) * 1));
+  --primary-dark-2: color-mix(in oklch, var(--primary), var(--black) calc(var(--ramp-dark-step) * 2));
+  --primary-dark-3: color-mix(in oklch, var(--primary), var(--black) calc(var(--ramp-dark-step) * 3));
+  --primary-dark-4: color-mix(in oklch, var(--primary), var(--black) calc(var(--ramp-dark-step) * 4));
+  --primary-dark-5: color-mix(in oklch, var(--primary), var(--black) calc(var(--ramp-dark-step) * 5));
+  --primary-dark-6: color-mix(in oklch, var(--primary), var(--black) calc(var(--ramp-dark-step) * 6));
+  --primary-dark-7: color-mix(in oklch, var(--primary), var(--black) calc(var(--ramp-dark-step) * 7));
+  --primary-dark-8: color-mix(in oklch, var(--primary), var(--black) calc(var(--ramp-dark-step) * 8));
+  --primary-dark-9: color-mix(in oklch, var(--primary), var(--black) calc(var(--ramp-dark-step) * 9));
+  --primary-dark-10: color-mix(in oklch, var(--primary), var(--black) calc(var(--ramp-dark-step) * 10));
+
+  --primary-alpha-1: color-mix(in oklch, var(--primary) 5%, transparent);
+  --primary-alpha-2: color-mix(in oklch, var(--primary) 10%, transparent);
+  --primary-alpha-3: color-mix(in oklch, var(--primary) 20%, transparent);
+  --primary-alpha-4: color-mix(in oklch, var(--primary) 30%, transparent);
+  --primary-alpha-5: color-mix(in oklch, var(--primary) 40%, transparent);
+  --primary-alpha-6: color-mix(in oklch, var(--primary) 50%, transparent);
+  --primary-alpha-7: color-mix(in oklch, var(--primary) 60%, transparent);
+  --primary-alpha-8: color-mix(in oklch, var(--primary) 70%, transparent);
+  --primary-alpha-9: color-mix(in oklch, var(--primary) 80%, transparent);
+  --primary-alpha-10: color-mix(in oklch, var(--primary) 90%, transparent);
+
+  /* secondary: light (toward white) / dark (toward black) / alpha (transparency) */
+  --secondary-light-1: color-mix(in oklch, var(--secondary), var(--white) calc(var(--ramp-light-step) * 1));
+  --secondary-light-2: color-mix(in oklch, var(--secondary), var(--white) calc(var(--ramp-light-step) * 2));
+  --secondary-light-3: color-mix(in oklch, var(--secondary), var(--white) calc(var(--ramp-light-step) * 3));
+  --secondary-light-4: color-mix(in oklch, var(--secondary), var(--white) calc(var(--ramp-light-step) * 4));
+  --secondary-light-5: color-mix(in oklch, var(--secondary), var(--white) calc(var(--ramp-light-step) * 5));
+  --secondary-light-6: color-mix(in oklch, var(--secondary), var(--white) calc(var(--ramp-light-step) * 6));
+  --secondary-light-7: color-mix(in oklch, var(--secondary), var(--white) calc(var(--ramp-light-step) * 7));
+  --secondary-light-8: color-mix(in oklch, var(--secondary), var(--white) calc(var(--ramp-light-step) * 8));
+  --secondary-light-9: color-mix(in oklch, var(--secondary), var(--white) calc(var(--ramp-light-step) * 9));
+  --secondary-light-10: color-mix(in oklch, var(--secondary), var(--white) calc(var(--ramp-light-step) * 10));
+
+  --secondary-dark-1: color-mix(in oklch, var(--secondary), var(--black) calc(var(--ramp-dark-step) * 1));
+  --secondary-dark-2: color-mix(in oklch, var(--secondary), var(--black) calc(var(--ramp-dark-step) * 2));
+  --secondary-dark-3: color-mix(in oklch, var(--secondary), var(--black) calc(var(--ramp-dark-step) * 3));
+  --secondary-dark-4: color-mix(in oklch, var(--secondary), var(--black) calc(var(--ramp-dark-step) * 4));
+  --secondary-dark-5: color-mix(in oklch, var(--secondary), var(--black) calc(var(--ramp-dark-step) * 5));
+  --secondary-dark-6: color-mix(in oklch, var(--secondary), var(--black) calc(var(--ramp-dark-step) * 6));
+  --secondary-dark-7: color-mix(in oklch, var(--secondary), var(--black) calc(var(--ramp-dark-step) * 7));
+  --secondary-dark-8: color-mix(in oklch, var(--secondary), var(--black) calc(var(--ramp-dark-step) * 8));
+  --secondary-dark-9: color-mix(in oklch, var(--secondary), var(--black) calc(var(--ramp-dark-step) * 9));
+  --secondary-dark-10: color-mix(in oklch, var(--secondary), var(--black) calc(var(--ramp-dark-step) * 10));
+
+  --secondary-alpha-1: color-mix(in oklch, var(--secondary) 5%, transparent);
+  --secondary-alpha-2: color-mix(in oklch, var(--secondary) 10%, transparent);
+  --secondary-alpha-3: color-mix(in oklch, var(--secondary) 20%, transparent);
+  --secondary-alpha-4: color-mix(in oklch, var(--secondary) 30%, transparent);
+  --secondary-alpha-5: color-mix(in oklch, var(--secondary) 40%, transparent);
+  --secondary-alpha-6: color-mix(in oklch, var(--secondary) 50%, transparent);
+  --secondary-alpha-7: color-mix(in oklch, var(--secondary) 60%, transparent);
+  --secondary-alpha-8: color-mix(in oklch, var(--secondary) 70%, transparent);
+  --secondary-alpha-9: color-mix(in oklch, var(--secondary) 80%, transparent);
+  --secondary-alpha-10: color-mix(in oklch, var(--secondary) 90%, transparent);
+
+  /* surface: light (toward white) / dark (toward black) / alpha (transparency) */
+  --surface-light-1: color-mix(in oklch, var(--surface), var(--white) calc(var(--ramp-light-step) * 1));
+  --surface-light-2: color-mix(in oklch, var(--surface), var(--white) calc(var(--ramp-light-step) * 2));
+  --surface-light-3: color-mix(in oklch, var(--surface), var(--white) calc(var(--ramp-light-step) * 3));
+  --surface-light-4: color-mix(in oklch, var(--surface), var(--white) calc(var(--ramp-light-step) * 4));
+  --surface-light-5: color-mix(in oklch, var(--surface), var(--white) calc(var(--ramp-light-step) * 5));
+  --surface-light-6: color-mix(in oklch, var(--surface), var(--white) calc(var(--ramp-light-step) * 6));
+  --surface-light-7: color-mix(in oklch, var(--surface), var(--white) calc(var(--ramp-light-step) * 7));
+  --surface-light-8: color-mix(in oklch, var(--surface), var(--white) calc(var(--ramp-light-step) * 8));
+  --surface-light-9: color-mix(in oklch, var(--surface), var(--white) calc(var(--ramp-light-step) * 9));
+  --surface-light-10: color-mix(in oklch, var(--surface), var(--white) calc(var(--ramp-light-step) * 10));
+
+  --surface-dark-1: color-mix(in oklch, var(--surface), var(--black) calc(var(--ramp-dark-step) * 1));
+  --surface-dark-2: color-mix(in oklch, var(--surface), var(--black) calc(var(--ramp-dark-step) * 2));
+  --surface-dark-3: color-mix(in oklch, var(--surface), var(--black) calc(var(--ramp-dark-step) * 3));
+  --surface-dark-4: color-mix(in oklch, var(--surface), var(--black) calc(var(--ramp-dark-step) * 4));
+  --surface-dark-5: color-mix(in oklch, var(--surface), var(--black) calc(var(--ramp-dark-step) * 5));
+  --surface-dark-6: color-mix(in oklch, var(--surface), var(--black) calc(var(--ramp-dark-step) * 6));
+  --surface-dark-7: color-mix(in oklch, var(--surface), var(--black) calc(var(--ramp-dark-step) * 7));
+  --surface-dark-8: color-mix(in oklch, var(--surface), var(--black) calc(var(--ramp-dark-step) * 8));
+  --surface-dark-9: color-mix(in oklch, var(--surface), var(--black) calc(var(--ramp-dark-step) * 9));
+  --surface-dark-10: color-mix(in oklch, var(--surface), var(--black) calc(var(--ramp-dark-step) * 10));
+
+  --surface-alpha-1: color-mix(in oklch, var(--surface) 5%, transparent);
+  --surface-alpha-2: color-mix(in oklch, var(--surface) 10%, transparent);
+  --surface-alpha-3: color-mix(in oklch, var(--surface) 20%, transparent);
+  --surface-alpha-4: color-mix(in oklch, var(--surface) 30%, transparent);
+  --surface-alpha-5: color-mix(in oklch, var(--surface) 40%, transparent);
+  --surface-alpha-6: color-mix(in oklch, var(--surface) 50%, transparent);
+  --surface-alpha-7: color-mix(in oklch, var(--surface) 60%, transparent);
+  --surface-alpha-8: color-mix(in oklch, var(--surface) 70%, transparent);
+  --surface-alpha-9: color-mix(in oklch, var(--surface) 80%, transparent);
+  --surface-alpha-10: color-mix(in oklch, var(--surface) 90%, transparent);
+
+    /* ---- 2.2b Accessible text pairings (WCAG 2 contrast) ----
+       y (relative luminance) is read from the colour in XYZ. Light text wins when
+       y is below the crossover where white and black have equal contrast. */
+    --a11y-light-x: calc(var(--a11y-light-y) * 0.95047);
+    --a11y-light-z: calc(var(--a11y-light-y) * 1.08883);
+    --a11y-dark-x:  calc(var(--a11y-dark-y) * 0.95047);
+    --a11y-dark-z:  calc(var(--a11y-dark-y) * 1.08883);
+    --a11y-threshold: calc(sqrt((var(--a11y-light-y) + 0.05) * (var(--a11y-dark-y) + 0.05)) - 0.05);
+
+    /* primary */
+    --primary-a11y: color(from var(--primary) xyz-d65 calc(var(--a11y-dark-x) + (var(--a11y-light-x) - var(--a11y-dark-x)) * clamp(0, (var(--a11y-threshold) - y) * 1000000, 1)) calc(var(--a11y-dark-y) + (var(--a11y-light-y) - var(--a11y-dark-y)) * clamp(0, (var(--a11y-threshold) - y) * 1000000, 1)) calc(var(--a11y-dark-z) + (var(--a11y-light-z) - var(--a11y-dark-z)) * clamp(0, (var(--a11y-threshold) - y) * 1000000, 1)));
+    --primary-light-1-a11y: color(from var(--primary-light-1) xyz-d65 calc(var(--a11y-dark-x) + (var(--a11y-light-x) - var(--a11y-dark-x)) * clamp(0, (var(--a11y-threshold) - y) * 1000000, 1)) calc(var(--a11y-dark-y) + (var(--a11y-light-y) - var(--a11y-dark-y)) * clamp(0, (var(--a11y-threshold) - y) * 1000000, 1)) calc(var(--a11y-dark-z) + (var(--a11y-light-z) - var(--a11y-dark-z)) * clamp(0, (var(--a11y-threshold) - y) * 1000000, 1)));
+    --primary-light-2-a11y: color(from var(--primary-light-2) xyz-d65 calc(var(--a11y-dark-x) + (var(--a11y-light-x) - var(--a11y-dark-x)) * clamp(0, (var(--a11y-threshold) - y) * 1000000, 1)) calc(var(--a11y-dark-y) + (var(--a11y-light-y) - var(--a11y-dark-y)) * clamp(0, (var(--a11y-threshold) - y) * 1000000, 1)) calc(var(--a11y-dark-z) + (var(--a11y-light-z) - var(--a11y-dark-z)) * clamp(0, (var(--a11y-threshold) - y) * 1000000, 1)));
+    --primary-light-3-a11y: color(from var(--primary-light-3) xyz-d65 calc(var(--a11y-dark-x) + (var(--a11y-light-x) - var(--a11y-dark-x)) * clamp(0, (var(--a11y-threshold) - y) * 1000000, 1)) calc(var(--a11y-dark-y) + (var(--a11y-light-y) - var(--a11y-dark-y)) * clamp(0, (var(--a11y-threshold) - y) * 1000000, 1)) calc(var(--a11y-dark-z) + (var(--a11y-light-z) - var(--a11y-dark-z)) * clamp(0, (var(--a11y-threshold) - y) * 1000000, 1)));
+    --primary-light-4-a11y: color(from var(--primary-light-4) xyz-d65 calc(var(--a11y-dark-x) + (var(--a11y-light-x) - var(--a11y-dark-x)) * clamp(0, (var(--a11y-threshold) - y) * 1000000, 1)) calc(var(--a11y-dark-y) + (var(--a11y-light-y) - var(--a11y-dark-y)) * clamp(0, (var(--a11y-threshold) - y) * 1000000, 1)) calc(var(--a11y-dark-z) + (var(--a11y-light-z) - var(--a11y-dark-z)) * clamp(0, (var(--a11y-threshold) - y) * 1000000, 1)));
+    --primary-light-5-a11y: color(from var(--primary-light-5) xyz-d65 calc(var(--a11y-dark-x) + (var(--a11y-light-x) - var(--a11y-dark-x)) * clamp(0, (var(--a11y-threshold) - y) * 1000000, 1)) calc(var(--a11y-dark-y) + (var(--a11y-light-y) - var(--a11y-dark-y)) * clamp(0, (var(--a11y-threshold) - y) * 1000000, 1)) calc(var(--a11y-dark-z) + (var(--a11y-light-z) - var(--a11y-dark-z)) * clamp(0, (var(--a11y-threshold) - y) * 1000000, 1)));
+    --primary-light-6-a11y: color(from var(--primary-light-6) xyz-d65 calc(var(--a11y-dark-x) + (var(--a11y-light-x) - var(--a11y-dark-x)) * clamp(0, (var(--a11y-threshold) - y) * 1000000, 1)) calc(var(--a11y-dark-y) + (var(--a11y-light-y) - var(--a11y-dark-y)) * clamp(0, (var(--a11y-threshold) - y) * 1000000, 1)) calc(var(--a11y-dark-z) + (var(--a11y-light-z) - var(--a11y-dark-z)) * clamp(0, (var(--a11y-threshold) - y) * 1000000, 1)));
+    --primary-light-7-a11y: color(from var(--primary-light-7) xyz-d65 calc(var(--a11y-dark-x) + (var(--a11y-light-x) - var(--a11y-dark-x)) * clamp(0, (var(--a11y-threshold) - y) * 1000000, 1)) calc(var(--a11y-dark-y) + (var(--a11y-light-y) - var(--a11y-dark-y)) * clamp(0, (var(--a11y-threshold) - y) * 1000000, 1)) calc(var(--a11y-dark-z) + (var(--a11y-light-z) - var(--a11y-dark-z)) * clamp(0, (var(--a11y-threshold) - y) * 1000000, 1)));
+    --primary-light-8-a11y: color(from var(--primary-light-8) xyz-d65 calc(var(--a11y-dark-x) + (var(--a11y-light-x) - var(--a11y-dark-x)) * clamp(0, (var(--a11y-threshold) - y) * 1000000, 1)) calc(var(--a11y-dark-y) + (var(--a11y-light-y) - var(--a11y-dark-y)) * clamp(0, (var(--a11y-threshold) - y) * 1000000, 1)) calc(var(--a11y-dark-z) + (var(--a11y-light-z) - var(--a11y-dark-z)) * clamp(0, (var(--a11y-threshold) - y) * 1000000, 1)));
+    --primary-light-9-a11y: color(from var(--primary-light-9) xyz-d65 calc(var(--a11y-dark-x) + (var(--a11y-light-x) - var(--a11y-dark-x)) * clamp(0, (var(--a11y-threshold) - y) * 1000000, 1)) calc(var(--a11y-dark-y) + (var(--a11y-light-y) - var(--a11y-dark-y)) * clamp(0, (var(--a11y-threshold) - y) * 1000000, 1)) calc(var(--a11y-dark-z) + (var(--a11y-light-z) - var(--a11y-dark-z)) * clamp(0, (var(--a11y-threshold) - y) * 1000000, 1)));
+    --primary-light-10-a11y: color(from var(--primary-light-10) xyz-d65 calc(var(--a11y-dark-x) + (var(--a11y-light-x) - var(--a11y-dark-x)) * clamp(0, (var(--a11y-threshold) - y) * 1000000, 1)) calc(var(--a11y-dark-y) + (var(--a11y-light-y) - var(--a11y-dark-y)) * clamp(0, (var(--a11y-threshold) - y) * 1000000, 1)) calc(var(--a11y-dark-z) + (var(--a11y-light-z) - var(--a11y-dark-z)) * clamp(0, (var(--a11y-threshold) - y) * 1000000, 1)));
+    --primary-dark-1-a11y: color(from var(--primary-dark-1) xyz-d65 calc(var(--a11y-dark-x) + (var(--a11y-light-x) - var(--a11y-dark-x)) * clamp(0, (var(--a11y-threshold) - y) * 1000000, 1)) calc(var(--a11y-dark-y) + (var(--a11y-light-y) - var(--a11y-dark-y)) * clamp(0, (var(--a11y-threshold) - y) * 1000000, 1)) calc(var(--a11y-dark-z) + (var(--a11y-light-z) - var(--a11y-dark-z)) * clamp(0, (var(--a11y-threshold) - y) * 1000000, 1)));
+    --primary-dark-2-a11y: color(from var(--primary-dark-2) xyz-d65 calc(var(--a11y-dark-x) + (var(--a11y-light-x) - var(--a11y-dark-x)) * clamp(0, (var(--a11y-threshold) - y) * 1000000, 1)) calc(var(--a11y-dark-y) + (var(--a11y-light-y) - var(--a11y-dark-y)) * clamp(0, (var(--a11y-threshold) - y) * 1000000, 1)) calc(var(--a11y-dark-z) + (var(--a11y-light-z) - var(--a11y-dark-z)) * clamp(0, (var(--a11y-threshold) - y) * 1000000, 1)));
+    --primary-dark-3-a11y: color(from var(--primary-dark-3) xyz-d65 calc(var(--a11y-dark-x) + (var(--a11y-light-x) - var(--a11y-dark-x)) * clamp(0, (var(--a11y-threshold) - y) * 1000000, 1)) calc(var(--a11y-dark-y) + (var(--a11y-light-y) - var(--a11y-dark-y)) * clamp(0, (var(--a11y-threshold) - y) * 1000000, 1)) calc(var(--a11y-dark-z) + (var(--a11y-light-z) - var(--a11y-dark-z)) * clamp(0, (var(--a11y-threshold) - y) * 1000000, 1)));
+    --primary-dark-4-a11y: color(from var(--primary-dark-4) xyz-d65 calc(var(--a11y-dark-x) + (var(--a11y-light-x) - var(--a11y-dark-x)) * clamp(0, (var(--a11y-threshold) - y) * 1000000, 1)) calc(var(--a11y-dark-y) + (var(--a11y-light-y) - var(--a11y-dark-y)) * clamp(0, (var(--a11y-threshold) - y) * 1000000, 1)) calc(var(--a11y-dark-z) + (var(--a11y-light-z) - var(--a11y-dark-z)) * clamp(0, (var(--a11y-threshold) - y) * 1000000, 1)));
+    --primary-dark-5-a11y: color(from var(--primary-dark-5) xyz-d65 calc(var(--a11y-dark-x) + (var(--a11y-light-x) - var(--a11y-dark-x)) * clamp(0, (var(--a11y-threshold) - y) * 1000000, 1)) calc(var(--a11y-dark-y) + (var(--a11y-light-y) - var(--a11y-dark-y)) * clamp(0, (var(--a11y-threshold) - y) * 1000000, 1)) calc(var(--a11y-dark-z) + (var(--a11y-light-z) - var(--a11y-dark-z)) * clamp(0, (var(--a11y-threshold) - y) * 1000000, 1)));
+    --primary-dark-6-a11y: color(from var(--primary-dark-6) xyz-d65 calc(var(--a11y-dark-x) + (var(--a11y-light-x) - var(--a11y-dark-x)) * clamp(0, (var(--a11y-threshold) - y) * 1000000, 1)) calc(var(--a11y-dark-y) + (var(--a11y-light-y) - var(--a11y-dark-y)) * clamp(0, (var(--a11y-threshold) - y) * 1000000, 1)) calc(var(--a11y-dark-z) + (var(--a11y-light-z) - var(--a11y-dark-z)) * clamp(0, (var(--a11y-threshold) - y) * 1000000, 1)));
+    --primary-dark-7-a11y: color(from var(--primary-dark-7) xyz-d65 calc(var(--a11y-dark-x) + (var(--a11y-light-x) - var(--a11y-dark-x)) * clamp(0, (var(--a11y-threshold) - y) * 1000000, 1)) calc(var(--a11y-dark-y) + (var(--a11y-light-y) - var(--a11y-dark-y)) * clamp(0, (var(--a11y-threshold) - y) * 1000000, 1)) calc(var(--a11y-dark-z) + (var(--a11y-light-z) - var(--a11y-dark-z)) * clamp(0, (var(--a11y-threshold) - y) * 1000000, 1)));
+    --primary-dark-8-a11y: color(from var(--primary-dark-8) xyz-d65 calc(var(--a11y-dark-x) + (var(--a11y-light-x) - var(--a11y-dark-x)) * clamp(0, (var(--a11y-threshold) - y) * 1000000, 1)) calc(var(--a11y-dark-y) + (var(--a11y-light-y) - var(--a11y-dark-y)) * clamp(0, (var(--a11y-threshold) - y) * 1000000, 1)) calc(var(--a11y-dark-z) + (var(--a11y-light-z) - var(--a11y-dark-z)) * clamp(0, (var(--a11y-threshold) - y) * 1000000, 1)));
+    --primary-dark-9-a11y: color(from var(--primary-dark-9) xyz-d65 calc(var(--a11y-dark-x) + (var(--a11y-light-x) - var(--a11y-dark-x)) * clamp(0, (var(--a11y-threshold) - y) * 1000000, 1)) calc(var(--a11y-dark-y) + (var(--a11y-light-y) - var(--a11y-dark-y)) * clamp(0, (var(--a11y-threshold) - y) * 1000000, 1)) calc(var(--a11y-dark-z) + (var(--a11y-light-z) - var(--a11y-dark-z)) * clamp(0, (var(--a11y-threshold) - y) * 1000000, 1)));
+    --primary-dark-10-a11y: color(from var(--primary-dark-10) xyz-d65 calc(var(--a11y-dark-x) + (var(--a11y-light-x) - var(--a11y-dark-x)) * clamp(0, (var(--a11y-threshold) - y) * 1000000, 1)) calc(var(--a11y-dark-y) + (var(--a11y-light-y) - var(--a11y-dark-y)) * clamp(0, (var(--a11y-threshold) - y) * 1000000, 1)) calc(var(--a11y-dark-z) + (var(--a11y-light-z) - var(--a11y-dark-z)) * clamp(0, (var(--a11y-threshold) - y) * 1000000, 1)));
+    /* secondary */
+    --secondary-a11y: color(from var(--secondary) xyz-d65 calc(var(--a11y-dark-x) + (var(--a11y-light-x) - var(--a11y-dark-x)) * clamp(0, (var(--a11y-threshold) - y) * 1000000, 1)) calc(var(--a11y-dark-y) + (var(--a11y-light-y) - var(--a11y-dark-y)) * clamp(0, (var(--a11y-threshold) - y) * 1000000, 1)) calc(var(--a11y-dark-z) + (var(--a11y-light-z) - var(--a11y-dark-z)) * clamp(0, (var(--a11y-threshold) - y) * 1000000, 1)));
+    --secondary-light-1-a11y: color(from var(--secondary-light-1) xyz-d65 calc(var(--a11y-dark-x) + (var(--a11y-light-x) - var(--a11y-dark-x)) * clamp(0, (var(--a11y-threshold) - y) * 1000000, 1)) calc(var(--a11y-dark-y) + (var(--a11y-light-y) - var(--a11y-dark-y)) * clamp(0, (var(--a11y-threshold) - y) * 1000000, 1)) calc(var(--a11y-dark-z) + (var(--a11y-light-z) - var(--a11y-dark-z)) * clamp(0, (var(--a11y-threshold) - y) * 1000000, 1)));
+    --secondary-light-2-a11y: color(from var(--secondary-light-2) xyz-d65 calc(var(--a11y-dark-x) + (var(--a11y-light-x) - var(--a11y-dark-x)) * clamp(0, (var(--a11y-threshold) - y) * 1000000, 1)) calc(var(--a11y-dark-y) + (var(--a11y-light-y) - var(--a11y-dark-y)) * clamp(0, (var(--a11y-threshold) - y) * 1000000, 1)) calc(var(--a11y-dark-z) + (var(--a11y-light-z) - var(--a11y-dark-z)) * clamp(0, (var(--a11y-threshold) - y) * 1000000, 1)));
+    --secondary-light-3-a11y: color(from var(--secondary-light-3) xyz-d65 calc(var(--a11y-dark-x) + (var(--a11y-light-x) - var(--a11y-dark-x)) * clamp(0, (var(--a11y-threshold) - y) * 1000000, 1)) calc(var(--a11y-dark-y) + (var(--a11y-light-y) - var(--a11y-dark-y)) * clamp(0, (var(--a11y-threshold) - y) * 1000000, 1)) calc(var(--a11y-dark-z) + (var(--a11y-light-z) - var(--a11y-dark-z)) * clamp(0, (var(--a11y-threshold) - y) * 1000000, 1)));
+    --secondary-light-4-a11y: color(from var(--secondary-light-4) xyz-d65 calc(var(--a11y-dark-x) + (var(--a11y-light-x) - var(--a11y-dark-x)) * clamp(0, (var(--a11y-threshold) - y) * 1000000, 1)) calc(var(--a11y-dark-y) + (var(--a11y-light-y) - var(--a11y-dark-y)) * clamp(0, (var(--a11y-threshold) - y) * 1000000, 1)) calc(var(--a11y-dark-z) + (var(--a11y-light-z) - var(--a11y-dark-z)) * clamp(0, (var(--a11y-threshold) - y) * 1000000, 1)));
+    --secondary-light-5-a11y: color(from var(--secondary-light-5) xyz-d65 calc(var(--a11y-dark-x) + (var(--a11y-light-x) - var(--a11y-dark-x)) * clamp(0, (var(--a11y-threshold) - y) * 1000000, 1)) calc(var(--a11y-dark-y) + (var(--a11y-light-y) - var(--a11y-dark-y)) * clamp(0, (var(--a11y-threshold) - y) * 1000000, 1)) calc(var(--a11y-dark-z) + (var(--a11y-light-z) - var(--a11y-dark-z)) * clamp(0, (var(--a11y-threshold) - y) * 1000000, 1)));
+    --secondary-light-6-a11y: color(from var(--secondary-light-6) xyz-d65 calc(var(--a11y-dark-x) + (var(--a11y-light-x) - var(--a11y-dark-x)) * clamp(0, (var(--a11y-threshold) - y) * 1000000, 1)) calc(var(--a11y-dark-y) + (var(--a11y-light-y) - var(--a11y-dark-y)) * clamp(0, (var(--a11y-threshold) - y) * 1000000, 1)) calc(var(--a11y-dark-z) + (var(--a11y-light-z) - var(--a11y-dark-z)) * clamp(0, (var(--a11y-threshold) - y) * 1000000, 1)));
+    --secondary-light-7-a11y: color(from var(--secondary-light-7) xyz-d65 calc(var(--a11y-dark-x) + (var(--a11y-light-x) - var(--a11y-dark-x)) * clamp(0, (var(--a11y-threshold) - y) * 1000000, 1)) calc(var(--a11y-dark-y) + (var(--a11y-light-y) - var(--a11y-dark-y)) * clamp(0, (var(--a11y-threshold) - y) * 1000000, 1)) calc(var(--a11y-dark-z) + (var(--a11y-light-z) - var(--a11y-dark-z)) * clamp(0, (var(--a11y-threshold) - y) * 1000000, 1)));
+    --secondary-light-8-a11y: color(from var(--secondary-light-8) xyz-d65 calc(var(--a11y-dark-x) + (var(--a11y-light-x) - var(--a11y-dark-x)) * clamp(0, (var(--a11y-threshold) - y) * 1000000, 1)) calc(var(--a11y-dark-y) + (var(--a11y-light-y) - var(--a11y-dark-y)) * clamp(0, (var(--a11y-threshold) - y) * 1000000, 1)) calc(var(--a11y-dark-z) + (var(--a11y-light-z) - var(--a11y-dark-z)) * clamp(0, (var(--a11y-threshold) - y) * 1000000, 1)));
+    --secondary-light-9-a11y: color(from var(--secondary-light-9) xyz-d65 calc(var(--a11y-dark-x) + (var(--a11y-light-x) - var(--a11y-dark-x)) * clamp(0, (var(--a11y-threshold) - y) * 1000000, 1)) calc(var(--a11y-dark-y) + (var(--a11y-light-y) - var(--a11y-dark-y)) * clamp(0, (var(--a11y-threshold) - y) * 1000000, 1)) calc(var(--a11y-dark-z) + (var(--a11y-light-z) - var(--a11y-dark-z)) * clamp(0, (var(--a11y-threshold) - y) * 1000000, 1)));
+    --secondary-light-10-a11y: color(from var(--secondary-light-10) xyz-d65 calc(var(--a11y-dark-x) + (var(--a11y-light-x) - var(--a11y-dark-x)) * clamp(0, (var(--a11y-threshold) - y) * 1000000, 1)) calc(var(--a11y-dark-y) + (var(--a11y-light-y) - var(--a11y-dark-y)) * clamp(0, (var(--a11y-threshold) - y) * 1000000, 1)) calc(var(--a11y-dark-z) + (var(--a11y-light-z) - var(--a11y-dark-z)) * clamp(0, (var(--a11y-threshold) - y) * 1000000, 1)));
+    --secondary-dark-1-a11y: color(from var(--secondary-dark-1) xyz-d65 calc(var(--a11y-dark-x) + (var(--a11y-light-x) - var(--a11y-dark-x)) * clamp(0, (var(--a11y-threshold) - y) * 1000000, 1)) calc(var(--a11y-dark-y) + (var(--a11y-light-y) - var(--a11y-dark-y)) * clamp(0, (var(--a11y-threshold) - y) * 1000000, 1)) calc(var(--a11y-dark-z) + (var(--a11y-light-z) - var(--a11y-dark-z)) * clamp(0, (var(--a11y-threshold) - y) * 1000000, 1)));
+    --secondary-dark-2-a11y: color(from var(--secondary-dark-2) xyz-d65 calc(var(--a11y-dark-x) + (var(--a11y-light-x) - var(--a11y-dark-x)) * clamp(0, (var(--a11y-threshold) - y) * 1000000, 1)) calc(var(--a11y-dark-y) + (var(--a11y-light-y) - var(--a11y-dark-y)) * clamp(0, (var(--a11y-threshold) - y) * 1000000, 1)) calc(var(--a11y-dark-z) + (var(--a11y-light-z) - var(--a11y-dark-z)) * clamp(0, (var(--a11y-threshold) - y) * 1000000, 1)));
+    --secondary-dark-3-a11y: color(from var(--secondary-dark-3) xyz-d65 calc(var(--a11y-dark-x) + (var(--a11y-light-x) - var(--a11y-dark-x)) * clamp(0, (var(--a11y-threshold) - y) * 1000000, 1)) calc(var(--a11y-dark-y) + (var(--a11y-light-y) - var(--a11y-dark-y)) * clamp(0, (var(--a11y-threshold) - y) * 1000000, 1)) calc(var(--a11y-dark-z) + (var(--a11y-light-z) - var(--a11y-dark-z)) * clamp(0, (var(--a11y-threshold) - y) * 1000000, 1)));
+    --secondary-dark-4-a11y: color(from var(--secondary-dark-4) xyz-d65 calc(var(--a11y-dark-x) + (var(--a11y-light-x) - var(--a11y-dark-x)) * clamp(0, (var(--a11y-threshold) - y) * 1000000, 1)) calc(var(--a11y-dark-y) + (var(--a11y-light-y) - var(--a11y-dark-y)) * clamp(0, (var(--a11y-threshold) - y) * 1000000, 1)) calc(var(--a11y-dark-z) + (var(--a11y-light-z) - var(--a11y-dark-z)) * clamp(0, (var(--a11y-threshold) - y) * 1000000, 1)));
+    --secondary-dark-5-a11y: color(from var(--secondary-dark-5) xyz-d65 calc(var(--a11y-dark-x) + (var(--a11y-light-x) - var(--a11y-dark-x)) * clamp(0, (var(--a11y-threshold) - y) * 1000000, 1)) calc(var(--a11y-dark-y) + (var(--a11y-light-y) - var(--a11y-dark-y)) * clamp(0, (var(--a11y-threshold) - y) * 1000000, 1)) calc(var(--a11y-dark-z) + (var(--a11y-light-z) - var(--a11y-dark-z)) * clamp(0, (var(--a11y-threshold) - y) * 1000000, 1)));
+    --secondary-dark-6-a11y: color(from var(--secondary-dark-6) xyz-d65 calc(var(--a11y-dark-x) + (var(--a11y-light-x) - var(--a11y-dark-x)) * clamp(0, (var(--a11y-threshold) - y) * 1000000, 1)) calc(var(--a11y-dark-y) + (var(--a11y-light-y) - var(--a11y-dark-y)) * clamp(0, (var(--a11y-threshold) - y) * 1000000, 1)) calc(var(--a11y-dark-z) + (var(--a11y-light-z) - var(--a11y-dark-z)) * clamp(0, (var(--a11y-threshold) - y) * 1000000, 1)));
+    --secondary-dark-7-a11y: color(from var(--secondary-dark-7) xyz-d65 calc(var(--a11y-dark-x) + (var(--a11y-light-x) - var(--a11y-dark-x)) * clamp(0, (var(--a11y-threshold) - y) * 1000000, 1)) calc(var(--a11y-dark-y) + (var(--a11y-light-y) - var(--a11y-dark-y)) * clamp(0, (var(--a11y-threshold) - y) * 1000000, 1)) calc(var(--a11y-dark-z) + (var(--a11y-light-z) - var(--a11y-dark-z)) * clamp(0, (var(--a11y-threshold) - y) * 1000000, 1)));
+    --secondary-dark-8-a11y: color(from var(--secondary-dark-8) xyz-d65 calc(var(--a11y-dark-x) + (var(--a11y-light-x) - var(--a11y-dark-x)) * clamp(0, (var(--a11y-threshold) - y) * 1000000, 1)) calc(var(--a11y-dark-y) + (var(--a11y-light-y) - var(--a11y-dark-y)) * clamp(0, (var(--a11y-threshold) - y) * 1000000, 1)) calc(var(--a11y-dark-z) + (var(--a11y-light-z) - var(--a11y-dark-z)) * clamp(0, (var(--a11y-threshold) - y) * 1000000, 1)));
+    --secondary-dark-9-a11y: color(from var(--secondary-dark-9) xyz-d65 calc(var(--a11y-dark-x) + (var(--a11y-light-x) - var(--a11y-dark-x)) * clamp(0, (var(--a11y-threshold) - y) * 1000000, 1)) calc(var(--a11y-dark-y) + (var(--a11y-light-y) - var(--a11y-dark-y)) * clamp(0, (var(--a11y-threshold) - y) * 1000000, 1)) calc(var(--a11y-dark-z) + (var(--a11y-light-z) - var(--a11y-dark-z)) * clamp(0, (var(--a11y-threshold) - y) * 1000000, 1)));
+    --secondary-dark-10-a11y: color(from var(--secondary-dark-10) xyz-d65 calc(var(--a11y-dark-x) + (var(--a11y-light-x) - var(--a11y-dark-x)) * clamp(0, (var(--a11y-threshold) - y) * 1000000, 1)) calc(var(--a11y-dark-y) + (var(--a11y-light-y) - var(--a11y-dark-y)) * clamp(0, (var(--a11y-threshold) - y) * 1000000, 1)) calc(var(--a11y-dark-z) + (var(--a11y-light-z) - var(--a11y-dark-z)) * clamp(0, (var(--a11y-threshold) - y) * 1000000, 1)));
+    /* surface */
+    --surface-a11y: color(from var(--surface) xyz-d65 calc(var(--a11y-dark-x) + (var(--a11y-light-x) - var(--a11y-dark-x)) * clamp(0, (var(--a11y-threshold) - y) * 1000000, 1)) calc(var(--a11y-dark-y) + (var(--a11y-light-y) - var(--a11y-dark-y)) * clamp(0, (var(--a11y-threshold) - y) * 1000000, 1)) calc(var(--a11y-dark-z) + (var(--a11y-light-z) - var(--a11y-dark-z)) * clamp(0, (var(--a11y-threshold) - y) * 1000000, 1)));
+    --surface-light-1-a11y: color(from var(--surface-light-1) xyz-d65 calc(var(--a11y-dark-x) + (var(--a11y-light-x) - var(--a11y-dark-x)) * clamp(0, (var(--a11y-threshold) - y) * 1000000, 1)) calc(var(--a11y-dark-y) + (var(--a11y-light-y) - var(--a11y-dark-y)) * clamp(0, (var(--a11y-threshold) - y) * 1000000, 1)) calc(var(--a11y-dark-z) + (var(--a11y-light-z) - var(--a11y-dark-z)) * clamp(0, (var(--a11y-threshold) - y) * 1000000, 1)));
+    --surface-light-2-a11y: color(from var(--surface-light-2) xyz-d65 calc(var(--a11y-dark-x) + (var(--a11y-light-x) - var(--a11y-dark-x)) * clamp(0, (var(--a11y-threshold) - y) * 1000000, 1)) calc(var(--a11y-dark-y) + (var(--a11y-light-y) - var(--a11y-dark-y)) * clamp(0, (var(--a11y-threshold) - y) * 1000000, 1)) calc(var(--a11y-dark-z) + (var(--a11y-light-z) - var(--a11y-dark-z)) * clamp(0, (var(--a11y-threshold) - y) * 1000000, 1)));
+    --surface-light-3-a11y: color(from var(--surface-light-3) xyz-d65 calc(var(--a11y-dark-x) + (var(--a11y-light-x) - var(--a11y-dark-x)) * clamp(0, (var(--a11y-threshold) - y) * 1000000, 1)) calc(var(--a11y-dark-y) + (var(--a11y-light-y) - var(--a11y-dark-y)) * clamp(0, (var(--a11y-threshold) - y) * 1000000, 1)) calc(var(--a11y-dark-z) + (var(--a11y-light-z) - var(--a11y-dark-z)) * clamp(0, (var(--a11y-threshold) - y) * 1000000, 1)));
+    --surface-light-4-a11y: color(from var(--surface-light-4) xyz-d65 calc(var(--a11y-dark-x) + (var(--a11y-light-x) - var(--a11y-dark-x)) * clamp(0, (var(--a11y-threshold) - y) * 1000000, 1)) calc(var(--a11y-dark-y) + (var(--a11y-light-y) - var(--a11y-dark-y)) * clamp(0, (var(--a11y-threshold) - y) * 1000000, 1)) calc(var(--a11y-dark-z) + (var(--a11y-light-z) - var(--a11y-dark-z)) * clamp(0, (var(--a11y-threshold) - y) * 1000000, 1)));
+    --surface-light-5-a11y: color(from var(--surface-light-5) xyz-d65 calc(var(--a11y-dark-x) + (var(--a11y-light-x) - var(--a11y-dark-x)) * clamp(0, (var(--a11y-threshold) - y) * 1000000, 1)) calc(var(--a11y-dark-y) + (var(--a11y-light-y) - var(--a11y-dark-y)) * clamp(0, (var(--a11y-threshold) - y) * 1000000, 1)) calc(var(--a11y-dark-z) + (var(--a11y-light-z) - var(--a11y-dark-z)) * clamp(0, (var(--a11y-threshold) - y) * 1000000, 1)));
+    --surface-light-6-a11y: color(from var(--surface-light-6) xyz-d65 calc(var(--a11y-dark-x) + (var(--a11y-light-x) - var(--a11y-dark-x)) * clamp(0, (var(--a11y-threshold) - y) * 1000000, 1)) calc(var(--a11y-dark-y) + (var(--a11y-light-y) - var(--a11y-dark-y)) * clamp(0, (var(--a11y-threshold) - y) * 1000000, 1)) calc(var(--a11y-dark-z) + (var(--a11y-light-z) - var(--a11y-dark-z)) * clamp(0, (var(--a11y-threshold) - y) * 1000000, 1)));
+    --surface-light-7-a11y: color(from var(--surface-light-7) xyz-d65 calc(var(--a11y-dark-x) + (var(--a11y-light-x) - var(--a11y-dark-x)) * clamp(0, (var(--a11y-threshold) - y) * 1000000, 1)) calc(var(--a11y-dark-y) + (var(--a11y-light-y) - var(--a11y-dark-y)) * clamp(0, (var(--a11y-threshold) - y) * 1000000, 1)) calc(var(--a11y-dark-z) + (var(--a11y-light-z) - var(--a11y-dark-z)) * clamp(0, (var(--a11y-threshold) - y) * 1000000, 1)));
+    --surface-light-8-a11y: color(from var(--surface-light-8) xyz-d65 calc(var(--a11y-dark-x) + (var(--a11y-light-x) - var(--a11y-dark-x)) * clamp(0, (var(--a11y-threshold) - y) * 1000000, 1)) calc(var(--a11y-dark-y) + (var(--a11y-light-y) - var(--a11y-dark-y)) * clamp(0, (var(--a11y-threshold) - y) * 1000000, 1)) calc(var(--a11y-dark-z) + (var(--a11y-light-z) - var(--a11y-dark-z)) * clamp(0, (var(--a11y-threshold) - y) * 1000000, 1)));
+    --surface-light-9-a11y: color(from var(--surface-light-9) xyz-d65 calc(var(--a11y-dark-x) + (var(--a11y-light-x) - var(--a11y-dark-x)) * clamp(0, (var(--a11y-threshold) - y) * 1000000, 1)) calc(var(--a11y-dark-y) + (var(--a11y-light-y) - var(--a11y-dark-y)) * clamp(0, (var(--a11y-threshold) - y) * 1000000, 1)) calc(var(--a11y-dark-z) + (var(--a11y-light-z) - var(--a11y-dark-z)) * clamp(0, (var(--a11y-threshold) - y) * 1000000, 1)));
+    --surface-light-10-a11y: color(from var(--surface-light-10) xyz-d65 calc(var(--a11y-dark-x) + (var(--a11y-light-x) - var(--a11y-dark-x)) * clamp(0, (var(--a11y-threshold) - y) * 1000000, 1)) calc(var(--a11y-dark-y) + (var(--a11y-light-y) - var(--a11y-dark-y)) * clamp(0, (var(--a11y-threshold) - y) * 1000000, 1)) calc(var(--a11y-dark-z) + (var(--a11y-light-z) - var(--a11y-dark-z)) * clamp(0, (var(--a11y-threshold) - y) * 1000000, 1)));
+    --surface-dark-1-a11y: color(from var(--surface-dark-1) xyz-d65 calc(var(--a11y-dark-x) + (var(--a11y-light-x) - var(--a11y-dark-x)) * clamp(0, (var(--a11y-threshold) - y) * 1000000, 1)) calc(var(--a11y-dark-y) + (var(--a11y-light-y) - var(--a11y-dark-y)) * clamp(0, (var(--a11y-threshold) - y) * 1000000, 1)) calc(var(--a11y-dark-z) + (var(--a11y-light-z) - var(--a11y-dark-z)) * clamp(0, (var(--a11y-threshold) - y) * 1000000, 1)));
+    --surface-dark-2-a11y: color(from var(--surface-dark-2) xyz-d65 calc(var(--a11y-dark-x) + (var(--a11y-light-x) - var(--a11y-dark-x)) * clamp(0, (var(--a11y-threshold) - y) * 1000000, 1)) calc(var(--a11y-dark-y) + (var(--a11y-light-y) - var(--a11y-dark-y)) * clamp(0, (var(--a11y-threshold) - y) * 1000000, 1)) calc(var(--a11y-dark-z) + (var(--a11y-light-z) - var(--a11y-dark-z)) * clamp(0, (var(--a11y-threshold) - y) * 1000000, 1)));
+    --surface-dark-3-a11y: color(from var(--surface-dark-3) xyz-d65 calc(var(--a11y-dark-x) + (var(--a11y-light-x) - var(--a11y-dark-x)) * clamp(0, (var(--a11y-threshold) - y) * 1000000, 1)) calc(var(--a11y-dark-y) + (var(--a11y-light-y) - var(--a11y-dark-y)) * clamp(0, (var(--a11y-threshold) - y) * 1000000, 1)) calc(var(--a11y-dark-z) + (var(--a11y-light-z) - var(--a11y-dark-z)) * clamp(0, (var(--a11y-threshold) - y) * 1000000, 1)));
+    --surface-dark-4-a11y: color(from var(--surface-dark-4) xyz-d65 calc(var(--a11y-dark-x) + (var(--a11y-light-x) - var(--a11y-dark-x)) * clamp(0, (var(--a11y-threshold) - y) * 1000000, 1)) calc(var(--a11y-dark-y) + (var(--a11y-light-y) - var(--a11y-dark-y)) * clamp(0, (var(--a11y-threshold) - y) * 1000000, 1)) calc(var(--a11y-dark-z) + (var(--a11y-light-z) - var(--a11y-dark-z)) * clamp(0, (var(--a11y-threshold) - y) * 1000000, 1)));
+    --surface-dark-5-a11y: color(from var(--surface-dark-5) xyz-d65 calc(var(--a11y-dark-x) + (var(--a11y-light-x) - var(--a11y-dark-x)) * clamp(0, (var(--a11y-threshold) - y) * 1000000, 1)) calc(var(--a11y-dark-y) + (var(--a11y-light-y) - var(--a11y-dark-y)) * clamp(0, (var(--a11y-threshold) - y) * 1000000, 1)) calc(var(--a11y-dark-z) + (var(--a11y-light-z) - var(--a11y-dark-z)) * clamp(0, (var(--a11y-threshold) - y) * 1000000, 1)));
+    --surface-dark-6-a11y: color(from var(--surface-dark-6) xyz-d65 calc(var(--a11y-dark-x) + (var(--a11y-light-x) - var(--a11y-dark-x)) * clamp(0, (var(--a11y-threshold) - y) * 1000000, 1)) calc(var(--a11y-dark-y) + (var(--a11y-light-y) - var(--a11y-dark-y)) * clamp(0, (var(--a11y-threshold) - y) * 1000000, 1)) calc(var(--a11y-dark-z) + (var(--a11y-light-z) - var(--a11y-dark-z)) * clamp(0, (var(--a11y-threshold) - y) * 1000000, 1)));
+    --surface-dark-7-a11y: color(from var(--surface-dark-7) xyz-d65 calc(var(--a11y-dark-x) + (var(--a11y-light-x) - var(--a11y-dark-x)) * clamp(0, (var(--a11y-threshold) - y) * 1000000, 1)) calc(var(--a11y-dark-y) + (var(--a11y-light-y) - var(--a11y-dark-y)) * clamp(0, (var(--a11y-threshold) - y) * 1000000, 1)) calc(var(--a11y-dark-z) + (var(--a11y-light-z) - var(--a11y-dark-z)) * clamp(0, (var(--a11y-threshold) - y) * 1000000, 1)));
+    --surface-dark-8-a11y: color(from var(--surface-dark-8) xyz-d65 calc(var(--a11y-dark-x) + (var(--a11y-light-x) - var(--a11y-dark-x)) * clamp(0, (var(--a11y-threshold) - y) * 1000000, 1)) calc(var(--a11y-dark-y) + (var(--a11y-light-y) - var(--a11y-dark-y)) * clamp(0, (var(--a11y-threshold) - y) * 1000000, 1)) calc(var(--a11y-dark-z) + (var(--a11y-light-z) - var(--a11y-dark-z)) * clamp(0, (var(--a11y-threshold) - y) * 1000000, 1)));
+    --surface-dark-9-a11y: color(from var(--surface-dark-9) xyz-d65 calc(var(--a11y-dark-x) + (var(--a11y-light-x) - var(--a11y-dark-x)) * clamp(0, (var(--a11y-threshold) - y) * 1000000, 1)) calc(var(--a11y-dark-y) + (var(--a11y-light-y) - var(--a11y-dark-y)) * clamp(0, (var(--a11y-threshold) - y) * 1000000, 1)) calc(var(--a11y-dark-z) + (var(--a11y-light-z) - var(--a11y-dark-z)) * clamp(0, (var(--a11y-threshold) - y) * 1000000, 1)));
+    --surface-dark-10-a11y: color(from var(--surface-dark-10) xyz-d65 calc(var(--a11y-dark-x) + (var(--a11y-light-x) - var(--a11y-dark-x)) * clamp(0, (var(--a11y-threshold) - y) * 1000000, 1)) calc(var(--a11y-dark-y) + (var(--a11y-light-y) - var(--a11y-dark-y)) * clamp(0, (var(--a11y-threshold) - y) * 1000000, 1)) calc(var(--a11y-dark-z) + (var(--a11y-light-z) - var(--a11y-dark-z)) * clamp(0, (var(--a11y-threshold) - y) * 1000000, 1)));
+    /* status */
+    --success-a11y: color(from var(--success) xyz-d65 calc(var(--a11y-dark-x) + (var(--a11y-light-x) - var(--a11y-dark-x)) * clamp(0, (var(--a11y-threshold) - y) * 1000000, 1)) calc(var(--a11y-dark-y) + (var(--a11y-light-y) - var(--a11y-dark-y)) * clamp(0, (var(--a11y-threshold) - y) * 1000000, 1)) calc(var(--a11y-dark-z) + (var(--a11y-light-z) - var(--a11y-dark-z)) * clamp(0, (var(--a11y-threshold) - y) * 1000000, 1)));
+    --warning-a11y: color(from var(--warning) xyz-d65 calc(var(--a11y-dark-x) + (var(--a11y-light-x) - var(--a11y-dark-x)) * clamp(0, (var(--a11y-threshold) - y) * 1000000, 1)) calc(var(--a11y-dark-y) + (var(--a11y-light-y) - var(--a11y-dark-y)) * clamp(0, (var(--a11y-threshold) - y) * 1000000, 1)) calc(var(--a11y-dark-z) + (var(--a11y-light-z) - var(--a11y-dark-z)) * clamp(0, (var(--a11y-threshold) - y) * 1000000, 1)));
+    --danger-a11y: color(from var(--danger) xyz-d65 calc(var(--a11y-dark-x) + (var(--a11y-light-x) - var(--a11y-dark-x)) * clamp(0, (var(--a11y-threshold) - y) * 1000000, 1)) calc(var(--a11y-dark-y) + (var(--a11y-light-y) - var(--a11y-dark-y)) * clamp(0, (var(--a11y-threshold) - y) * 1000000, 1)) calc(var(--a11y-dark-z) + (var(--a11y-light-z) - var(--a11y-dark-z)) * clamp(0, (var(--a11y-threshold) - y) * 1000000, 1)));
+    --info-a11y: color(from var(--info) xyz-d65 calc(var(--a11y-dark-x) + (var(--a11y-light-x) - var(--a11y-dark-x)) * clamp(0, (var(--a11y-threshold) - y) * 1000000, 1)) calc(var(--a11y-dark-y) + (var(--a11y-light-y) - var(--a11y-dark-y)) * clamp(0, (var(--a11y-threshold) - y) * 1000000, 1)) calc(var(--a11y-dark-z) + (var(--a11y-light-z) - var(--a11y-dark-z)) * clamp(0, (var(--a11y-threshold) - y) * 1000000, 1)));
+
+    /* ---- 2.3 Fluid type: --text-{2xs…5xl}  (step -3…6, base --text-m) ----
+       -min / -max are px at the min / max viewport; -slope is px per viewport px. */
+  --text-2xs-min: calc(var(--text-min-size) * pow(var(--text-min-ratio), -3));
+  --text-2xs-max: calc(var(--text-max-size) * pow(var(--text-max-ratio), -3));
+  --text-2xs-slope: calc((var(--text-2xs-max) - var(--text-2xs-min)) / (var(--fluid-max-vw) - var(--fluid-min-vw)));
+  --text-2xs: clamp(
+    calc(var(--text-2xs-min) / 16 * 1rem),
+    calc((var(--text-2xs-min) - var(--fluid-min-vw) * var(--text-2xs-slope)) / 16 * 1rem + var(--text-2xs-slope) * 100vw),
+    calc(var(--text-2xs-max) / 16 * 1rem)
+  );
+
+  --text-xs-min: calc(var(--text-min-size) * pow(var(--text-min-ratio), -2));
+  --text-xs-max: calc(var(--text-max-size) * pow(var(--text-max-ratio), -2));
+  --text-xs-slope: calc((var(--text-xs-max) - var(--text-xs-min)) / (var(--fluid-max-vw) - var(--fluid-min-vw)));
+  --text-xs: clamp(
+    calc(var(--text-xs-min) / 16 * 1rem),
+    calc((var(--text-xs-min) - var(--fluid-min-vw) * var(--text-xs-slope)) / 16 * 1rem + var(--text-xs-slope) * 100vw),
+    calc(var(--text-xs-max) / 16 * 1rem)
+  );
+
+  --text-s-min: calc(var(--text-min-size) * pow(var(--text-min-ratio), -1));
+  --text-s-max: calc(var(--text-max-size) * pow(var(--text-max-ratio), -1));
+  --text-s-slope: calc((var(--text-s-max) - var(--text-s-min)) / (var(--fluid-max-vw) - var(--fluid-min-vw)));
+  --text-s: clamp(
+    calc(var(--text-s-min) / 16 * 1rem),
+    calc((var(--text-s-min) - var(--fluid-min-vw) * var(--text-s-slope)) / 16 * 1rem + var(--text-s-slope) * 100vw),
+    calc(var(--text-s-max) / 16 * 1rem)
+  );
+
+  --text-m-min: calc(var(--text-min-size) * pow(var(--text-min-ratio), 0));
+  --text-m-max: calc(var(--text-max-size) * pow(var(--text-max-ratio), 0));
+  --text-m-slope: calc((var(--text-m-max) - var(--text-m-min)) / (var(--fluid-max-vw) - var(--fluid-min-vw)));
+  --text-m: clamp(
+    calc(var(--text-m-min) / 16 * 1rem),
+    calc((var(--text-m-min) - var(--fluid-min-vw) * var(--text-m-slope)) / 16 * 1rem + var(--text-m-slope) * 100vw),
+    calc(var(--text-m-max) / 16 * 1rem)
+  );
+
+  --text-l-min: calc(var(--text-min-size) * pow(var(--text-min-ratio), 1));
+  --text-l-max: calc(var(--text-max-size) * pow(var(--text-max-ratio), 1));
+  --text-l-slope: calc((var(--text-l-max) - var(--text-l-min)) / (var(--fluid-max-vw) - var(--fluid-min-vw)));
+  --text-l: clamp(
+    calc(var(--text-l-min) / 16 * 1rem),
+    calc((var(--text-l-min) - var(--fluid-min-vw) * var(--text-l-slope)) / 16 * 1rem + var(--text-l-slope) * 100vw),
+    calc(var(--text-l-max) / 16 * 1rem)
+  );
+
+  --text-xl-min: calc(var(--text-min-size) * pow(var(--text-min-ratio), 2));
+  --text-xl-max: calc(var(--text-max-size) * pow(var(--text-max-ratio), 2));
+  --text-xl-slope: calc((var(--text-xl-max) - var(--text-xl-min)) / (var(--fluid-max-vw) - var(--fluid-min-vw)));
+  --text-xl: clamp(
+    calc(var(--text-xl-min) / 16 * 1rem),
+    calc((var(--text-xl-min) - var(--fluid-min-vw) * var(--text-xl-slope)) / 16 * 1rem + var(--text-xl-slope) * 100vw),
+    calc(var(--text-xl-max) / 16 * 1rem)
+  );
+
+  --text-2xl-min: calc(var(--text-min-size) * pow(var(--text-min-ratio), 3));
+  --text-2xl-max: calc(var(--text-max-size) * pow(var(--text-max-ratio), 3));
+  --text-2xl-slope: calc((var(--text-2xl-max) - var(--text-2xl-min)) / (var(--fluid-max-vw) - var(--fluid-min-vw)));
+  --text-2xl: clamp(
+    calc(var(--text-2xl-min) / 16 * 1rem),
+    calc((var(--text-2xl-min) - var(--fluid-min-vw) * var(--text-2xl-slope)) / 16 * 1rem + var(--text-2xl-slope) * 100vw),
+    calc(var(--text-2xl-max) / 16 * 1rem)
+  );
+
+  --text-3xl-min: calc(var(--text-min-size) * pow(var(--text-min-ratio), 4));
+  --text-3xl-max: calc(var(--text-max-size) * pow(var(--text-max-ratio), 4));
+  --text-3xl-slope: calc((var(--text-3xl-max) - var(--text-3xl-min)) / (var(--fluid-max-vw) - var(--fluid-min-vw)));
+  --text-3xl: clamp(
+    calc(var(--text-3xl-min) / 16 * 1rem),
+    calc((var(--text-3xl-min) - var(--fluid-min-vw) * var(--text-3xl-slope)) / 16 * 1rem + var(--text-3xl-slope) * 100vw),
+    calc(var(--text-3xl-max) / 16 * 1rem)
+  );
+
+  --text-4xl-min: calc(var(--text-min-size) * pow(var(--text-min-ratio), 5));
+  --text-4xl-max: calc(var(--text-max-size) * pow(var(--text-max-ratio), 5));
+  --text-4xl-slope: calc((var(--text-4xl-max) - var(--text-4xl-min)) / (var(--fluid-max-vw) - var(--fluid-min-vw)));
+  --text-4xl: clamp(
+    calc(var(--text-4xl-min) / 16 * 1rem),
+    calc((var(--text-4xl-min) - var(--fluid-min-vw) * var(--text-4xl-slope)) / 16 * 1rem + var(--text-4xl-slope) * 100vw),
+    calc(var(--text-4xl-max) / 16 * 1rem)
+  );
+
+  --text-5xl-min: calc(var(--text-min-size) * pow(var(--text-min-ratio), 6));
+  --text-5xl-max: calc(var(--text-max-size) * pow(var(--text-max-ratio), 6));
+  --text-5xl-slope: calc((var(--text-5xl-max) - var(--text-5xl-min)) / (var(--fluid-max-vw) - var(--fluid-min-vw)));
+  --text-5xl: clamp(
+    calc(var(--text-5xl-min) / 16 * 1rem),
+    calc((var(--text-5xl-min) - var(--fluid-min-vw) * var(--text-5xl-slope)) / 16 * 1rem + var(--text-5xl-slope) * 100vw),
+    calc(var(--text-5xl-max) / 16 * 1rem)
+  );
+
+    /* ---- 2.4 Fluid space: --space-{3xs…4xl}  (step -4…5, base --space-m) ---- */
+  --space-3xs-min: calc(var(--space-min-size) * pow(var(--space-min-ratio), -4));
+  --space-3xs-max: calc(var(--space-max-size) * pow(var(--space-max-ratio), -4));
+  --space-3xs-slope: calc((var(--space-3xs-max) - var(--space-3xs-min)) / (var(--fluid-max-vw) - var(--fluid-min-vw)));
+  --space-3xs: clamp(
+    calc(var(--space-3xs-min) / 16 * 1rem),
+    calc((var(--space-3xs-min) - var(--fluid-min-vw) * var(--space-3xs-slope)) / 16 * 1rem + var(--space-3xs-slope) * 100vw),
+    calc(var(--space-3xs-max) / 16 * 1rem)
+  );
+
+  --space-2xs-min: calc(var(--space-min-size) * pow(var(--space-min-ratio), -3));
+  --space-2xs-max: calc(var(--space-max-size) * pow(var(--space-max-ratio), -3));
+  --space-2xs-slope: calc((var(--space-2xs-max) - var(--space-2xs-min)) / (var(--fluid-max-vw) - var(--fluid-min-vw)));
+  --space-2xs: clamp(
+    calc(var(--space-2xs-min) / 16 * 1rem),
+    calc((var(--space-2xs-min) - var(--fluid-min-vw) * var(--space-2xs-slope)) / 16 * 1rem + var(--space-2xs-slope) * 100vw),
+    calc(var(--space-2xs-max) / 16 * 1rem)
+  );
+
+  --space-xs-min: calc(var(--space-min-size) * pow(var(--space-min-ratio), -2));
+  --space-xs-max: calc(var(--space-max-size) * pow(var(--space-max-ratio), -2));
+  --space-xs-slope: calc((var(--space-xs-max) - var(--space-xs-min)) / (var(--fluid-max-vw) - var(--fluid-min-vw)));
+  --space-xs: clamp(
+    calc(var(--space-xs-min) / 16 * 1rem),
+    calc((var(--space-xs-min) - var(--fluid-min-vw) * var(--space-xs-slope)) / 16 * 1rem + var(--space-xs-slope) * 100vw),
+    calc(var(--space-xs-max) / 16 * 1rem)
+  );
+
+  --space-s-min: calc(var(--space-min-size) * pow(var(--space-min-ratio), -1));
+  --space-s-max: calc(var(--space-max-size) * pow(var(--space-max-ratio), -1));
+  --space-s-slope: calc((var(--space-s-max) - var(--space-s-min)) / (var(--fluid-max-vw) - var(--fluid-min-vw)));
+  --space-s: clamp(
+    calc(var(--space-s-min) / 16 * 1rem),
+    calc((var(--space-s-min) - var(--fluid-min-vw) * var(--space-s-slope)) / 16 * 1rem + var(--space-s-slope) * 100vw),
+    calc(var(--space-s-max) / 16 * 1rem)
+  );
+
+  --space-m-min: calc(var(--space-min-size) * pow(var(--space-min-ratio), 0));
+  --space-m-max: calc(var(--space-max-size) * pow(var(--space-max-ratio), 0));
+  --space-m-slope: calc((var(--space-m-max) - var(--space-m-min)) / (var(--fluid-max-vw) - var(--fluid-min-vw)));
+  --space-m: clamp(
+    calc(var(--space-m-min) / 16 * 1rem),
+    calc((var(--space-m-min) - var(--fluid-min-vw) * var(--space-m-slope)) / 16 * 1rem + var(--space-m-slope) * 100vw),
+    calc(var(--space-m-max) / 16 * 1rem)
+  );
+
+  --space-l-min: calc(var(--space-min-size) * pow(var(--space-min-ratio), 1));
+  --space-l-max: calc(var(--space-max-size) * pow(var(--space-max-ratio), 1));
+  --space-l-slope: calc((var(--space-l-max) - var(--space-l-min)) / (var(--fluid-max-vw) - var(--fluid-min-vw)));
+  --space-l: clamp(
+    calc(var(--space-l-min) / 16 * 1rem),
+    calc((var(--space-l-min) - var(--fluid-min-vw) * var(--space-l-slope)) / 16 * 1rem + var(--space-l-slope) * 100vw),
+    calc(var(--space-l-max) / 16 * 1rem)
+  );
+
+  --space-xl-min: calc(var(--space-min-size) * pow(var(--space-min-ratio), 2));
+  --space-xl-max: calc(var(--space-max-size) * pow(var(--space-max-ratio), 2));
+  --space-xl-slope: calc((var(--space-xl-max) - var(--space-xl-min)) / (var(--fluid-max-vw) - var(--fluid-min-vw)));
+  --space-xl: clamp(
+    calc(var(--space-xl-min) / 16 * 1rem),
+    calc((var(--space-xl-min) - var(--fluid-min-vw) * var(--space-xl-slope)) / 16 * 1rem + var(--space-xl-slope) * 100vw),
+    calc(var(--space-xl-max) / 16 * 1rem)
+  );
+
+  --space-2xl-min: calc(var(--space-min-size) * pow(var(--space-min-ratio), 3));
+  --space-2xl-max: calc(var(--space-max-size) * pow(var(--space-max-ratio), 3));
+  --space-2xl-slope: calc((var(--space-2xl-max) - var(--space-2xl-min)) / (var(--fluid-max-vw) - var(--fluid-min-vw)));
+  --space-2xl: clamp(
+    calc(var(--space-2xl-min) / 16 * 1rem),
+    calc((var(--space-2xl-min) - var(--fluid-min-vw) * var(--space-2xl-slope)) / 16 * 1rem + var(--space-2xl-slope) * 100vw),
+    calc(var(--space-2xl-max) / 16 * 1rem)
+  );
+
+  --space-3xl-min: calc(var(--space-min-size) * pow(var(--space-min-ratio), 4));
+  --space-3xl-max: calc(var(--space-max-size) * pow(var(--space-max-ratio), 4));
+  --space-3xl-slope: calc((var(--space-3xl-max) - var(--space-3xl-min)) / (var(--fluid-max-vw) - var(--fluid-min-vw)));
+  --space-3xl: clamp(
+    calc(var(--space-3xl-min) / 16 * 1rem),
+    calc((var(--space-3xl-min) - var(--fluid-min-vw) * var(--space-3xl-slope)) / 16 * 1rem + var(--space-3xl-slope) * 100vw),
+    calc(var(--space-3xl-max) / 16 * 1rem)
+  );
+
+  --space-4xl-min: calc(var(--space-min-size) * pow(var(--space-min-ratio), 5));
+  --space-4xl-max: calc(var(--space-max-size) * pow(var(--space-max-ratio), 5));
+  --space-4xl-slope: calc((var(--space-4xl-max) - var(--space-4xl-min)) / (var(--fluid-max-vw) - var(--fluid-min-vw)));
+  --space-4xl: clamp(
+    calc(var(--space-4xl-min) / 16 * 1rem),
+    calc((var(--space-4xl-min) - var(--fluid-min-vw) * var(--space-4xl-slope)) / 16 * 1rem + var(--space-4xl-slope) * 100vw),
+    calc(var(--space-4xl-max) / 16 * 1rem)
+  );
+
+    /* ---- 2.5 Radii (from spacing) ---- */
+    --radius-xs: calc(var(--space-xs) * var(--radius-scale));
+    --radius-s: calc(var(--space-s) * var(--radius-scale));
+    --radius-m: calc(var(--space-m) * var(--radius-scale));
+    --radius-l: calc(var(--space-l) * var(--radius-scale));
+    --radius-xl: calc(var(--space-xl) * var(--radius-scale));
+    --radius-2xl: calc(var(--space-2xl) * var(--radius-scale));
+    --radius-none: 0;
+    --radius-full: 9999px;
+
+    /* ---- 2.6 Borders ---- */
+    --border-width-s: 1px;
+    --border-width-m: 2px;
+    --border-width-l: 4px;
+
+    /* ---- 2.7 Shadows (tinted by the surface colour) ---- */
+    --shadow-color: var(--surface-dark-10);
+    --shadow-xs: 0 1px 2px color-mix(in oklch, var(--shadow-color) 10%, transparent);
+    --shadow-s:  0 1px 3px color-mix(in oklch, var(--shadow-color) 14%, transparent), 0 1px 2px color-mix(in oklch, var(--shadow-color) 8%, transparent);
+    --shadow-m:  0 4px 8px -2px color-mix(in oklch, var(--shadow-color) 14%, transparent), 0 2px 4px -2px color-mix(in oklch, var(--shadow-color) 8%, transparent);
+    --shadow-l:  0 12px 20px -4px color-mix(in oklch, var(--shadow-color) 16%, transparent), 0 4px 8px -4px color-mix(in oklch, var(--shadow-color) 8%, transparent);
+    --shadow-xl: 0 24px 40px -8px color-mix(in oklch, var(--shadow-color) 20%, transparent);
+
+    /* ---- 2.8 Motion ---- */
+    --duration-fast: 120ms;
+    --duration-base: 200ms;
+    --duration-slow: 400ms;
+    --ease-out:    cubic-bezier(0.2, 0.8, 0.2, 1);
+    --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+    --transition: var(--duration-base) var(--ease-out);
+
+    /* ---- 2.9 Stacking ---- */
+    --z-base: 0;
+    --z-dropdown: 100;
+    --z-sticky: 200;
+    --z-overlay: 300;
+    --z-modal: 400;
+    --z-toast: 500;
+
+    /* ---- 2.10 Misc ---- */
+    --opacity-disabled: 0.5;
+    --focus-ring: 3px solid var(--color-focus);
+    --focus-offset: 2px;
+    --aspect-square: 1 / 1;
+    --aspect-video: 16 / 9;
+    --aspect-photo: 4 / 3;
+    /* Breakpoints can't be variables in @media. Use these literals:
+       sm 40em (640px) · md 48em (768px) · lg 64em (1024px) · xl 80em (1280px) */
+  }
+
+  [data-theme="light"] { color-scheme: light; }
+  [data-theme="dark"]  { color-scheme: dark; }
+  [data-theme="auto"]  { color-scheme: light dark; }
+}

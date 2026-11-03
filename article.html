@@ -1,0 +1,152 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>How to build accessible pages · Site name</title>
+  <meta name="description" content="Example article page: breadcrumb, article header, long-form prose, a table and related reading.">
+  <link rel="canonical" href="https://example.com/article.html">
+  <link rel="icon" href="images/favicon.svg" type="image/svg+xml">
+
+  <script src="js/theme-init.js"></script>
+  <link rel="stylesheet" href="css/main.css">
+
+  <script src="js/components.js" defer></script>
+  <script src="js/vendor/alpine.min.js" defer></script>
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to main content</a>
+
+  <header class="nav" x-data="nav" :class="{ 'nav--open': open }" @keydown.escape="close">
+    <div class="container nav__inner">
+      <a class="nav__brand" href="index.html">Site name</a>
+      <div class="nav__actions">
+        <button class="theme-toggle" type="button" x-data="themeToggle" @click="switchTheme" :aria-pressed="dark" aria-label="Dark mode">
+          <svg class="icon theme-toggle__icon theme-toggle__icon--sun" aria-hidden="true" focusable="false"><use href="images/icons.svg#sun"/></svg>
+          <svg class="icon theme-toggle__icon theme-toggle__icon--moon" aria-hidden="true" focusable="false"><use href="images/icons.svg#moon"/></svg>
+        </button>
+        <button class="nav__toggle" type="button" x-ref="toggle" @click="toggle" :aria-expanded="open" aria-controls="main-menu">
+          <svg class="icon" aria-hidden="true" focusable="false"><use href="images/icons.svg#menu"/></svg>
+          <span>Menu</span>
+        </button>
+      </div>
+      <nav aria-label="Main" class="nav__menu">
+        <ul class="nav__list" id="main-menu">
+          <li><a class="nav__link" href="index.html">Home</a></li>
+          <li><a class="nav__link" href="article.html" aria-current="page">Article</a></li>
+          <li><a class="nav__link" href="contact.html">Contact</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <main id="main">
+    <article class="section" aria-labelledby="article-title">
+      <div class="container container--narrow stack stack--l">
+        <nav class="breadcrumb" aria-label="Breadcrumb">
+          <ol class="breadcrumb__list">
+            <li class="breadcrumb__item"><a class="breadcrumb__link" href="index.html">Home</a></li>
+            <li class="breadcrumb__item"><a class="breadcrumb__link" href="article.html" aria-current="page">Article</a></li>
+          </ol>
+        </nav>
+
+        <header class="article-header">
+          <h1 class="article-header__title" id="article-title">How to build accessible pages</h1>
+          <p class="article-header__lead">A short, practical checklist you can apply to every page before it ships.</p>
+          <p class="article-header__meta">
+            <span>By Sam Rivera</span>
+            <time datetime="2026-11-03">3 November 2026</time>
+            <span>6 min read</span>
+          </p>
+        </header>
+
+        <div class="prose">
+          <p>Accessible pages are better pages. They load faster, read more clearly and work for everyone, whatever device or ability they bring. Here are the habits that matter most.</p>
+
+          <h2>Start with semantics</h2>
+          <p>Choose the element that matches the meaning of the content: a <code>button</code> for actions, a link for navigation, a list for lists. The browser then gives you keyboard support and screen reader behaviour for free.</p>
+          <ul>
+            <li>One <code>h1</code> per page, and headings that never skip a level</li>
+            <li>Landmarks: <code>header</code>, <code>nav</code>, <code>main</code>, <code>footer</code></li>
+            <li>Real <code>label</code> elements for every form field</li>
+          </ul>
+
+          <h2>Check contrast and focus</h2>
+          <p>Text needs enough contrast against its background in both light and dark themes. The framework pairs every colour with a readable text colour, so use those pairs instead of picking by eye.</p>
+          <blockquote>If you can't see where the keyboard focus is, neither can your users.</blockquote>
+
+          <h3>Targets and spacing</h3>
+          <p>Keep interactive targets at least 24 by 24 pixels, and aim for 44 where you can.</p>
+
+          <h2>Respect motion preferences</h2>
+          <p>Write animation so it only runs for people who haven't asked for reduced motion. Fades are fine; sliding, zooming and parallax are not.</p>
+
+          <figure>
+            <div class="table table--striped" role="region" aria-labelledby="checks-caption" tabindex="0">
+              <table class="table__grid">
+                <caption id="checks-caption">Quick checks and the tool that finds them</caption>
+                <thead><tr><th scope="col">Check</th><th scope="col">How</th></tr></thead>
+                <tbody>
+                  <tr><th scope="row">Structure</th><td>tools/check.mjs</td></tr>
+                  <tr><th scope="row">Contrast and ARIA</th><td>axe scan</td></tr>
+                  <tr><th scope="row">Keyboard</th><td>Tab through the page</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </figure>
+        </div>
+
+        <nav class="pagination" aria-label="Article navigation">
+          <ul class="pagination__list">
+            <li class="pagination__item"><a class="pagination__link" href="index.html">Back to home</a></li>
+            <li class="pagination__item"><a class="pagination__link" href="contact.html">Ask a question</a></li>
+          </ul>
+        </nav>
+      </div>
+    </article>
+
+    <aside class="section section--alt" aria-labelledby="related-title">
+      <div class="container stack stack--l">
+        <h2 id="related-title">Related reading</h2>
+        <div class="grid">
+          <article class="card card--raised u-clickable">
+            <div class="card__body">
+              <h3 class="card__title"><a href="index.html">Build calmer, faster websites</a></h3>
+              <p class="card__text">See how the components fit together on a full landing page.</p>
+            </div>
+          </article>
+          <article class="card card--raised u-clickable">
+            <div class="card__body">
+              <h3 class="card__title"><a href="contact.html">Talk to us</a></h3>
+              <p class="card__text">Questions about accessibility on your site? Get in touch.</p>
+            </div>
+          </article>
+        </div>
+      </div>
+    </aside>
+  </main>
+
+  <footer class="footer">
+    <div class="container footer__inner">
+      <div>
+        <p class="footer__brand">Site name</p>
+        <p class="u-text-muted">A short description of the organisation.</p>
+      </div>
+      <nav class="footer__nav" aria-labelledby="footer-explore">
+        <h2 class="u-text-m" id="footer-explore">Explore</h2>
+        <ul class="footer__list">
+          <li><a class="footer__link" href="index.html">Home</a></li>
+          <li><a class="footer__link" href="article.html">Article</a></li>
+        </ul>
+      </nav>
+      <nav class="footer__nav" aria-labelledby="footer-help">
+        <h2 class="u-text-m" id="footer-help">Help</h2>
+        <ul class="footer__list">
+          <li><a class="footer__link" href="contact.html">Contact</a></li>
+        </ul>
+      </nav>
+      <p class="footer__legal">&copy; 2026 Site name. All rights reserved.</p>
+    </div>
+  </footer>
+</body>
+</html>

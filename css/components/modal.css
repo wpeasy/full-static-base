@@ -1,0 +1,65 @@
+/* ==========================================================================
+   MODAL  ·  <dialog class="modal">
+   Elements: __header  __title  __close  __body  __footer
+   Native <dialog>: focus trap, Esc, top-layer and inert background are built in.
+   Open:  @click="$refs.dialog.showModal()"   Close: <form method="dialog"> button.
+   ========================================================================== */
+
+@layer components {
+  .modal {
+    width: min(calc(100% - 2 * var(--gutter)), 32rem);
+    max-height: 90vh;
+    margin: auto;
+    padding: 0;
+    overflow-y: auto;
+    color: var(--color-text);
+    background-color: var(--color-surface);
+    border: 0;
+    border-radius: var(--radius-card);
+    box-shadow: var(--shadow-xl);
+  }
+  .modal::backdrop {
+    background-color: var(--surface-alpha-60);
+    backdrop-filter: blur(2px);
+  }
+
+  .modal__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-s);
+    padding: var(--space-m);
+    border-bottom: var(--border-width) solid var(--color-border);
+  }
+  .modal__title { font-size: var(--text-xl); }
+  .modal__close {
+    display: inline-grid;
+    place-items: center;
+    padding: var(--space-2xs);
+    color: var(--color-text-muted);
+    background: none;
+    border: 0;
+    border-radius: var(--radius-s);
+  }
+  .modal__close:hover { color: var(--color-text); background-color: var(--primary-alpha-10); }
+
+  .modal__body { padding: var(--space-m); }
+  .modal__footer {
+    display: flex;
+    justify-content: flex-end;
+    gap: var(--space-xs);
+    padding: var(--space-s) var(--space-m);
+    border-top: var(--border-width) solid var(--color-border);
+  }
+
+  /* Entrance animation only when motion is welcome */
+  @media (prefers-reduced-motion: no-preference) {
+    .modal {
+      transition: opacity var(--duration-base) var(--ease-out), translate var(--duration-base) var(--ease-out), overlay var(--duration-base) allow-discrete, display var(--duration-base) allow-discrete;
+      opacity: 0;
+      translate: 0 var(--space-s);
+    }
+    .modal[open] { opacity: 1; translate: 0 0; }
+    @starting-style { .modal[open] { opacity: 0; translate: 0 var(--space-s); } }
+  }
+}

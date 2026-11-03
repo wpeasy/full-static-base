@@ -1,0 +1,23 @@
+/* ==========================================================================
+   THEME TOGGLE  ·  .theme-toggle   Elements: __icon (--sun | --moon)
+   <button class="theme-toggle" aria-pressed> toggles dark mode and remembers the choice.
+   Behaviour: js/components.js → themeToggle; initial theme set by js/theme-init.js (no flash).
+   ========================================================================== */
+
+@layer components {
+  .theme-toggle {
+    display: inline-grid;
+    place-items: center;
+    padding: var(--space-2xs);
+    color: var(--color-text);
+    background: none;
+    border: var(--border-width) solid var(--color-border-strong);
+    border-radius: var(--radius-button);
+  }
+  .theme-toggle:hover { background-color: var(--primary-alpha-10); }
+
+  .theme-toggle__icon { display: inline-block; }
+  .theme-toggle__icon--moon { display: none; }
+  .theme-toggle[aria-pressed="true"] .theme-toggle__icon--sun { display: none; }
+  .theme-toggle[aria-pressed="true"] .theme-toggle__icon--moon { display: inline-block; }
+}

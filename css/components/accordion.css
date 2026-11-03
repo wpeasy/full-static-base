@@ -1,0 +1,45 @@
+/* ==========================================================================
+   ACCORDION  ·  .accordion  built from native <details>/<summary>
+   Elements: __item (<details name="group">)  __trigger (<summary>)  __panel
+   Same `name` on items = only one open at a time. No JavaScript needed.
+   ========================================================================== */
+
+@layer components {
+  .accordion {
+    background-color: var(--color-surface);
+    border: var(--border-width) solid var(--color-border);
+    border-radius: var(--radius-card);
+    overflow: hidden;
+  }
+
+  .accordion__item + .accordion__item { border-top: var(--border-width) solid var(--color-border); }
+
+  .accordion__trigger {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-s);
+    padding: var(--space-s) var(--space-m);
+    font-weight: var(--weight-medium);
+    list-style: none;
+    cursor: pointer;
+  }
+  .accordion__trigger::-webkit-details-marker { display: none; }
+  .accordion__trigger:hover { background-color: var(--primary-alpha-10); }
+  .accordion__trigger::after {
+    content: "+";
+    font-size: var(--text-xl);
+    line-height: 1;
+  }
+  .accordion__item[open] > .accordion__trigger::after { content: "\2212"; } /* minus sign */
+
+  .accordion__panel {
+    padding: 0 var(--space-m) var(--space-m);
+    color: var(--color-text-muted);
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .accordion__item[open] > .accordion__panel { animation: accordion-reveal var(--duration-base) var(--ease-out); }
+    @keyframes accordion-reveal { from { opacity: 0; translate: 0 calc(var(--space-2xs) * -1); } }
+  }
+}

@@ -1,0 +1,32 @@
+/* ==========================================================================
+   TABLE  ·  .table  (--striped)   Elements: __grid
+   .table is a keyboard-scrollable region; __grid is the real <table>.
+   <div class="table" role="region" aria-labelledby="cap" tabindex="0">
+     <table class="table__grid"><caption id="cap">…</caption><thead><tr><th scope="col">…
+   ========================================================================== */
+
+@layer components {
+  .table {
+    overflow-x: auto;
+    border: var(--border-width) solid var(--color-border);
+    border-radius: var(--radius-m);
+    background-color: var(--color-surface);
+  }
+
+  .table__grid { min-width: 32rem; }
+  .table__grid caption {
+    padding: var(--space-s);
+    color: var(--color-text-muted);
+    font-size: var(--text-s);
+    text-align: start;
+  }
+  .table__grid th,
+  .table__grid td { padding: var(--space-xs) var(--space-s); }
+  .table__grid thead th {
+    background-color: var(--color-surface-alt);
+    border-bottom: var(--border-width-m) solid var(--color-border-strong);
+  }
+  .table__grid tbody tr:last-child > * { border-bottom: 0; }
+
+  .table--striped .table__grid tbody tr:nth-child(even) { background-color: var(--color-bg-alt); }
+}

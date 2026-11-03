@@ -1,0 +1,30 @@
+/* ==========================================================================
+   FOOTER  ·  .footer   Elements: __inner  __brand  __nav  __list  __link  __legal
+   Use <footer class="footer u-surface-inverse"> (or any surface) as the page's contentinfo.
+   ========================================================================== */
+
+@layer components {
+  .footer {
+    padding-block: var(--space-xl);
+    background-color: var(--color-bg-alt);
+    color: var(--color-text);
+  }
+
+  .footer__inner { display: grid; gap: var(--space-l); }
+  .footer__brand { font-size: var(--text-l); font-weight: var(--weight-bold); }
+  .footer__nav { display: grid; gap: var(--space-xs); align-content: start; }
+  .footer__list { display: grid; gap: var(--space-3xs); margin: 0; padding: 0; list-style: none; }
+  .footer__link { color: var(--color-text-muted); }
+  .footer__link:hover { color: var(--color-link-hover); }
+  .footer__legal {
+    padding-block-start: var(--space-m);
+    color: var(--color-text-muted);
+    font-size: var(--text-s);
+    border-top: var(--border-width) solid var(--color-border);
+  }
+
+  @media (min-width: 48em) {
+    .footer__inner { grid-template-columns: 2fr repeat(2, 1fr); }
+    .footer__legal { grid-column: 1 / -1; }
+  }
+}

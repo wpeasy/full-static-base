@@ -1,0 +1,18 @@
+/* ==========================================================================
+   SECTION HEADER  ·  .section-header  (--center)
+   Elements: __eyebrow  __title  __lead     Intro block placed at the top of a section.
+   ========================================================================== */
+
+@layer components {
+  .section-header { display: grid; gap: var(--space-xs); max-width: var(--measure); }
+  .section-header--center { margin-inline: auto; text-align: center; }
+
+  .section-header__eyebrow {
+    color: var(--color-link);
+    font-size: var(--text-s);
+    font-weight: var(--weight-bold);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+  .section-header__lead { color: var(--color-text-muted); font-size: var(--text-l); }
+}

@@ -1,0 +1,21 @@
+/* ==========================================================================
+   PRINT  ·  css/core/print.css   Print-friendly output: content only, black on white, URLs visible.
+   ========================================================================== */
+
+@layer utilities {
+  @media print {
+    :root { color-scheme: light; }
+
+    body { color: CanvasText; background: Canvas; }
+    .skip-link, .nav, .footer, .toast-region, .theme-toggle, .hero__actions, .cta__actions,
+    .button, .u-hide-print { display: none !important; }
+
+    a { color: inherit; text-decoration: underline; }
+    a[href^="http"]::after { content: " (" attr(href) ")"; font-size: 0.85em; }
+
+    .section { padding-block: var(--space-m); background: none; }
+    .card, .pricing, .testimonial, .feature, .table { break-inside: avoid; box-shadow: none; }
+    h1, h2, h3 { break-after: avoid; }
+    img { max-width: 100%; break-inside: avoid; }
+  }
+}

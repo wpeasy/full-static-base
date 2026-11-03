@@ -1,0 +1,115 @@
+/* ==========================================================================
+   STYLEGUIDE  ·  css/components/styleguide.css
+   Blocks used only by index.html (the framework review page).
+   ========================================================================== */
+
+@layer components {
+
+  .sg-header {
+    position: sticky;
+    top: 0;
+    z-index: var(--z-sticky);
+    background-color: color-mix(in oklch, var(--color-bg) 88%, transparent);
+    backdrop-filter: blur(8px);
+    border-bottom: var(--border-width) solid var(--color-border);
+  }
+  .sg-header__inner { padding-block: var(--space-s); }
+  .sg-header__nav { display: flex; flex-wrap: wrap; gap: var(--space-m); font-size: var(--text-s); }
+
+  .sg-toggle {
+    padding: var(--space-2xs) var(--space-s);
+    color: var(--color-text);
+    background: var(--color-surface);
+    border: var(--border-width) solid var(--color-border-strong);
+    border-radius: var(--radius-full);
+    font-size: var(--text-s);
+  }
+
+  .sg-label {
+    font-family: var(--font-mono);
+    font-size: var(--text-xs);
+    color: var(--color-text-muted);
+  }
+
+  /* ---- Colour ramps ---- */
+  .ramp { display: grid; gap: var(--space-2xs); }
+  .ramp__row {
+    display: grid;
+    grid-template-columns: repeat(10, minmax(0, 1fr));
+    gap: var(--space-3xs);
+  }
+  .ramp__base { display: grid; grid-template-columns: minmax(0, 1fr); }
+  .ramp__swatch {
+    display: flex;
+    align-items: flex-end;
+    min-height: var(--space-2xl);
+    padding: var(--space-3xs);
+    border-radius: var(--radius-xs);
+    font-family: var(--font-mono);
+    font-size: var(--text-2xs);
+    color: var(--swatch-text, var(--color-text));
+    /* checkerboard shows through the alpha steps */
+    background:
+      linear-gradient(var(--swatch), var(--swatch)),
+      conic-gradient(var(--surface-light-7) 25%, var(--white) 0 50%, var(--surface-light-7) 0 75%, var(--white) 0) 0 0 / 12px 12px;
+    box-shadow: inset 0 0 0 1px var(--surface-alpha-10);
+  }
+  .ramp__swatch--tall { min-height: var(--space-3xl); }
+
+  /* ---- Semantic colour chips ---- */
+  .chip {
+    display: grid;
+    gap: var(--space-3xs);
+    padding: var(--space-xs);
+    background: var(--color-surface);
+    border: var(--border-width) solid var(--color-border);
+    border-radius: var(--radius-m);
+  }
+  .chip__color {
+    height: var(--space-xl);
+    background: var(--chip);
+    border-radius: var(--radius-s);
+    box-shadow: inset 0 0 0 1px var(--surface-alpha-10);
+  }
+
+  /* ---- Scale rows ---- */
+  .scale { display: grid; gap: var(--space-xs); }
+  .scale__row {
+    display: grid;
+    grid-template-columns: 4.5rem 6rem minmax(0, 1fr);
+    align-items: center;
+    gap: var(--space-s);
+  }
+  .scale__sample { min-width: 0; overflow-wrap: anywhere; line-height: var(--leading-heading); }
+  @media (max-width: 40em) {
+    .scale__row { grid-template-columns: 1fr; gap: var(--space-3xs); }
+  }
+  .scale__bar {
+    max-width: 100%;
+    height: var(--space-s);
+    background: var(--color-primary);
+    border-radius: var(--radius-xs);
+  }
+  .scale__radius {
+    width: var(--space-3xl);
+    height: var(--space-2xl);
+    background: var(--color-primary);
+  }
+  .scale__shadow {
+    display: grid;
+    place-items: center;
+    height: var(--space-3xl);
+    background: var(--color-surface);
+    border-radius: var(--radius-card);
+  }
+
+  /* ---- Surface demo tile ---- */
+  .sg-surface {
+    display: grid;
+    gap: var(--space-xs);
+    align-content: start;
+    padding: var(--space-m);
+    border: var(--border-width) solid var(--color-border);
+    border-radius: var(--radius-card);
+  }
+}

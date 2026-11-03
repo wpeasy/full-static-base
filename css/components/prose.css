@@ -1,0 +1,20 @@
+/* ==========================================================================
+   PROSE  ·  .prose  — for long-form / CMS / markdown content you can't add classes to.
+   This is the ONE sanctioned place to style bare elements (h2, ul, img…) inside a block.
+   Use real heading levels; they carry the document outline.
+   ========================================================================== */
+
+@layer components {
+  .prose { max-width: var(--measure); }
+  .prose > * + * { margin-block-start: var(--space-s); }
+
+  .prose > :is(h2, h3, h4) { margin-block-start: var(--space-xl); }
+  .prose > :is(h2, h3, h4) + * { margin-block-start: var(--space-xs); }
+
+  .prose :is(ul, ol) { padding-inline-start: 1.5em; }
+  .prose li + li { margin-block-start: var(--space-2xs); }
+  .prose a { text-decoration: underline; }
+  .prose img { border-radius: var(--radius-image); }
+  .prose figure > figcaption { margin-block-start: var(--space-2xs); color: var(--color-text-muted); font-size: var(--text-s); }
+  .prose :is(table) { font-size: var(--text-s); }
+}

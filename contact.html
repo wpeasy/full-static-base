@@ -1,0 +1,159 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Contact · Site name</title>
+  <meta name="description" content="Example contact page: an accessible form with an error summary, consent checkbox and honeypot, plus contact details.">
+  <link rel="canonical" href="https://example.com/contact.html">
+  <link rel="icon" href="images/favicon.svg" type="image/svg+xml">
+
+  <script src="js/theme-init.js"></script>
+  <link rel="stylesheet" href="css/main.css">
+
+  <script src="js/forms.js" defer></script>
+  <script src="js/components.js" defer></script>
+  <script src="js/vendor/alpine.min.js" defer></script>
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to main content</a>
+
+  <header class="nav" x-data="nav" :class="{ 'nav--open': open }" @keydown.escape="close">
+    <div class="container nav__inner">
+      <a class="nav__brand" href="index.html">Site name</a>
+      <div class="nav__actions">
+        <button class="theme-toggle" type="button" x-data="themeToggle" @click="switchTheme" :aria-pressed="dark" aria-label="Dark mode">
+          <svg class="icon theme-toggle__icon theme-toggle__icon--sun" aria-hidden="true" focusable="false"><use href="images/icons.svg#sun"/></svg>
+          <svg class="icon theme-toggle__icon theme-toggle__icon--moon" aria-hidden="true" focusable="false"><use href="images/icons.svg#moon"/></svg>
+        </button>
+        <button class="nav__toggle" type="button" x-ref="toggle" @click="toggle" :aria-expanded="open" aria-controls="main-menu">
+          <svg class="icon" aria-hidden="true" focusable="false"><use href="images/icons.svg#menu"/></svg>
+          <span>Menu</span>
+        </button>
+      </div>
+      <nav aria-label="Main" class="nav__menu">
+        <ul class="nav__list" id="main-menu">
+          <li><a class="nav__link" href="index.html">Home</a></li>
+          <li><a class="nav__link" href="article.html">Article</a></li>
+          <li><a class="nav__link" href="contact.html" aria-current="page">Contact</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <main id="main">
+    <section class="section" aria-labelledby="contact-title">
+      <div class="container stack stack--xl">
+        <header class="section-header">
+          <p class="section-header__eyebrow">Get in touch</p>
+          <h1 id="contact-title">Contact us</h1>
+          <p class="section-header__lead">Tell us about your project. We reply within one working day.</p>
+        </header>
+
+        <div class="grid grid--2" style="--grid-gap: var(--space-xl)">
+          <!-- Replace the action with your form endpoint (see docs/forms.md). -->
+          <form class="stack" method="post" action="https://example.com/form-endpoint"
+                x-data="formValidation" @submit="submit" aria-labelledby="contact-title">
+
+            <div class="error-summary" tabindex="-1" x-ref="summary" x-show="errors.length" x-cloak aria-labelledby="error-title">
+              <h2 class="error-summary__title" id="error-title">There is a problem</h2>
+              <ul class="error-summary__list">
+                <template x-for="error in errors" :key="error.id">
+                  <li><a class="error-summary__link" :href="`#${error.id}`" x-text="error.message"></a></li>
+                </template>
+              </ul>
+            </div>
+
+            <div class="field" :class="{ 'field--invalid': invalid('name') }">
+              <label class="field__label" for="name">Full name</label>
+              <input class="field__input" id="name" name="name" type="text" autocomplete="name" required
+                     @input="clear('name')" :aria-invalid="invalid('name')" aria-describedby="name-error">
+              <span class="field__error" id="name-error" x-show="invalid('name')" x-cloak x-text="messages.name"></span>
+            </div>
+
+            <div class="field" :class="{ 'field--invalid': invalid('email') }">
+              <label class="field__label" for="email">Email address</label>
+              <input class="field__input" id="email" name="email" type="email" autocomplete="email" required
+                     @input="clear('email')" :aria-invalid="invalid('email')" aria-describedby="email-hint email-error">
+              <span class="field__hint" id="email-hint">We only use this to reply.</span>
+              <span class="field__error" id="email-error" x-show="invalid('email')" x-cloak x-text="messages.email"></span>
+            </div>
+
+            <div class="field" :class="{ 'field--invalid': invalid('topic') }">
+              <label class="field__label" for="topic">Topic</label>
+              <select class="field__input" id="topic" name="topic" required
+                      @change="clear('topic')" :aria-invalid="invalid('topic')" aria-describedby="topic-error">
+                <option value="">Choose a topic</option>
+                <option>New project</option>
+                <option>Support</option>
+                <option>Something else</option>
+              </select>
+              <span class="field__error" id="topic-error" x-show="invalid('topic')" x-cloak x-text="messages.topic"></span>
+            </div>
+
+            <div class="field" :class="{ 'field--invalid': invalid('message') }">
+              <label class="field__label" for="message">Message</label>
+              <textarea class="field__input" id="message" name="message" required minlength="20"
+                        @input="clear('message')" :aria-invalid="invalid('message')" aria-describedby="message-error"></textarea>
+              <span class="field__error" id="message-error" x-show="invalid('message')" x-cloak x-text="messages.message"></span>
+            </div>
+
+            <!-- Honeypot: invisible to people and assistive tech; bots fill it in. Reject submissions where it's not empty. -->
+            <div class="u-visually-hidden" aria-hidden="true">
+              <label for="website">Leave this field empty</label>
+              <input id="website" name="website" type="text" tabindex="-1" autocomplete="off">
+            </div>
+
+            <div class="field" :class="{ 'field--invalid': invalid('consent') }">
+              <div class="check">
+                <input class="check__input" id="consent" name="consent" type="checkbox" required
+                       @change="clear('consent')" :aria-invalid="invalid('consent')" aria-describedby="consent-error">
+                <label class="check__label" for="consent">I agree to be contacted about my enquiry.</label>
+              </div>
+              <span class="field__error" id="consent-error" x-show="invalid('consent')" x-cloak x-text="messages.consent"></span>
+            </div>
+
+            <button class="button" type="submit">Send message</button>
+          </form>
+
+          <aside class="stack stack--l" aria-labelledby="details-title">
+            <h2 class="u-h3" id="details-title">Contact details</h2>
+            <address class="stack stack--s">
+              <p>Example Street 1<br>Sydney NSW 2000</p>
+              <p><a href="mailto:hello@example.com">hello@example.com</a></p>
+            </address>
+            <h3 class="u-h5">Opening hours</h3>
+            <dl class="stack stack--s">
+              <div><dt class="u-weight-bold">Monday to Friday</dt><dd>9:00 am to 5:00 pm</dd></div>
+              <div><dt class="u-weight-bold">Weekends</dt><dd>Closed</dd></div>
+            </dl>
+          </aside>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="container footer__inner">
+      <div>
+        <p class="footer__brand">Site name</p>
+        <p class="u-text-muted">A short description of the organisation.</p>
+      </div>
+      <nav class="footer__nav" aria-labelledby="footer-explore">
+        <h2 class="u-text-m" id="footer-explore">Explore</h2>
+        <ul class="footer__list">
+          <li><a class="footer__link" href="index.html">Home</a></li>
+          <li><a class="footer__link" href="article.html">Article</a></li>
+        </ul>
+      </nav>
+      <nav class="footer__nav" aria-labelledby="footer-help">
+        <h2 class="u-text-m" id="footer-help">Help</h2>
+        <ul class="footer__list">
+          <li><a class="footer__link" href="contact.html">Contact</a></li>
+        </ul>
+      </nav>
+      <p class="footer__legal">&copy; 2026 Site name. All rights reserved.</p>
+    </div>
+  </footer>
+</body>
+</html>

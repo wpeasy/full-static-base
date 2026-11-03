@@ -1,0 +1,21 @@
+/* ==========================================================================
+   TESTIMONIAL  ·  .testimonial   Elements: __quote  __author  __name  __role
+   <figure class="testimonial"><blockquote class="testimonial__quote"><p>…</p></blockquote>
+   <figcaption class="testimonial__author"><span class="testimonial__name">…</span> <span class="testimonial__role">…</span>
+   ========================================================================== */
+
+@layer components {
+  .testimonial {
+    display: grid;
+    gap: var(--space-m);
+    margin: 0;
+    padding: var(--space-l);
+    background-color: var(--color-surface);
+    border: var(--border-width) solid var(--color-border);
+    border-radius: var(--radius-card);
+  }
+  .testimonial__quote { margin: 0; padding: 0; border: 0; color: var(--color-text); font-size: var(--text-xl); line-height: 1.4; }
+  .testimonial__author { display: grid; }
+  .testimonial__name { font-weight: var(--weight-bold); }
+  .testimonial__role { color: var(--color-text-muted); font-size: var(--text-s); }
+}

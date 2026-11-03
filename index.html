@@ -1,0 +1,213 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Build calmer, faster websites · Site name</title>
+  <meta name="description" content="Example landing page: hero, features, stats, testimonial, pricing, FAQ and a call to action, built only from framework components.">
+  <link rel="canonical" href="https://example.com/">
+  <link rel="icon" href="images/favicon.svg" type="image/svg+xml">
+
+  <script src="js/theme-init.js"></script>
+  <link rel="stylesheet" href="css/main.css">
+
+  <script src="js/components.js" defer></script>
+  <script src="js/vendor/alpine.min.js" defer></script>
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to main content</a>
+
+  <header class="nav" x-data="nav" :class="{ 'nav--open': open }" @keydown.escape="close">
+    <div class="container nav__inner">
+      <a class="nav__brand" href="index.html">Site name</a>
+      <div class="nav__actions">
+        <button class="theme-toggle" type="button" x-data="themeToggle" @click="switchTheme" :aria-pressed="dark" aria-label="Dark mode">
+          <svg class="icon theme-toggle__icon theme-toggle__icon--sun" aria-hidden="true" focusable="false"><use href="images/icons.svg#sun"/></svg>
+          <svg class="icon theme-toggle__icon theme-toggle__icon--moon" aria-hidden="true" focusable="false"><use href="images/icons.svg#moon"/></svg>
+        </button>
+        <button class="nav__toggle" type="button" x-ref="toggle" @click="toggle" :aria-expanded="open" aria-controls="main-menu">
+          <svg class="icon" aria-hidden="true" focusable="false"><use href="images/icons.svg#menu"/></svg>
+          <span>Menu</span>
+        </button>
+      </div>
+      <nav aria-label="Main" class="nav__menu">
+        <ul class="nav__list" id="main-menu">
+          <li><a class="nav__link" href="index.html" aria-current="page">Home</a></li>
+          <li><a class="nav__link" href="article.html">Article</a></li>
+          <li><a class="nav__link" href="contact.html">Contact</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <main id="main">
+
+    <section class="section" aria-labelledby="hero-title">
+      <div class="container">
+        <div class="hero">
+          <div class="hero__content">
+            <p class="hero__eyebrow">Example landing page</p>
+            <h1 class="hero__title" id="hero-title">Build calmer, faster websites</h1>
+            <p class="hero__lead">A consistent foundation of tokens and components so every page looks considered and works for everyone, on any device.</p>
+            <div class="hero__actions">
+              <a class="button button--l" href="contact.html">Get started <svg class="icon" aria-hidden="true" focusable="false"><use href="images/icons.svg#arrow-right"/></svg></a>
+              <a class="button button--l button--outline" href="article.html">Read the guide</a>
+            </div>
+          </div>
+          <div class="hero__media" role="img" aria-label="Abstract gradient illustration"></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section section--alt" aria-labelledby="features-title">
+      <div class="container stack stack--xl">
+        <header class="section-header section-header--center">
+          <p class="section-header__eyebrow">Why it works</p>
+          <h2 id="features-title">Everything you need, nothing you don't</h2>
+          <p class="section-header__lead">Three principles behind every page.</p>
+        </header>
+        <div class="grid">
+          <article class="feature">
+            <span class="feature__icon"><svg class="icon" aria-hidden="true" focusable="false"><use href="images/icons.svg#layers"/></svg></span>
+            <h3 class="feature__title">Consistent by design</h3>
+            <p class="feature__text">Colour, type and spacing come from one theme, so new pages match without extra effort.</p>
+          </article>
+          <article class="feature">
+            <span class="feature__icon"><svg class="icon" aria-hidden="true" focusable="false"><use href="images/icons.svg#shield"/></svg></span>
+            <h3 class="feature__title">Accessible from the start</h3>
+            <p class="feature__text">Semantic markup, keyboard support, checked contrast and reduced motion are built in.</p>
+          </article>
+          <article class="feature">
+            <span class="feature__icon"><svg class="icon" aria-hidden="true" focusable="false"><use href="images/icons.svg#zap"/></svg></span>
+            <h3 class="feature__title">Fast and simple</h3>
+            <p class="feature__text">Plain HTML and CSS with no build step: easy to read, edit and host anywhere.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" aria-labelledby="stats-title">
+      <div class="container stack stack--l">
+        <h2 class="u-visually-hidden" id="stats-title">Results in numbers</h2>
+        <dl class="grid grid--4">
+          <div class="stat"><dt class="stat__label">Sites launched</dt><dd class="stat__value">120+</dd></div>
+          <div class="stat"><dt class="stat__label">Average Lighthouse score</dt><dd class="stat__value">98</dd></div>
+          <div class="stat"><dt class="stat__label">Components</dt><dd class="stat__value">30</dd></div>
+          <div class="stat"><dt class="stat__label">Build tools needed</dt><dd class="stat__value">0</dd></div>
+        </dl>
+      </div>
+    </section>
+
+    <section class="section section--alt" aria-labelledby="quote-title">
+      <div class="container container--narrow stack stack--l">
+        <h2 class="u-visually-hidden" id="quote-title">What customers say</h2>
+        <figure class="testimonial">
+          <blockquote class="testimonial__quote">
+            <p>"We changed one colour in the theme and the whole site followed. Our pages passed accessibility review the first time."</p>
+          </blockquote>
+          <figcaption class="testimonial__author">
+            <span class="testimonial__name">Alex Morgan</span>
+            <span class="testimonial__role">Head of Digital, Example Co.</span>
+          </figcaption>
+        </figure>
+      </div>
+    </section>
+
+    <section class="section" aria-labelledby="pricing-title">
+      <div class="container stack stack--xl">
+        <header class="section-header section-header--center">
+          <p class="section-header__eyebrow">Pricing</p>
+          <h2 id="pricing-title">Simple plans</h2>
+        </header>
+        <div class="grid grid--3">
+          <article class="pricing">
+            <h3 class="pricing__name">Starter</h3>
+            <p class="pricing__price"><span class="pricing__amount">$0</span><span class="pricing__period">/month</span></p>
+            <ul class="pricing__list">
+              <li class="pricing__item"><svg class="icon" aria-hidden="true" focusable="false"><use href="images/icons.svg#check"/></svg><span>Up to 5 pages</span></li>
+              <li class="pricing__item"><svg class="icon" aria-hidden="true" focusable="false"><use href="images/icons.svg#check"/></svg><span>Community support</span></li>
+            </ul>
+            <a class="button button--outline button--full" href="contact.html">Choose Starter</a>
+          </article>
+          <article class="pricing pricing--featured">
+            <span class="badge badge--primary pricing__badge">Most popular</span>
+            <h3 class="pricing__name">Pro</h3>
+            <p class="pricing__price"><span class="pricing__amount">$29</span><span class="pricing__period">/month</span></p>
+            <ul class="pricing__list">
+              <li class="pricing__item"><svg class="icon" aria-hidden="true" focusable="false"><use href="images/icons.svg#check"/></svg><span>Up to 50 pages</span></li>
+              <li class="pricing__item"><svg class="icon" aria-hidden="true" focusable="false"><use href="images/icons.svg#check"/></svg><span>Priority email support</span></li>
+              <li class="pricing__item"><svg class="icon" aria-hidden="true" focusable="false"><use href="images/icons.svg#check"/></svg><span>Custom themes</span></li>
+            </ul>
+            <a class="button button--full" href="contact.html">Choose Pro</a>
+          </article>
+          <article class="pricing">
+            <h3 class="pricing__name">Scale</h3>
+            <p class="pricing__price"><span class="pricing__amount">$99</span><span class="pricing__period">/month</span></p>
+            <ul class="pricing__list">
+              <li class="pricing__item"><svg class="icon" aria-hidden="true" focusable="false"><use href="images/icons.svg#check"/></svg><span>Unlimited pages</span></li>
+              <li class="pricing__item"><svg class="icon" aria-hidden="true" focusable="false"><use href="images/icons.svg#check"/></svg><span>Dedicated support</span></li>
+            </ul>
+            <a class="button button--outline button--full" href="contact.html">Choose Scale</a>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section section--alt" aria-labelledby="faq-title">
+      <div class="container container--narrow stack stack--l">
+        <h2 id="faq-title">Frequently asked questions</h2>
+        <div class="accordion">
+          <details class="accordion__item" name="faq" open>
+            <summary class="accordion__trigger">Do I need a build step?</summary>
+            <div class="accordion__panel">No. Everything is plain HTML, CSS and a little Alpine.js, served exactly as written.</div>
+          </details>
+          <details class="accordion__item" name="faq">
+            <summary class="accordion__trigger">Is it accessible?</summary>
+            <div class="accordion__panel">Components follow WCAG 2.2 AA patterns, colour pairs are contrast-checked, and motion respects the reduced-motion preference.</div>
+          </details>
+          <details class="accordion__item" name="faq">
+            <summary class="accordion__trigger">Can I change the design?</summary>
+            <div class="accordion__panel">Yes. Start with the theme file; change components when the design needs it.</div>
+          </details>
+        </div>
+      </div>
+    </section>
+
+    <section class="section u-surface-primary" aria-labelledby="cta-title">
+      <div class="container">
+        <div class="cta">
+          <h2 class="cta__title" id="cta-title">Ready to start?</h2>
+          <p class="cta__text">Tell us about your project and we'll get back within one working day.</p>
+          <div class="cta__actions">
+            <a class="button button--l" href="contact.html">Contact us</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="footer">
+    <div class="container footer__inner">
+      <div>
+        <p class="footer__brand">Site name</p>
+        <p class="u-text-muted">A short description of the organisation.</p>
+      </div>
+      <nav class="footer__nav" aria-labelledby="footer-explore">
+        <h2 class="u-text-m" id="footer-explore">Explore</h2>
+        <ul class="footer__list">
+          <li><a class="footer__link" href="index.html">Home</a></li>
+          <li><a class="footer__link" href="article.html">Article</a></li>
+        </ul>
+      </nav>
+      <nav class="footer__nav" aria-labelledby="footer-help">
+        <h2 class="u-text-m" id="footer-help">Help</h2>
+        <ul class="footer__list">
+          <li><a class="footer__link" href="contact.html">Contact</a></li>
+        </ul>
+      </nav>
+      <p class="footer__legal">&copy; 2026 Site name. All rights reserved.</p>
+    </div>
+  </footer>
+</body>
+</html>

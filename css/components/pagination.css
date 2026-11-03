@@ -1,0 +1,40 @@
+/* ==========================================================================
+   PAGINATION  ·  .pagination   Elements: __list  __item  __link
+   <nav class="pagination" aria-label="Pagination"><ul class="pagination__list">
+     <li class="pagination__item"><a class="pagination__link" href="…" aria-current="page">2</a></li>
+   Previous / next links need text ("Previous page"), not just an arrow.
+   ========================================================================== */
+
+@layer components {
+  /* Public property: --pagination-gap */
+  .pagination { --pagination-gap: var(--space-2xs); }
+
+  .pagination__list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--pagination-gap);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+  .pagination__item { margin: 0; }
+
+  .pagination__link {
+    display: grid;
+    place-items: center;
+    min-width: var(--space-xl);
+    min-height: var(--space-xl);
+    padding: var(--space-3xs) var(--space-xs);
+    color: var(--color-text);
+    border: var(--border-width) solid var(--color-border);
+    border-radius: var(--radius-s);
+    text-decoration: none;
+  }
+  .pagination__link:hover { color: var(--color-link-hover); background-color: var(--primary-alpha-10); }
+  .pagination__link[aria-current="page"] {
+    color: var(--color-on-primary);
+    background-color: var(--color-primary);
+    border-color: var(--color-primary);
+  }
+  .pagination__link[aria-disabled="true"] { opacity: var(--opacity-disabled); pointer-events: none; }
+}

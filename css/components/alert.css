@@ -1,0 +1,24 @@
+/* ==========================================================================
+   ALERT  ·  .alert  (--success | --warning | --danger | --info)
+   Elements: __title  __text
+   ========================================================================== */
+
+@layer components {
+  .alert {
+    --alert-color: var(--color-info);
+    --alert-bg: var(--color-info-bg);
+
+    display: grid;
+    gap: var(--space-3xs);
+    padding: var(--space-s) var(--space-m);
+    background-color: var(--alert-bg);
+    border-inline-start: var(--border-width-l) solid var(--alert-color);
+    border-radius: var(--radius-s);
+  }
+  .alert--success { --alert-color: var(--color-success); --alert-bg: var(--color-success-bg); }
+  .alert--warning { --alert-color: var(--color-warning); --alert-bg: var(--color-warning-bg); }
+  .alert--danger  { --alert-color: var(--color-danger);  --alert-bg: var(--color-danger-bg); }
+
+  .alert__title { font-weight: var(--weight-bold); }
+  .alert__text { color: var(--color-text); }
+}

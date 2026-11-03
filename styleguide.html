@@ -1,0 +1,252 @@
+<!doctype html>
+<html lang="en" data-theme="light" data-page="styleguide">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Framework Style Guide</title>
+  <meta name="description" content="Design tokens, colour ramps, type and space scales, surfaces and utilities.">
+  <meta name="robots" content="noindex">
+
+  <link rel="stylesheet" href="css/main.css">
+
+  <script src="js/styleguide.js" defer></script>
+  <script src="js/vendor/alpine.min.js" defer></script>
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to main content</a>
+
+  <header class="sg-header">
+    <div class="container sg-header__inner cluster cluster--between">
+      <strong>Framework</strong>
+      <nav class="sg-header__nav" aria-label="Sections">
+        <a href="#colors">Colors</a>
+        <a href="#semantic">Semantic</a>
+        <a href="#type">Type</a>
+        <a href="#space">Space</a>
+        <a href="#radii">Radii</a>
+        <a href="#shadows">Shadows</a>
+        <a href="#surfaces">Surfaces</a>
+        <a href="#utilities">Utilities</a>
+        <a href="components.html">Components</a>
+        <a href="index.html">Example site →</a>
+      </nav>
+      <div x-data="themeCycle">
+        <button type="button" class="sg-toggle" @click="cycle" x-text="'Theme: ' + theme"></button>
+      </div>
+    </div>
+  </header>
+
+  <main id="main">
+
+    <!-- COLORS -->
+    <section class="section" id="colors">
+      <div class="container stack stack--l">
+        <h1>Framework style guide</h1>
+        <h2>Colour ramps</h2>
+        <p class="u-measure">Each brand colour is one OKLCH value in the theme block. Ten steps toward white, ten toward black and ten alpha steps are mixed from it with <code>color-mix(in oklch)</code>.</p>
+
+        <div class="stack stack--l" x-data="{ colors: ['primary', 'secondary', 'surface'] }">
+          <template x-for="c in colors" :key="c">
+            <div class="ramp" x-data="ramp(c)">
+              <h3 x-text="c"></h3>
+
+              <span class="sg-label">light 10 → 1</span>
+              <div class="ramp__row">
+                <template x-for="n in [...steps].reverse()" :key="n">
+                  <div class="ramp__swatch" :style="`--swatch: var(--${name}-light-${n}); --swatch-text: var(--${name}-light-${n}-a11y)`" x-text="n"></div>
+                </template>
+              </div>
+
+              <span class="sg-label">base</span>
+              <div class="ramp__base">
+                <div class="ramp__swatch ramp__swatch--tall" :style="`--swatch: var(--${name}); --swatch-text: var(--${name}-a11y)`" x-text="'--' + name"></div>
+              </div>
+
+              <span class="sg-label">dark 1 → 10</span>
+              <div class="ramp__row">
+                <template x-for="n in steps" :key="n">
+                  <div class="ramp__swatch" :style="`--swatch: var(--${name}-dark-${n}); --swatch-text: var(--${name}-dark-${n}-a11y)`" x-text="n"></div>
+                </template>
+              </div>
+
+              <span class="sg-label">alpha %</span>
+              <div class="ramp__row">
+                <template x-for="(a, i) in alphas" :key="a">
+                  <div class="ramp__swatch" :style="`--swatch: var(--${name}-alpha-${i + 1})`" x-text="a"></div>
+                </template>
+              </div>
+            </div>
+          </template>
+        </div>
+      </div>
+    </section>
+
+    <!-- SEMANTIC -->
+    <section class="section section--alt" id="semantic">
+      <div class="container stack stack--l">
+        <h2>Semantic colours</h2>
+        <p class="u-measure">What components use. Defined once with <code>light-dark()</code>, so toggling the theme (top right) re-maps them all.</p>
+        <div class="grid" style="--grid-min: 10rem; --grid-gap: var(--space-s)"
+             x-data="{ tokens: ['bg','bg-alt','surface','surface-alt','border','border-strong','text','text-muted','text-inverse','h1','h2','h6','link','link-hover','primary','primary-hover','secondary','secondary-hover','focus','success','warning','danger','info'] }">
+          <template x-for="t in tokens" :key="t">
+            <div class="chip">
+              <div class="chip__color" :style="`--chip: var(--color-${t})`"></div>
+              <span class="sg-label" x-text="'--color-' + t"></span>
+            </div>
+          </template>
+        </div>
+
+        <div class="cluster">
+          <a class="button" href="#semantic">Primary</a>
+          <a class="button button--secondary" href="#semantic">Secondary</a>
+        </div>
+        <div class="grid grid--2" style="--grid-gap: var(--space-s)">
+          <div class="alert alert--success"><p class="alert__text">Success message</p></div>
+          <div class="alert alert--warning"><p class="alert__text">Warning message</p></div>
+          <div class="alert alert--danger"><p class="alert__text">Danger message</p></div>
+          <div class="alert"><p class="alert__text">Info message</p></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- TYPE -->
+    <section class="section" id="type">
+      <div class="container stack stack--l">
+        <h2>Typography</h2>
+        <div class="stack">
+          <p class="u-h1">Heading 1 · The quick brown fox</p>
+          <p class="u-h2">Heading 2 · The quick brown fox</p>
+          <p class="u-h3">Heading 3 · The quick brown fox</p>
+          <p class="u-h4">Heading 4 · The quick brown fox</p>
+          <p class="u-h5">Heading 5 · The quick brown fox</p>
+          <p class="u-h6">Heading 6 · The quick brown fox</p>
+          <p class="u-measure">Body text. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. <a href="#type">A link inside text</a>, <strong>strong</strong>, <code>inline code</code> and <small>small print</small>.</p>
+          <blockquote class="u-measure">A blockquote for a pulled statement.</blockquote>
+        </div>
+
+        <h3>Fluid type scale</h3>
+        <p class="sg-label">Resize the window: values are measured live.</p>
+        <div class="scale" x-data="scale('text', ['5xl','4xl','3xl','2xl','xl','l','m','s','xs','2xs'])">
+          <template x-for="row in rows" :key="row.name">
+            <div class="scale__row">
+              <span class="sg-label" x-text="'--text-' + row.name"></span>
+              <span class="sg-label" x-text="row.px.toFixed(1) + 'px'"></span>
+              <span class="scale__sample" :style="`font-size: var(--text-${row.name})`">Hamburgefonstiv</span>
+            </div>
+          </template>
+        </div>
+      </div>
+    </section>
+
+    <!-- SPACE -->
+    <section class="section section--alt" id="space">
+      <div class="container stack stack--l">
+        <h2>Fluid spacing</h2>
+        <div class="scale" x-data="scale('space', ['3xs','2xs','xs','s','m','l','xl','2xl','3xl','4xl'])">
+          <template x-for="row in rows" :key="row.name">
+            <div class="scale__row">
+              <span class="sg-label" x-text="'--space-' + row.name"></span>
+              <span class="sg-label" x-text="row.px.toFixed(1) + 'px'"></span>
+              <div class="scale__bar" :style="`width: var(--space-${row.name})`"></div>
+            </div>
+          </template>
+        </div>
+      </div>
+    </section>
+
+    <!-- RADII -->
+    <section class="section" id="radii">
+      <div class="container stack stack--l">
+        <h2>Radii <small class="u-text-muted">(spacing × <code>--radius-scale</code>)</small></h2>
+        <div class="cluster" style="--cluster-gap: var(--space-l)"
+             x-data="{ sizes: ['xs','s','m','l','xl','2xl','full'] }">
+          <template x-for="s in sizes" :key="s">
+            <div class="stack stack--s">
+              <div class="scale__radius" :style="`border-radius: var(--radius-${s})`"></div>
+              <span class="sg-label" x-text="'--radius-' + s"></span>
+            </div>
+          </template>
+        </div>
+      </div>
+    </section>
+
+    <!-- SHADOWS -->
+    <section class="section section--alt" id="shadows">
+      <div class="container stack stack--l">
+        <h2>Shadows</h2>
+        <div class="grid" style="--grid-min: 8rem"
+             x-data="{ sizes: ['xs','s','m','l','xl'] }">
+          <template x-for="s in sizes" :key="s">
+            <div class="scale__shadow" :style="`box-shadow: var(--shadow-${s})`">
+              <span class="sg-label" x-text="'--shadow-' + s"></span>
+            </div>
+          </template>
+        </div>
+      </div>
+    </section>
+
+    <!-- SURFACES -->
+    <section class="section" id="surfaces">
+      <div class="container stack stack--l">
+        <h2>Surfaces</h2>
+        <p class="u-measure">Utility classes that set the background and re-point text, heading, link, border and button colours inside. Switch the theme to see them adapt.</p>
+        <div class="grid" style="--grid-min: 16rem"
+             x-data="{ surfaces: ['1','2','3','accent','primary','secondary','inverse'] }">
+          <template x-for="s in surfaces" :key="s">
+            <div class="sg-surface" :class="`u-surface-${s}`">
+              <h3 x-text="'u-surface-' + s"></h3>
+              <p>Body text with a <a href="#surfaces">link</a>.</p>
+              <p class="u-text-muted"><small>Muted text</small></p>
+              <p class="u-h6">Heading 6</p>
+              <a class="button button--s" href="#surfaces">Button</a>
+            </div>
+          </template>
+        </div>
+      </div>
+    </section>
+
+    <!-- UTILITIES -->
+    <section class="section" id="utilities">
+      <div class="container stack stack--l">
+        <h2>Utilities</h2>
+        <div class="grid" style="--grid-min: 18rem">
+
+          <article class="card card--raised u-clickable">
+            <h3 class="u-text-xl"><a href="#utilities">u-clickable</a></h3>
+            <p class="u-line-clamp u-line-clamp-2">The whole card is the link target: the first link stretches over its parent. This text is also clamped to two lines using u-line-clamp-2, so anything beyond it is cut off with an ellipsis, however long the copy runs.</p>
+            <a class="u-clickable__skip" href="#utilities">Separate link</a>
+          </article>
+
+          <article class="card">
+            <h3 class="u-text-xl">u-list-none</h3>
+            <ul class="u-list-none">
+              <li>No bullets</li>
+              <li>No indent</li>
+              <li>No margin</li>
+            </ul>
+          </article>
+
+          <article class="card">
+            <h3 class="u-text-xl">u-truncate</h3>
+            <p class="u-truncate">A single long line that is truncated with an ellipsis at the edge of its container.</p>
+            <p class="u-visually-hidden">Screen-reader-only text</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- INVERSE -->
+    <section class="section section--inverse">
+      <div class="container stack">
+        <h2>Inverse section</h2>
+        <p class="u-measure">The <code>section--inverse</code> modifier sets <code>color-scheme: dark</code> for this block only, so every semantic token resolves to its dark value without extra CSS.</p>
+        <div class="cluster">
+          <a class="button" href="#colors">Primary</a>
+          <a class="button button--secondary" href="#colors">Secondary</a>
+        </div>
+      </div>
+    </section>
+
+  </main>
+</body>
+</html>

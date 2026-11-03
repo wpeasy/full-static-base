@@ -1,0 +1,11 @@
+/* ==========================================================================
+   STAT  ·  .stat   Elements: __value  __label
+   A figure with a caption inside a description list; value shows first visually.
+   <dl class="grid"><div class="stat"><dt class="stat__label">Clients</dt><dd class="stat__value">120+</dd></div></dl>
+   ========================================================================== */
+
+@layer components {
+  .stat { display: flex; flex-direction: column-reverse; gap: var(--space-3xs); }
+  .stat__value { margin: 0; color: var(--color-h1); font-size: var(--text-4xl); font-weight: var(--weight-heading); line-height: 1; }
+  .stat__label { color: var(--color-text-muted); }
+}

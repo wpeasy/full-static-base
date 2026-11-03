@@ -1,0 +1,84 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Page title · Site name</title>
+  <meta name="description" content="One-sentence summary of this page (about 150 characters).">
+  <link rel="canonical" href="https://example.com/page.html">
+  <link rel="icon" href="images/favicon.svg" type="image/svg+xml">
+
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Page title · Site name">
+  <meta property="og:description" content="One-sentence summary of this page.">
+  <meta property="og:url" content="https://example.com/page.html">
+  <meta property="og:image" content="https://example.com/images/og.jpg">
+  <meta name="twitter:card" content="summary_large_image">
+
+  <script src="js/theme-init.js"></script>
+  <link rel="stylesheet" href="css/main.css">
+
+  <script src="js/components.js" defer></script>
+  <script src="js/vendor/alpine.min.js" defer></script>
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to main content</a>
+
+  <!-- Shared header: edit it HERE, then run `node tools/sync-shared.mjs` to copy it to every page. -->
+  <header class="nav" x-data="nav" :class="{ 'nav--open': open }" @keydown.escape="close">
+    <div class="container nav__inner">
+      <a class="nav__brand" href="index.html">Site name</a>
+      <div class="nav__actions">
+        <button class="theme-toggle" type="button" x-data="themeToggle" @click="switchTheme" :aria-pressed="dark" aria-label="Dark mode">
+          <svg class="icon theme-toggle__icon theme-toggle__icon--sun" aria-hidden="true" focusable="false"><use href="images/icons.svg#sun"/></svg>
+          <svg class="icon theme-toggle__icon theme-toggle__icon--moon" aria-hidden="true" focusable="false"><use href="images/icons.svg#moon"/></svg>
+        </button>
+        <button class="nav__toggle" type="button" x-ref="toggle" @click="toggle" :aria-expanded="open" aria-controls="main-menu">
+          <svg class="icon" aria-hidden="true" focusable="false"><use href="images/icons.svg#menu"/></svg>
+          <span>Menu</span>
+        </button>
+      </div>
+      <nav aria-label="Main" class="nav__menu">
+        <ul class="nav__list" id="main-menu">
+          <li><a class="nav__link" href="index.html">Home</a></li>
+          <li><a class="nav__link" href="article.html">Article</a></li>
+          <li><a class="nav__link" href="contact.html">Contact</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <main id="main">
+    <section class="section" aria-labelledby="page-title">
+      <div class="container stack stack--l">
+        <h1 id="page-title">Page heading</h1>
+        <p class="u-measure">Replace this with the page content. Choose heading levels for structure, one h1 per page.</p>
+      </div>
+    </section>
+  </main>
+
+  <!-- Shared footer: edit it HERE, then run `node tools/sync-shared.mjs`. -->
+  <footer class="footer">
+    <div class="container footer__inner">
+      <div>
+        <p class="footer__brand">Site name</p>
+        <p class="u-text-muted">A short description of the organisation.</p>
+      </div>
+      <nav class="footer__nav" aria-labelledby="footer-explore">
+        <h2 class="u-text-m" id="footer-explore">Explore</h2>
+        <ul class="footer__list">
+          <li><a class="footer__link" href="index.html">Home</a></li>
+          <li><a class="footer__link" href="article.html">Article</a></li>
+        </ul>
+      </nav>
+      <nav class="footer__nav" aria-labelledby="footer-help">
+        <h2 class="u-text-m" id="footer-help">Help</h2>
+        <ul class="footer__list">
+          <li><a class="footer__link" href="contact.html">Contact</a></li>
+        </ul>
+      </nav>
+      <p class="footer__legal">&copy; 2026 Site name. All rights reserved.</p>
+    </div>
+  </footer>
+</body>
+</html>

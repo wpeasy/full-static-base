@@ -1,0 +1,53 @@
+/* ==========================================================================
+   TOAST  ·  .toast  (--success | --danger | --info)   Elements: __message  __close
+   Lives in a polite live region:
+     <div class="toast-region" role="status" aria-live="polite"> …toasts… </div>
+   Never auto-dismiss without a way to pause/keep it (WCAG 2.2.1); default is manual close.
+   ========================================================================== */
+
+@layer components {
+  .toast-region {
+    position: fixed;
+    inset-block-end: var(--space-m);
+    inset-inline: var(--gutter);
+    z-index: var(--z-toast);
+    display: grid;
+    gap: var(--space-xs);
+    justify-items: end;
+    pointer-events: none;
+  }
+
+  .toast {
+    --toast-color: var(--color-info);
+
+    display: flex;
+    align-items: center;
+    gap: var(--space-s);
+    max-width: 26rem;
+    padding: var(--space-s) var(--space-m);
+    color: var(--color-text);
+    background-color: var(--color-surface);
+    border: var(--border-width) solid var(--color-border);
+    border-inline-start: var(--border-width-l) solid var(--toast-color);
+    border-radius: var(--radius-m);
+    box-shadow: var(--shadow-l);
+    pointer-events: auto;
+  }
+  .toast--success { --toast-color: var(--color-success); }
+  .toast--danger  { --toast-color: var(--color-danger); }
+
+  .toast__message { flex: 1; }
+  .toast__close {
+    padding: var(--space-3xs);
+    color: var(--color-text-muted);
+    background: none;
+    border: 0;
+    border-radius: var(--radius-s);
+  }
+  .toast__close:hover { color: var(--color-text); background-color: var(--primary-alpha-10); }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .toast { animation: toast-in var(--duration-base) var(--ease-out); }
+    @keyframes toast-in { from { opacity: 0; translate: 0 var(--space-s); } }
+  }
+}

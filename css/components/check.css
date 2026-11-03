@@ -1,0 +1,16 @@
+/* ==========================================================================
+   CHECK  ·  .check   Elements: __input  __label        Checkbox / radio with its label.
+   <div class="check"><input class="check__input" type="checkbox" id="x"><label class="check__label" for="x">…</label></div>
+   ========================================================================== */
+
+@layer components {
+  .check { display: flex; align-items: start; gap: var(--space-xs); }
+  .check__input {
+    flex: none;
+    width: var(--space-m);
+    height: var(--space-m);
+    margin-block-start: var(--space-3xs);
+    accent-color: var(--color-primary);
+  }
+  .check__label { cursor: pointer; }
+}

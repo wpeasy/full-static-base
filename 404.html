@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Page not found · Site name</title>
+  <meta name="description" content="The page you asked for could not be found.">
+  <meta name="robots" content="noindex">
+  <link rel="icon" href="images/favicon.svg" type="image/svg+xml">
+
+
+  <link rel="stylesheet" href="css/main.css">
+
+  <script src="js/components.js" defer></script>
+  <script src="js/vendor/alpine.min.js" defer></script>
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to main content</a>
+
+  <!-- Shared header: keep identical on every page (only the aria-current link changes). -->
+  <header class="nav" x-data="nav" :class="{ 'nav--open': open }" @keydown.escape="close">
+    <div class="container nav__inner">
+      <a class="nav__brand" href="index.html">Site name</a>
+      <div class="nav__actions">
+        <button class="theme-toggle" type="button" x-data="themeToggle" @click="switchTheme" :aria-pressed="dark" aria-label="Dark mode">
+          <svg class="icon theme-toggle__icon theme-toggle__icon--sun" aria-hidden="true" focusable="false"><use href="images/icons.svg#sun"/></svg>
+          <svg class="icon theme-toggle__icon theme-toggle__icon--moon" aria-hidden="true" focusable="false"><use href="images/icons.svg#moon"/></svg>
+        </button>
+        <button class="nav__toggle" type="button" x-ref="toggle" @click="toggle" :aria-expanded="open" aria-controls="main-menu">
+          <svg class="icon" aria-hidden="true" focusable="false"><use href="images/icons.svg#menu"/></svg>
+          <span>Menu</span>
+        </button>
+      </div>
+      <nav aria-label="Main" class="nav__menu">
+        <ul class="nav__list" id="main-menu">
+          <li><a class="nav__link" href="index.html">Home</a></li>
+          <li><a class="nav__link" href="article.html">Article</a></li>
+          <li><a class="nav__link" href="contact.html">Contact</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <main id="main">
+    <section class="section" aria-labelledby="page-title">
+      <div class="container stack stack--l">
+        <h1 id="page-title">Page not found</h1>
+        <p class="u-measure">The page you were looking for doesn't exist or has moved.</p>
+        <p><a class="button" href="index.html">Back to the home page</a></p>
+      </div>
+    </section>
+  </main>
+
+  <!-- Shared footer: keep identical on every page. -->
+  <footer class="footer">
+    <div class="container footer__inner">
+      <div>
+        <p class="footer__brand">Site name</p>
+        <p class="u-text-muted">A short description of the organisation.</p>
+      </div>
+      <nav class="footer__nav" aria-labelledby="footer-explore">
+        <h2 class="u-text-m" id="footer-explore">Explore</h2>
+        <ul class="footer__list">
+          <li><a class="footer__link" href="index.html">Home</a></li>
+          <li><a class="footer__link" href="article.html">Article</a></li>
+        </ul>
+      </nav>
+      <nav class="footer__nav" aria-labelledby="footer-help">
+        <h2 class="u-text-m" id="footer-help">Help</h2>
+        <ul class="footer__list">
+          <li><a class="footer__link" href="contact.html">Contact</a></li>
+        </ul>
+      </nav>
+      <p class="footer__legal">&copy; 2026 Site name. All rights reserved.</p>
+    </div>
+  </footer>
+</body>
+</html>

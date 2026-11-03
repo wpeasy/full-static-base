@@ -1,0 +1,61 @@
+/* ==========================================================================
+   LAYOUT  ·  css/core/layout.css
+   Structural BEM blocks: container, section, stack, cluster, grid.
+   Tune any of them per use with the custom property named in its comment.
+   ========================================================================== */
+
+@layer layout {
+
+  /* .container  (--narrow | --wide | --full) */
+  .container {
+    width: 100%;
+    max-width: var(--container);
+    margin-inline: auto;
+    padding-inline: var(--gutter);
+  }
+  .container--narrow { max-width: var(--container-narrow); }
+  .container--wide   { max-width: var(--container-wide); }
+  .container--full   { max-width: none; }
+
+  /* .section  (--alt | --surface | --inverse | --flush) */
+  .section {
+    padding-block: var(--section-space);
+    background-color: var(--color-bg);
+    color: var(--color-text);
+  }
+  .section--alt     { background-color: var(--color-bg-alt); }
+  .section--surface { background-color: var(--color-surface); }
+  .section--inverse { color-scheme: dark; }   /* re-resolves every light-dark() token inside */
+  .section--flush   { padding-block: 0; }
+
+  /* .stack  vertical rhythm.  --stack-gap (default space-m)  (--s | --l | --xl) */
+  .stack { display: flex; flex-direction: column; gap: var(--stack-gap, var(--space-m)); }
+  .stack--s  { --stack-gap: var(--space-s); }
+  .stack--l  { --stack-gap: var(--space-l); }
+  .stack--xl { --stack-gap: var(--space-xl); }
+
+  /* .cluster  wrapping row.  --cluster-gap, --cluster-align  (--between | --center | --end) */
+  .cluster {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: var(--cluster-align, center);
+    gap: var(--cluster-gap, var(--space-s));
+  }
+  .cluster--between { justify-content: space-between; }
+  .cluster--center  { justify-content: center; }
+  .cluster--end     { justify-content: flex-end; }
+
+  /* .grid  auto-fit columns.  --grid-min (min column width)  --grid-gap */
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, var(--grid-min, 16rem)), 1fr));
+    gap: var(--grid-gap);
+  }
+  .grid--fill { grid-template-columns: repeat(auto-fill, minmax(min(100%, var(--grid-min, 16rem)), 1fr)); }
+  .grid--2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .grid--3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .grid--4 { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+  @media (max-width: 48em) {
+    .grid--2, .grid--3, .grid--4 { grid-template-columns: minmax(0, 1fr); }
+  }
+}

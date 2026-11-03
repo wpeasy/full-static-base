@@ -1,0 +1,8 @@
+{
+  "css.validate": true,
+  "editor.tabSize": 2,
+  "files.associations": { "*.html": "html" },
+  "cssVariables.lookupFiles": ["css/theme.css", "css/core/framework.css"],
+  "html.customData": [],
+  "emmet.includeLanguages": { "html": "html" }
+}

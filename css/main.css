@@ -1,0 +1,40 @@
+/* Single entry point: every page links ONLY this file.
+   Order matters: theme first, then core, then components.
+   Add a new component = add one @import line here (tools/check.mjs verifies none are missing).
+   For production, `node tools/bundle-css.mjs` inlines these into css/main.bundle.css. */
+@import url("theme.css");
+@import url("core/framework.css");
+@import url("core/base.css");
+@import url("core/layout.css");
+@import url("core/utilities.css");
+@import url("core/print.css");
+
+@import url("components/skip-link.css");
+@import url("components/icon.css");
+@import url("components/nav.css");
+@import url("components/hero.css");
+@import url("components/section-header.css");
+@import url("components/feature.css");
+@import url("components/stat.css");
+@import url("components/testimonial.css");
+@import url("components/pricing.css");
+@import url("components/cta.css");
+@import url("components/article-header.css");
+@import url("components/theme-toggle.css");
+@import url("components/button.css");
+@import url("components/card.css");
+@import url("components/badge.css");
+@import url("components/alert.css");
+@import url("components/toast.css");
+@import url("components/field.css");
+@import url("components/check.css");
+@import url("components/error-summary.css");
+@import url("components/table.css");
+@import url("components/prose.css");
+@import url("components/breadcrumb.css");
+@import url("components/pagination.css");
+@import url("components/tabs.css");
+@import url("components/accordion.css");
+@import url("components/modal.css");
+@import url("components/footer.css");
+@import url("components/styleguide.css");

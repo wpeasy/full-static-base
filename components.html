@@ -1,0 +1,302 @@
+<!doctype html>
+<html lang="en" data-page="styleguide">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Component Gallery</title>
+  <meta name="description" content="Every framework component with its variants.">
+  <meta name="robots" content="noindex">
+
+  <script src="js/theme-init.js"></script>
+  <link rel="stylesheet" href="css/main.css">
+
+  <script src="js/components.js" defer></script>
+  <script src="js/vendor/alpine.min.js" defer></script>
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to main content</a>
+
+  <header class="nav" x-data="nav" :class="{ 'nav--open': open }" @keydown.escape="close">
+    <div class="container nav__inner">
+      <a class="nav__brand" href="components.html">Brand</a>
+      <div class="nav__actions">
+        <button class="theme-toggle" type="button" x-data="themeToggle" @click="switchTheme" :aria-pressed="dark" aria-label="Dark mode">
+          <svg class="icon theme-toggle__icon theme-toggle__icon--sun" aria-hidden="true" focusable="false"><use href="images/icons.svg#sun"/></svg>
+          <svg class="icon theme-toggle__icon theme-toggle__icon--moon" aria-hidden="true" focusable="false"><use href="images/icons.svg#moon"/></svg>
+        </button>
+        <button class="nav__toggle" type="button" x-ref="toggle" @click="toggle" :aria-expanded="open" aria-controls="main-menu">
+          <svg class="icon" aria-hidden="true" focusable="false"><use href="images/icons.svg#menu"/></svg>
+          <span>Menu</span>
+        </button>
+      </div>
+      <nav aria-label="Main" class="nav__menu">
+        <ul class="nav__list" id="main-menu">
+          <li><a class="nav__link" href="index.html">Home</a></li>
+          <li><a class="nav__link" href="styleguide.html">Style guide</a></li>
+          <li><a class="nav__link nav__link--current" href="components.html" aria-current="page">Components</a></li>
+          <li><a class="nav__link" href="#forms">Forms</a></li>
+          <li><a class="nav__link" href="#overlays">Overlays</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <main id="main">
+
+    <section class="section">
+      <div class="container stack stack--xl">
+        <nav class="breadcrumb" aria-label="Breadcrumb">
+          <ol class="breadcrumb__list">
+            <li class="breadcrumb__item"><a class="breadcrumb__link" href="index.html">Home</a></li>
+            <li class="breadcrumb__item"><a class="breadcrumb__link" href="components.html" aria-current="page">Components</a></li>
+          </ol>
+        </nav>
+
+        <div class="hero">
+          <div class="hero__content">
+            <p class="hero__eyebrow">Foundation</p>
+            <h1 class="hero__title">Components</h1>
+            <p class="hero__lead">Each block is one BEM file in <code>css/components/</code>, built only from framework tokens. Start here, then change whatever the design needs.</p>
+            <div class="hero__actions">
+              <a class="button button--l" href="#buttons">Browse <svg class="icon" aria-hidden="true" focusable="false"><use href="images/icons.svg#arrow-right"/></svg></a>
+              <a class="button button--l button--outline" href="styleguide.html">Style guide</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section section--alt" id="buttons">
+      <div class="container stack stack--l">
+        <header class="section-header">
+          <p class="section-header__eyebrow">Actions &amp; status</p>
+          <h2>Buttons, badges, alerts</h2>
+        </header>
+
+        <div class="cluster">
+          <a class="button" href="#buttons">Primary</a>
+          <a class="button button--secondary" href="#buttons">Secondary</a>
+          <a class="button button--outline" href="#buttons">Outline</a>
+          <a class="button button--ghost" href="#buttons">Ghost</a>
+          <button class="button" type="button" disabled>Disabled</button>
+        </div>
+        <div class="cluster">
+          <a class="button button--s" href="#buttons">Small</a>
+          <a class="button" href="#buttons">Default</a>
+          <a class="button button--l" href="#buttons">Large</a>
+        </div>
+
+        <ul class="cluster u-list-none">
+          <li><span class="badge">Default</span></li>
+          <li><span class="badge badge--primary">Primary</span></li>
+          <li><span class="badge badge--success">Success</span></li>
+          <li><span class="badge badge--warning">Warning</span></li>
+          <li><span class="badge badge--danger">Danger</span></li>
+          <li><span class="badge badge--info">Info</span></li>
+        </ul>
+
+        <div class="stack stack--s">
+          <div class="alert alert--success" role="status"><strong class="alert__title">Saved</strong><p class="alert__text">Your changes were stored.</p></div>
+          <div class="alert alert--warning"><strong class="alert__title">Heads up</strong><p class="alert__text">This action affects other pages.</p></div>
+          <div class="alert alert--danger" role="alert"><strong class="alert__title">Error</strong><p class="alert__text">Something went wrong.</p></div>
+          <div class="alert"><strong class="alert__title">Info</strong><p class="alert__text">A neutral note.</p></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="container stack stack--l">
+        <header class="section-header">
+          <p class="section-header__eyebrow">Content</p>
+          <h2>Cards</h2>
+        </header>
+        <div class="grid" style="--grid-min: 16rem">
+          <article class="card card--raised u-clickable">
+            <div class="card__media" role="img" aria-label="Placeholder illustration"></div>
+            <div class="card__body">
+              <h3 class="card__title"><a href="#buttons">Clickable card</a></h3>
+              <p class="card__text u-line-clamp u-line-clamp-2">Uses u-clickable so the whole card is the link, and u-line-clamp to keep this text to two lines however long it gets.</p>
+            </div>
+            <div class="card__footer"><span class="badge badge--primary">New</span></div>
+          </article>
+          <article class="card">
+            <div class="card__body">
+              <h3 class="card__title">Outlined card</h3>
+              <p class="card__text">Default card with a border and no media.</p>
+              <a class="button button--s" href="#buttons">Action</a>
+            </div>
+          </article>
+          <article class="card card--flat">
+            <div class="card__body">
+              <h3 class="card__title">Flat card</h3>
+              <p class="card__text">Tinted surface, no border or shadow.</p>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section section--alt">
+      <div class="container stack stack--l">
+        <header class="section-header">
+          <p class="section-header__eyebrow">Data</p>
+          <h2>Table &amp; pagination</h2>
+        </header>
+        <div class="table table--striped" role="region" aria-labelledby="plans-caption" tabindex="0">
+          <table class="table__grid">
+            <caption id="plans-caption">Plans compared</caption>
+            <thead><tr><th scope="col">Plan</th><th scope="col">Pages</th><th scope="col">Support</th></tr></thead>
+            <tbody>
+              <tr><th scope="row">Starter</th><td>5</td><td>Email</td></tr>
+              <tr><th scope="row">Pro</th><td>50</td><td>Priority</td></tr>
+              <tr><th scope="row">Scale</th><td>Unlimited</td><td>Dedicated</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <nav class="pagination" aria-label="Pagination">
+          <ul class="pagination__list">
+            <li class="pagination__item"><a class="pagination__link" href="#main" aria-disabled="true">Previous<span class="u-visually-hidden"> page</span></a></li>
+            <li class="pagination__item"><a class="pagination__link" href="#main" aria-current="page"><span class="u-visually-hidden">Page </span>1</a></li>
+            <li class="pagination__item"><a class="pagination__link" href="#main"><span class="u-visually-hidden">Page </span>2</a></li>
+            <li class="pagination__item"><a class="pagination__link" href="#main"><span class="u-visually-hidden">Page </span>3</a></li>
+            <li class="pagination__item"><a class="pagination__link" href="#main">Next<span class="u-visually-hidden"> page</span></a></li>
+          </ul>
+        </nav>
+      </div>
+    </section>
+
+    <section class="section" id="forms">
+      <div class="container container--narrow stack stack--l">
+        <header class="section-header">
+          <p class="section-header__eyebrow">Input</p>
+          <h2>Form fields</h2>
+        </header>
+        <form class="stack" @submit.prevent>
+          <div class="field">
+            <label class="field__label" for="name">Name</label>
+            <input class="field__input" id="name" name="name" type="text" autocomplete="name" placeholder="Jane Doe">
+          </div>
+          <div class="field field--invalid">
+            <label class="field__label" for="email">Email</label>
+            <input class="field__input" id="email" name="email" type="email" autocomplete="email" value="not-an-email" aria-invalid="true" aria-describedby="email-error">
+            <span class="field__error" id="email-error">Enter a valid email address.</span>
+          </div>
+          <div class="field">
+            <label class="field__label" for="topic">Topic</label>
+            <select class="field__input" id="topic" name="topic" aria-describedby="topic-hint"><option>General</option><option>Support</option></select>
+            <span class="field__hint" id="topic-hint">Pick the closest match.</span>
+          </div>
+          <div class="field">
+            <label class="field__label" for="message">Message</label>
+            <textarea class="field__input" id="message" name="message"></textarea>
+          </div>
+          <button class="button" type="submit">Send</button>
+        </form>
+      </div>
+    </section>
+
+    <section class="section section--alt" id="overlays">
+      <div class="container container--narrow stack stack--l">
+        <header class="section-header">
+          <p class="section-header__eyebrow">Interactive</p>
+          <h2>Tabs, accordion, modal, toast</h2>
+        </header>
+
+        <div class="tabs" x-data="tabs(['one', 'two', 'three'])">
+          <div class="tabs__list" role="tablist" aria-label="Example tabs" @keydown="onKeydown">
+            <template x-for="id in ids" :key="id">
+              <button class="tabs__tab" type="button" role="tab"
+                      :id="`tab-${id}`" :aria-controls="`panel-${id}`"
+                      :aria-selected="active === id" :tabindex="active === id ? 0 : -1"
+                      @click="select(id)" x-text="`Tab ${id}`"></button>
+            </template>
+          </div>
+          <template x-for="id in ids" :key="id">
+            <div class="tabs__panel" role="tabpanel" tabindex="0"
+                 :id="`panel-${id}`" :aria-labelledby="`tab-${id}`" x-show="active === id" x-cloak>
+              <p x-text="`Content for tab ${id}.`"></p>
+            </div>
+          </template>
+        </div>
+
+        <div class="accordion">
+          <details class="accordion__item" name="faq" open>
+            <summary class="accordion__trigger">What is this?</summary>
+            <div class="accordion__panel">A static site framework built from CSS variables and BEM.</div>
+          </details>
+          <details class="accordion__item" name="faq">
+            <summary class="accordion__trigger">How does state work?</summary>
+            <div class="accordion__panel">Native HTML where it exists; Alpine toggles a BEM modifier or ARIA state; CSS does the styling.</div>
+          </details>
+        </div>
+
+        <div class="cluster" x-data>
+          <button class="button" type="button" @click="$refs.dialog.showModal()">Open modal</button>
+          <dialog class="modal" x-ref="dialog" aria-labelledby="modal-title" @click="if ($event.target === $el) $el.close()">
+            <div class="modal__header">
+              <h3 class="modal__title" id="modal-title">Modal title</h3>
+              <form method="dialog"><button class="modal__close" type="submit" aria-label="Close"><svg class="icon" aria-hidden="true" focusable="false"><use href="images/icons.svg#close"/></svg></button></form>
+            </div>
+            <div class="modal__body"><p>Esc, the close button or a backdrop click dismisses this. Focus is trapped and restored by the browser.</p></div>
+            <form class="modal__footer" method="dialog">
+              <button class="button button--ghost" type="submit" value="cancel">Cancel</button>
+              <button class="button" type="submit" value="confirm">Confirm</button>
+            </form>
+          </dialog>
+        </div>
+
+        <div x-data="toasts">
+          <button class="button button--secondary" type="button" @click="add('Settings saved.', 'success')">Show toast</button>
+          <div class="toast-region" role="status" aria-live="polite">
+            <template x-for="item in items" :key="item.id">
+              <div class="toast" :class="`toast--${item.type}`">
+                <p class="toast__message" x-text="item.message"></p>
+                <button class="toast__close" type="button" aria-label="Dismiss notification" @click="remove(item.id)">
+                  <svg class="icon" aria-hidden="true" focusable="false"><use href="images/icons.svg#close"/></svg>
+                </button>
+              </div>
+            </template>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="container container--narrow">
+        <article class="prose">
+          <h2>Prose</h2>
+          <p>Long-form content from a CMS or markdown renders cleanly inside <code>.prose</code> without adding classes to each element.</p>
+          <ul><li>Lists keep their rhythm</li><li>Links are underlined: <a href="#main">like this</a></li></ul>
+          <blockquote>Quotes use the shared border and muted text colours.</blockquote>
+        </article>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="footer">
+    <div class="container footer__inner">
+      <div>
+        <p class="footer__brand">Brand</p>
+        <p class="u-text-muted">A short description of the organisation.</p>
+      </div>
+      <nav class="footer__nav" aria-labelledby="footer-explore">
+        <h2 class="u-text-m" id="footer-explore">Explore</h2>
+        <ul class="footer__list">
+          <li><a class="footer__link" href="index.html">Home</a></li>
+          <li><a class="footer__link" href="styleguide.html">Style guide</a></li>
+          <li><a class="footer__link" href="components.html">Components</a></li>
+        </ul>
+      </nav>
+      <nav class="footer__nav" aria-labelledby="footer-legal">
+        <h2 class="u-text-m" id="footer-legal">Legal</h2>
+        <ul class="footer__list">
+          <li><a class="footer__link" href="#main">Privacy</a></li>
+          <li><a class="footer__link" href="#main">Terms</a></li>
+        </ul>
+      </nav>
+      <p class="footer__legal">&copy; 2026 Brand. All rights reserved.</p>
+    </div>
+  </footer>
+</body>
+</html>

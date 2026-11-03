@@ -1,0 +1,15 @@
+{
+  "name": "framework-dev-tools",
+  "private": true,
+  "type": "module",
+  "description": "Dev-only checks. The site itself has no build step or npm dependencies.",
+  "scripts": {
+    "check": "node check.mjs",
+    "bundle": "node bundle-css.mjs",
+    "browser": "node browser-checks.mjs"
+  },
+  "devDependencies": {
+    "@axe-core/playwright": "4.10.2",
+    "playwright": "1.49.1"
+  }
+}

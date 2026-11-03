@@ -1,0 +1,129 @@
+/* ==========================================================================
+   BASE  ·  css/core/base.css
+   Reset + default element styles. Element selectors only; values are tokens.
+   ========================================================================== */
+
+@layer reset {
+  *, *::before, *::after { box-sizing: border-box; }
+  * { margin: 0; }
+  img, picture, video, canvas, svg { display: block; max-width: 100%; height: auto; }
+  input, button, textarea, select { font: inherit; color: inherit; }
+  p, h1, h2, h3, h4, h5, h6 { overflow-wrap: break-word; }
+  button { cursor: pointer; }
+  table { border-collapse: collapse; }
+}
+
+@layer base {
+  /* Keep at 100% (1rem = 16px). The fluid scales in framework.css convert px → rem by ÷16,
+     and 100% also respects the user's browser font-size setting. Never change this. */
+  html {
+    font-size: 100%;
+    -webkit-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+  }
+
+  /* Smooth scrolling only for people who haven't asked for less motion */
+  @media (prefers-reduced-motion: no-preference) {
+    html { scroll-behavior: smooth; }
+  }
+
+  /* Lock page scroll behind an open modal <dialog> */
+  body:has(dialog[open]) { overflow: hidden; }
+
+  body {
+    min-height: 100vh;
+    font-family: var(--font-body);
+    font-size: var(--text-m);
+    font-weight: var(--weight-body);
+    line-height: var(--leading-body);
+    letter-spacing: var(--tracking-body);
+    color: var(--color-text);
+    background-color: var(--color-bg);
+    -webkit-font-smoothing: antialiased;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    line-height: var(--leading-heading);
+    letter-spacing: var(--tracking-heading);
+    text-wrap: balance;
+  }
+  h1 { font-family: var(--h1-font); font-weight: var(--h1-weight); font-size: var(--h1-size); color: var(--color-h1); }
+  h2 { font-family: var(--h2-font); font-weight: var(--h2-weight); font-size: var(--h2-size); color: var(--color-h2); }
+  h3 { font-family: var(--h3-font); font-weight: var(--h3-weight); font-size: var(--h3-size); color: var(--color-h3); }
+  h4 { font-family: var(--h4-font); font-weight: var(--h4-weight); font-size: var(--h4-size); color: var(--color-h4); }
+  h5 { font-family: var(--h5-font); font-weight: var(--h5-weight); font-size: var(--h5-size); color: var(--color-h5); }
+  h6 { font-family: var(--h6-font); font-weight: var(--h6-weight); font-size: var(--h6-size); color: var(--color-h6); }
+
+  p { text-wrap: pretty; }
+  small { font-size: var(--text-s); }
+  strong, b { font-weight: var(--weight-bold); }
+
+  a {
+    color: var(--color-link);
+    text-underline-offset: 0.2em;
+    transition: color var(--transition);
+  }
+  a:hover { color: var(--color-link-hover); }
+
+  :focus-visible {
+    outline: var(--focus-ring);
+    outline-offset: var(--focus-offset);
+  }
+
+  ::selection { background: var(--primary-alpha-30); }
+
+  hr {
+    border: 0;
+    border-top: var(--border-width) solid var(--color-border);
+  }
+
+  blockquote {
+    padding-inline-start: var(--space-m);
+    border-inline-start: var(--border-width-l) solid var(--color-border-strong);
+    color: var(--color-text-muted);
+  }
+
+  code, kbd, samp, pre { font-family: var(--font-mono); font-size: 0.9em; }
+  code, kbd {
+    padding: 0.1em 0.4em;
+    background: var(--color-surface-alt);
+    border-radius: var(--radius-xs);
+  }
+  pre {
+    padding: var(--space-m);
+    overflow-x: auto;
+    background: var(--color-surface-alt);
+    border-radius: var(--radius-m);
+  }
+  pre code { padding: 0; background: none; }
+
+  ul, ol { padding-inline-start: 1.25em; }
+  li + li { margin-block-start: var(--space-3xs); }
+
+  table { width: 100%; }
+  th, td { padding: var(--space-xs) var(--space-s); text-align: start; border-bottom: var(--border-width) solid var(--color-border); }
+  th { font-weight: var(--weight-bold); }
+
+  input, textarea, select {
+    padding: var(--space-xs) var(--space-s);
+    background: var(--color-surface);
+    border: var(--border-width) solid var(--color-border-strong);
+    border-radius: var(--radius-input);
+  }
+
+  /* Windows High Contrast / forced colours: keep boundaries and focus visible */
+  @media (forced-colors: active) {
+    :focus-visible { outline: var(--border-width-l) solid Highlight; }
+    .card, .alert, .toast, .table, .accordion, .modal { border: 1px solid CanvasText; }
+  }
+
+  /* Safety net: if a rule slips past the no-preference gating, motion is still removed.
+     Write movement inside @media (prefers-reduced-motion: no-preference) in the first place. */
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+    }
+  }
+}

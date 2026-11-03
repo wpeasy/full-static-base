@@ -1,0 +1,29 @@
+/* ==========================================================================
+   PRICING  ·  .pricing  (--featured)
+   Elements: __badge  __name  __price  __amount  __period  __list  __item
+   A single plan card. Lay several out with .grid. Use <article>, an <h3> in __name, a <ul> for __list.
+   ========================================================================== */
+
+@layer components {
+  .pricing {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-s);
+    padding: var(--space-l);
+    background-color: var(--color-surface);
+    border: var(--border-width) solid var(--color-border);
+    border-radius: var(--radius-card);
+  }
+  .pricing--featured { border-color: var(--color-primary); box-shadow: var(--shadow-m); }
+
+  .pricing__badge { align-self: start; }
+  .pricing__name { font-size: var(--text-xl); }
+  .pricing__price { display: flex; align-items: baseline; gap: var(--space-2xs); margin: 0; }
+  .pricing__amount { color: var(--color-h1); font-size: var(--text-4xl); font-weight: var(--weight-heading); line-height: 1; }
+  .pricing__period { color: var(--color-text-muted); }
+  .pricing__list { display: grid; gap: var(--space-xs); margin: 0 0 var(--space-s); padding: 0; list-style: none; }
+  .pricing__item { display: flex; align-items: start; gap: var(--space-xs); margin: 0; }
+  .pricing__item .icon { margin-block-start: var(--space-3xs); color: var(--color-success); }
+  .pricing > .button { margin-block-start: auto; }
+}

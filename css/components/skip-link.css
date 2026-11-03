@@ -1,0 +1,21 @@
+/* ==========================================================================
+   SKIP LINK  ·  .skip-link   First focusable element on every page.
+   <a class="skip-link" href="#main">Skip to main content</a>
+   ========================================================================== */
+
+@layer components {
+  .skip-link {
+    position: fixed;
+    inset-block-start: var(--space-xs);
+    inset-inline-start: var(--space-xs);
+    z-index: var(--z-toast);
+    padding: var(--space-xs) var(--space-m);
+    color: var(--color-on-primary);
+    background-color: var(--color-primary);
+    border-radius: var(--radius-button);
+    font-weight: var(--weight-medium);
+    text-decoration: none;
+    translate: 0 -200%;
+  }
+  .skip-link:focus { translate: 0 0; }
+}

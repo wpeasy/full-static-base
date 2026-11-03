@@ -1,0 +1,14 @@
+/* ==========================================================================
+   CTA  ·  .cta  (--left)   Elements: __title  __text  __actions
+   Call-to-action band. Put it in a <section class="section u-surface-primary"> (or any surface)
+   inside .container; the surface re-points text and button colours.
+   ========================================================================== */
+
+@layer components {
+  .cta { display: grid; gap: var(--space-s); justify-items: center; max-width: var(--measure); margin-inline: auto; text-align: center; }
+  .cta--left { justify-items: start; margin-inline: 0; text-align: start; }
+
+  .cta__title { font-size: var(--text-3xl); }
+  .cta__text { font-size: var(--text-l); }
+  .cta__actions { display: flex; flex-wrap: wrap; gap: var(--space-s); justify-content: inherit; margin-block-start: var(--space-xs); }
+}

@@ -1,0 +1,232 @@
+/* ==========================================================================
+   UTILITIES  ·  css/core/utilities.css
+   Small single-purpose helpers, prefixed u-. They live in the last cascade
+   layer so they win over blocks. Prefer a BEM block for anything that is a
+   real component; use these for one-off behaviour.
+   ========================================================================== */
+
+@layer utilities {
+
+  /* ---- Accessibility ---- */
+  /* Hidden visually, still read by screen readers */
+  .u-visually-hidden {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    margin: -1px;
+    padding: 0;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+    border: 0;
+  }
+
+  /* ---- Lists ---- */
+  /* Strip bullets, numbers and indent (use on ul/ol) */
+  .u-list-none {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+  .u-list-none > li + li { margin-block-start: 0; }
+
+  /* ---- Clickable box ----
+     Put on the card. The first link inside stretches to cover the whole card.
+     Other links/buttons stay independently clickable (raised above the cover).
+     Tune: add u-clickable__skip to any link that must not become the cover. */
+  .u-clickable { position: relative; }
+  .u-clickable :is(a[href], button):not(.u-clickable__skip):first-of-type::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+  }
+  .u-clickable :is(a[href], button):not(:first-of-type),
+  .u-clickable .u-clickable__skip {
+    position: relative;
+    z-index: 2;
+  }
+  .u-clickable:hover { cursor: pointer; }
+  .u-clickable:focus-within { outline: var(--focus-ring); outline-offset: var(--focus-offset); }
+  .u-clickable :focus-visible { outline: none; }
+
+  /* ---- Text truncation ---- */
+  .u-truncate {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  /* Clamp to N lines: --lines (default 3) */
+  .u-line-clamp {
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: var(--lines, 3);
+    line-clamp: var(--lines, 3);
+    overflow: hidden;
+  }
+  .u-line-clamp-1 { --lines: 1; }
+  .u-line-clamp-2 { --lines: 2; }
+  .u-line-clamp-3 { --lines: 3; }
+  .u-line-clamp-4 { --lines: 4; }
+
+  /* ---- Text ---- */
+  .u-text-balance { text-wrap: balance; }
+  .u-text-pretty  { text-wrap: pretty; }
+  .u-text-center  { text-align: center; }
+  .u-text-start   { text-align: start; }
+  .u-text-end     { text-align: end; }
+  .u-text-muted   { color: var(--color-text-muted); }
+  .u-uppercase    { text-transform: uppercase; letter-spacing: 0.08em; }
+  .u-measure      { max-width: var(--measure); }
+  .u-nowrap       { white-space: nowrap; }
+
+  /* Type sizes from the fluid scale */
+  .u-text-2xs { font-size: var(--text-2xs); }
+  .u-text-xs  { font-size: var(--text-xs); }
+  .u-text-s   { font-size: var(--text-s); }
+  .u-text-m   { font-size: var(--text-m); }
+  .u-text-l   { font-size: var(--text-l); }
+  .u-text-xl  { font-size: var(--text-xl); }
+  .u-text-2xl { font-size: var(--text-2xl); }
+  .u-text-3xl { font-size: var(--text-3xl); }
+  .u-text-4xl { font-size: var(--text-4xl); }
+  .u-text-5xl { font-size: var(--text-5xl); }
+
+  .u-weight-medium { font-weight: var(--weight-medium); }
+  .u-weight-bold   { font-weight: var(--weight-bold); }
+
+  /* Heading looks without heading semantics: choose the element for structure, the look here.
+     <h2 class="u-h4">…</h2> keeps the outline correct but renders like an h4. */
+  .u-h1 { font-family: var(--h1-font); font-weight: var(--h1-weight); font-size: var(--h1-size); color: var(--color-h1); line-height: var(--leading-heading); letter-spacing: var(--tracking-heading); text-wrap: balance; }
+  .u-h2 { font-family: var(--h2-font); font-weight: var(--h2-weight); font-size: var(--h2-size); color: var(--color-h2); line-height: var(--leading-heading); letter-spacing: var(--tracking-heading); text-wrap: balance; }
+  .u-h3 { font-family: var(--h3-font); font-weight: var(--h3-weight); font-size: var(--h3-size); color: var(--color-h3); line-height: var(--leading-heading); letter-spacing: var(--tracking-heading); text-wrap: balance; }
+  .u-h4 { font-family: var(--h4-font); font-weight: var(--h4-weight); font-size: var(--h4-size); color: var(--color-h4); line-height: var(--leading-heading); letter-spacing: var(--tracking-heading); text-wrap: balance; }
+  .u-h5 { font-family: var(--h5-font); font-weight: var(--h5-weight); font-size: var(--h5-size); color: var(--color-h5); line-height: var(--leading-heading); letter-spacing: var(--tracking-heading); text-wrap: balance; }
+  .u-h6 { font-family: var(--h6-font); font-weight: var(--h6-weight); font-size: var(--h6-size); color: var(--color-h6); line-height: var(--leading-heading); letter-spacing: var(--tracking-heading); text-wrap: balance; }
+
+  /* ---- Layout helpers ---- */
+  .u-center-self   { margin-inline: auto; }
+  .u-flex-center   { display: flex; align-items: center; justify-content: center; }
+  .u-grid-center   { display: grid; place-items: center; }
+  .u-flow > * + *  { margin-block-start: var(--flow-space, var(--space-m)); }
+  .u-full-bleed    { width: 100vw; margin-inline: calc(50% - 50vw); }
+  .u-overflow-hidden { overflow: hidden; }
+  .u-scroll-x      { overflow-x: auto; overscroll-behavior-x: contain; }
+  .u-relative      { position: relative; }
+  /* Cover the nearest positioned ancestor (background images, overlays) */
+  .u-cover         { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+  .u-isolate       { isolation: isolate; }
+
+  /* ---- Aspect ratio & media ---- */
+  .u-aspect-square { aspect-ratio: var(--aspect-square); }
+  .u-aspect-video  { aspect-ratio: var(--aspect-video); }
+  .u-aspect-photo  { aspect-ratio: var(--aspect-photo); }
+  .u-object-cover  { width: 100%; height: 100%; object-fit: cover; }
+  .u-object-contain{ width: 100%; height: 100%; object-fit: contain; }
+
+  /* ---- Surfaces ----
+     A surface sets the background AND re-points the semantic tokens used inside it
+     (text, headings h1–h6, links, borders, primary button), so any block placed
+     on it stays readable with no extra CSS. They also work in dark mode.
+
+       u-surface-1 / -2 / -3   neutral steps: page, alt, sunken
+       u-surface-accent        soft tint of the primary colour
+       u-surface-primary       solid primary
+       u-surface-secondary     solid secondary
+       u-surface-inverse       opposite of the page theme (dark on light, light on dark)
+
+     Don't nest a colour surface inside another colour surface. Padding is not included. */
+  .u-surface-1 { background-color: var(--color-bg); }
+  .u-surface-2 { background-color: var(--color-bg-alt); }
+  .u-surface-3 { background-color: light-dark(var(--surface-light-8), var(--surface-dark-7)); }
+  .u-surface-1, .u-surface-2, .u-surface-3 { color: var(--color-text); }
+
+  .u-surface-accent {
+    --surface-bg: light-dark(var(--primary-light-9), var(--primary-dark-8));
+    --surface-text: light-dark(var(--primary-dark-8), var(--primary-light-9));
+    --surface-heading: light-dark(var(--primary-dark-9), var(--primary-light-10));
+    --surface-muted: light-dark(var(--primary-dark-5), var(--primary-light-6));
+    --surface-link: light-dark(var(--primary), var(--primary-light-4));
+    --surface-link-hover: light-dark(var(--primary-dark-3), var(--primary-light-6));
+    --surface-border: light-dark(var(--primary-light-7), var(--primary-dark-5));
+    --surface-button: light-dark(var(--primary), var(--primary-light-2));
+    --surface-button-hover: light-dark(var(--primary-dark-2), var(--primary-light-4));
+    --surface-on-button: var(--white);
+  }
+  .u-surface-primary {
+    --surface-bg: light-dark(var(--primary), var(--primary-dark-2));
+    --surface-text: light-dark(var(--primary-a11y), var(--primary-dark-2-a11y));
+    --surface-heading: var(--surface-text);
+    --surface-muted: color-mix(in oklch, var(--surface-text) 78%, transparent);
+    --surface-link: var(--surface-text);
+    --surface-link-hover: color-mix(in oklch, var(--surface-text) 78%, transparent);
+    --surface-border: color-mix(in oklch, var(--surface-text) 30%, transparent);
+    --surface-button: var(--surface-text);
+    --surface-button-hover: color-mix(in oklch, var(--surface-text) 85%, var(--surface-bg));
+    --surface-on-button: var(--surface-bg);
+  }
+  .u-surface-secondary {
+    --surface-bg: light-dark(var(--secondary), var(--secondary-dark-4));
+    --surface-text: light-dark(var(--secondary-a11y), var(--secondary-dark-4-a11y));
+    --surface-heading: var(--surface-text);
+    --surface-muted: color-mix(in oklch, var(--surface-text) 75%, transparent);
+    --surface-link: var(--surface-text);
+    --surface-link-hover: color-mix(in oklch, var(--surface-text) 75%, transparent);
+    --surface-border: color-mix(in oklch, var(--surface-text) 30%, transparent);
+    --surface-button: var(--surface-text);
+    --surface-button-hover: color-mix(in oklch, var(--surface-text) 85%, var(--surface-bg));
+    --surface-on-button: var(--surface-bg);
+  }
+  .u-surface-inverse {
+    --surface-bg: light-dark(var(--surface-dark-9), var(--surface-light-9));
+    --surface-text: light-dark(var(--surface-light-9), var(--surface-dark-8));
+    --surface-heading: light-dark(var(--surface-light-10), var(--surface-dark-10));
+    --surface-muted: light-dark(var(--surface-light-5), var(--surface-dark-4));
+    --surface-link: light-dark(var(--primary-light-4), var(--primary));
+    --surface-link-hover: light-dark(var(--primary-light-6), var(--primary-dark-3));
+    --surface-border: light-dark(var(--surface-dark-5), var(--surface-light-6));
+    --surface-button: light-dark(var(--primary-light-2), var(--primary));
+    --surface-button-hover: light-dark(var(--primary-light-4), var(--primary-dark-2));
+    --surface-on-button: var(--white);
+  }
+
+  /* Shared wiring for the coloured surfaces */
+  :is(.u-surface-accent, .u-surface-primary, .u-surface-secondary, .u-surface-inverse) {
+    background-color: var(--surface-bg);
+    color: var(--surface-text);
+    --color-text: var(--surface-text);
+    --color-text-muted: var(--surface-muted);
+    --color-h1: var(--surface-heading);
+    --color-h2: var(--surface-heading);
+    --color-h3: var(--surface-heading);
+    --color-h4: var(--surface-heading);
+    --color-h5: var(--surface-heading);
+    --color-h6: var(--surface-muted);
+    --color-link: var(--surface-link);
+    --color-link-hover: var(--surface-link-hover);
+    --color-border: var(--surface-border);
+    --color-border-strong: var(--surface-border);
+    --color-primary: var(--surface-button);
+    --color-primary-hover: var(--surface-button-hover);
+    --color-on-primary: var(--surface-on-button);
+  }
+
+  /* ---- Borders & effects ---- */
+  .u-border   { border: var(--border-width) solid var(--color-border); }
+  .u-shadow-s  { box-shadow: var(--shadow-s); }
+  .u-shadow-m  { box-shadow: var(--shadow-m); }
+  .u-shadow-l  { box-shadow: var(--shadow-l); }
+  .u-rounded   { border-radius: var(--radius-m); }
+  .u-rounded-full { border-radius: var(--radius-full); }
+
+  /* ---- Interaction ---- */
+  .u-no-select   { user-select: none; }
+  .u-pointer-none{ pointer-events: none; }
+  .u-no-scroll   { overflow: hidden; }           /* body scroll lock while a modal is open */
+
+  /* ---- Visibility (breakpoints match framework.css notes: md = 48em) ---- */
+  [x-cloak] { display: none !important; }        /* Alpine: hide until initialised */
+  .u-hidden { display: none !important; }
+  @media (max-width: 47.999em) { .u-hide-mobile  { display: none !important; } }
+  @media (min-width: 48em)     { .u-hide-desktop { display: none !important; } }
+}

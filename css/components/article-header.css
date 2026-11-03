@@ -1,0 +1,11 @@
+/* ==========================================================================
+   ARTICLE HEADER  ·  .article-header   Elements: __title  __meta  __lead
+   Title block for a post. __title holds the page's single <h1>; __meta is a row for <time>/author.
+   ========================================================================== */
+
+@layer components {
+  .article-header { display: grid; gap: var(--space-s); max-width: var(--measure); }
+  .article-header__title { font-size: var(--text-4xl); }
+  .article-header__lead { color: var(--color-text-muted); font-size: var(--text-l); }
+  .article-header__meta { display: flex; flex-wrap: wrap; gap: var(--space-2xs) var(--space-s); color: var(--color-text-muted); font-size: var(--text-s); }
+}

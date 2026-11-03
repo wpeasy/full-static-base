@@ -1,0 +1,35 @@
+/* ==========================================================================
+   FIELD  ·  .field  (--invalid)
+   Elements: __label  __input  __hint  __error
+   __input styles <input>, <textarea> and <select>.
+   ========================================================================== */
+
+@layer components {
+  .field { display: grid; gap: var(--space-3xs); }
+
+  .field__label { font-size: var(--text-s); font-weight: var(--weight-medium); }
+
+  .field__input {
+    width: 100%;
+    padding: var(--space-xs) var(--space-s);
+    color: var(--color-text);
+    background-color: var(--color-surface);
+    border: var(--border-width) solid var(--color-border-strong);
+    border-radius: var(--radius-input);
+    transition: border-color var(--transition), box-shadow var(--transition);
+  }
+  .field__input::placeholder { color: var(--color-text-muted); }
+  .field__input:focus-visible {
+    outline: none;
+    border-color: var(--color-focus);
+    box-shadow: 0 0 0 var(--border-width-l) var(--primary-alpha-30);
+  }
+  .field__input:disabled { opacity: var(--opacity-disabled); }
+  textarea.field__input { min-height: var(--space-4xl); resize: vertical; }
+
+  .field__hint  { font-size: var(--text-xs); color: var(--color-text-muted); }
+  .field__error { font-size: var(--text-xs); color: var(--color-danger); }
+
+  .field--invalid .field__input { border-color: var(--color-danger); }
+  .field--invalid .field__input:focus-visible { box-shadow: 0 0 0 var(--border-width-l) color-mix(in oklch, var(--color-danger) 30%, transparent); }
+}

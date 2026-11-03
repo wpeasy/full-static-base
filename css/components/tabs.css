@@ -1,0 +1,31 @@
+/* ==========================================================================
+   TABS  ·  .tabs   Elements: __list  __tab  __panel   State: [aria-selected="true"]
+   ARIA tabs pattern (roles, roving tabindex, arrow keys) handled by js/components.js → tabs.
+   ========================================================================== */
+
+@layer components {
+  /* Public property: --tabs-gap */
+  .tabs { --tabs-gap: var(--space-2xs); }
+
+  .tabs__list {
+    display: flex;
+    gap: var(--tabs-gap);
+    overflow-x: auto;
+    border-bottom: var(--border-width) solid var(--color-border);
+  }
+
+  .tabs__tab {
+    padding: var(--space-xs) var(--space-m);
+    color: var(--color-text-muted);
+    background: none;
+    border: 0;
+    border-bottom: var(--border-width-m) solid transparent;
+    margin-bottom: calc(var(--border-width) * -1);
+    font-weight: var(--weight-medium);
+    white-space: nowrap;
+  }
+  .tabs__tab:hover { color: var(--color-text); }
+  .tabs__tab[aria-selected="true"] { color: var(--color-link); border-bottom-color: var(--color-link); }
+
+  .tabs__panel { padding-block: var(--space-m); }
+}

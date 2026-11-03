@@ -1,0 +1,35 @@
+/* ==========================================================================
+   HERO  ·  .hero  (--center)
+   Elements: __content  __eyebrow  __title  __lead  __actions  __media
+   Use inside <section class="section">. Put the page's single <h1> in __title.
+   ========================================================================== */
+
+@layer components {
+  .hero { display: grid; gap: var(--space-xl); align-items: center; }
+
+  .hero__content { display: grid; gap: var(--space-s); justify-items: start; }
+  .hero__eyebrow {
+    color: var(--color-link);
+    font-size: var(--text-s);
+    font-weight: var(--weight-bold);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+  .hero__title { font-size: var(--text-5xl); }
+  .hero__lead { max-width: var(--measure); color: var(--color-text-muted); font-size: var(--text-l); }
+  .hero__actions { display: flex; flex-wrap: wrap; gap: var(--space-s); margin-block-start: var(--space-s); }
+  .hero__media {
+    width: 100%;
+    aspect-ratio: var(--aspect-photo);
+    object-fit: cover;
+    background: linear-gradient(135deg, var(--primary-light-5), var(--secondary-light-3));
+    border-radius: var(--radius-card);
+  }
+
+  .hero--center { text-align: center; }
+  .hero--center .hero__content { justify-items: center; }
+
+  @media (min-width: 64em) {
+    .hero:not(.hero--center) { grid-template-columns: 1fr 1fr; }
+  }
+}

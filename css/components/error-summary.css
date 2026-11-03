@@ -1,0 +1,19 @@
+/* ==========================================================================
+   ERROR SUMMARY  ·  .error-summary   Elements: __title  __list  __link
+   Shown above a form after a failed submit. Receives focus (tabindex="-1") so screen readers
+   announce it; each link jumps to the invalid field. Behaviour: js/forms.js → formValidation.
+   ========================================================================== */
+
+@layer components {
+  .error-summary {
+    padding: var(--space-m);
+    background-color: var(--color-danger-bg);
+    border: var(--border-width-m) solid var(--color-danger);
+    border-radius: var(--radius-m);
+  }
+  .error-summary:focus-visible { outline: var(--focus-ring); outline-offset: var(--focus-offset); }
+
+  .error-summary__title { font-size: var(--text-l); }
+  .error-summary__list { display: grid; gap: var(--space-3xs); margin: var(--space-xs) 0 0; padding-inline-start: 1.25em; }
+  .error-summary__link { color: var(--color-text); font-weight: var(--weight-medium); }
+}

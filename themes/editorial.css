@@ -1,0 +1,155 @@
+/* PRESET: editorial — warm brick + ochre, serif headings, near-square corners, roomy reading rhythm
+   Copy this file over css/theme.css to use it. */
+
+/* ==========================================================================
+   Brand colours, fonts, scale settings, semantic colours, heading styles and
+   component roles for ONE site. Everything else derives from these values.
+   Presets to start from: themes/corporate.css, editorial.css, playful.css
+   (copy one over this file, then tune). Must load BEFORE core/framework.css.
+   ========================================================================== */
+
+@layer reset, tokens, base, layout, components, utilities;
+
+/* ==========================================================================
+   THEME  ·  css/theme.css   (the ONLY file edited per site)
+   ========================================================================== */
+@layer tokens {
+  :root {
+    color-scheme: light; /* light | dark | light dark (follow OS). Override per block with [data-theme] */
+
+    /* ---- 1.1 Brand colours (OKLCH: lightness 0-1, chroma 0-0.37, hue 0-360) ----
+       Each gets a 10-step light, dark and alpha ramp (see ENGINE → colour ramps). */
+    --primary:   oklch(0.42 0.10 25);
+    --secondary: oklch(0.72 0.10 85);
+    --surface:   oklch(0.50 0.02 70);  /* neutral: keep chroma low, tint toward primary hue */
+
+    /* Status colours (single value each) */
+    --success: oklch(0.62 0.17 150);
+    --warning: oklch(0.80 0.16 85);
+    --danger:  oklch(0.58 0.22 27);
+    --info:    oklch(0.62 0.14 235);
+
+    /* ---- 1.2 Ramp tuning: how far each step moves toward white / black ----
+       step n mixes n × step % of white/black. 10 × 9.6% ≈ 96%. */
+    --ramp-light-step: 9.6%;
+    --ramp-dark-step:  8.6%;
+
+    /* ---- 1.2b Accessible text pairing ----
+       Every ramp colour gets a partner --{color}-a11y, --{color}-light-N-a11y, --{color}-dark-N-a11y
+       holding whichever of a near-white / near-black has the higher WCAG contrast against it.
+       Set those two text colours by luminance Y (0 = black … 1 = white). */
+    --a11y-light-y: 0.94;   /* ≈ oklch(0.98 0 0) */
+    --a11y-dark-y:  0.008;  /* ≈ oklch(0.20 0 0) */
+
+    /* ---- 1.3 Semantic colours – light-dark(LIGHT, DARK) ---- */
+    --color-bg:           light-dark(var(--surface-light-10), var(--surface-dark-10));
+    --color-bg-alt:       light-dark(var(--surface-light-9),  var(--surface-dark-9));
+    --color-surface:      light-dark(var(--white),            var(--surface-dark-8));
+    --color-surface-alt:  light-dark(var(--surface-light-9),  var(--surface-dark-7));
+    --color-border:       light-dark(var(--surface-light-7),  var(--surface-dark-6));
+    --color-border-strong:light-dark(var(--surface-light-5),  var(--surface-dark-4));
+    --color-overlay:      light-dark(var(--surface-alpha-60), var(--black));
+
+    --color-text:         light-dark(var(--surface-dark-8),   var(--surface-light-9));
+    --color-text-muted:   light-dark(var(--surface-dark-3),   var(--surface-light-6));
+    --color-text-inverse: light-dark(var(--surface-light-10), var(--surface-dark-9));
+
+    /* Headings h1–h6 (colour, size, family, weight) */
+    --color-h1: light-dark(var(--primary-dark-6),  var(--primary-light-8));
+    --color-h2: light-dark(var(--surface-dark-9),  var(--surface-light-10));
+    --color-h3: var(--color-h2);
+    --color-h4: var(--color-h2);
+    --color-h5: var(--color-h2);
+    --color-h6: var(--color-text-muted);
+
+    --h1-size: var(--text-4xl);
+    --h2-size: var(--text-3xl);
+    --h3-size: var(--text-2xl);
+    --h4-size: var(--text-xl);
+    --h5-size: var(--text-l);
+    --h6-size: var(--text-m);
+
+    --h1-font: var(--font-heading);  --h1-weight: var(--weight-heading);
+    --h2-font: var(--font-heading);  --h2-weight: var(--weight-heading);
+    --h3-font: var(--font-heading);  --h3-weight: var(--weight-heading);
+    --h4-font: var(--font-heading);  --h4-weight: var(--weight-heading);
+    --h5-font: var(--font-heading);  --h5-weight: var(--weight-heading);
+    --h6-font: var(--font-heading);  --h6-weight: var(--weight-heading);
+
+    /* Links */
+    --color-link:        light-dark(var(--primary),        var(--primary-light-4));
+    --color-link-hover:  light-dark(var(--primary-dark-3), var(--primary-light-6));
+
+    /* Brand roles. "on-" colours are the text colour placed on that fill. */
+    --color-primary:         light-dark(var(--primary),        var(--primary-light-2));
+    --color-primary-hover:   light-dark(var(--primary-dark-2), var(--primary-light-4));
+    --color-on-primary:      light-dark(var(--primary-a11y), var(--primary-light-2-a11y));
+    --color-secondary:       light-dark(var(--secondary),      var(--secondary-light-1));
+    --color-secondary-hover: light-dark(var(--secondary-dark-2), var(--secondary-light-3));
+    --color-on-secondary:    light-dark(var(--secondary-a11y), var(--secondary-light-1-a11y));
+    --color-focus:           light-dark(var(--primary), var(--primary-light-4));
+
+    /* Status roles: solid + tinted background */
+    --color-success:    var(--success);  --color-success-bg: light-dark(color-mix(in oklch, var(--success) 12%, var(--white)), color-mix(in oklch, var(--success) 22%, var(--black)));
+    --color-warning:    var(--warning);  --color-warning-bg: light-dark(color-mix(in oklch, var(--warning) 14%, var(--white)), color-mix(in oklch, var(--warning) 22%, var(--black)));
+    --color-danger:     var(--danger);   --color-danger-bg:  light-dark(color-mix(in oklch, var(--danger) 12%, var(--white)),  color-mix(in oklch, var(--danger) 24%, var(--black)));
+    --color-info:       var(--info);     --color-info-bg:    light-dark(color-mix(in oklch, var(--info) 12%, var(--white)),    color-mix(in oklch, var(--info) 22%, var(--black)));
+
+    /* ---- 1.4 Fonts ---- */
+    --font-body:    system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    --font-heading: Georgia, "Times New Roman", serif;
+    --font-mono:    ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+
+    --weight-body: 400;
+    --weight-medium: 500;
+    --weight-heading: 600;
+    --weight-bold: 700;
+
+    --leading-body: 1.7;
+    --leading-heading: 1.15;
+    --tracking-body: 0;
+    --tracking-heading: -0.01em;
+    --measure: 65ch;                 /* comfortable line length for prose */
+
+    /* ---- 1.5 Fluid scales ----
+       Sizes are px (unitless) at the min / max viewport widths (also unitless px).
+       Ratios: pick a preset below or any number.
+       Presets → --ratio-minor-second 1.067 · major-second 1.125 · minor-third 1.2 ·
+                 major-third 1.25 · perfect-fourth 1.333 · augmented-fourth 1.414 ·
+                 perfect-fifth 1.5 · golden 1.618 */
+    --fluid-min-vw: 360;
+    --fluid-max-vw: 1440;
+
+    /* Typography scale */
+    --text-min-size:  17;
+    --text-max-size:  20;
+    --text-min-ratio: var(--ratio-minor-third);
+    --text-max-ratio: var(--ratio-perfect-fourth);
+
+    /* Spacing scale */
+    --space-min-size:  16;
+    --space-max-size:  20;
+    --space-min-ratio: var(--ratio-perfect-fifth);
+    --space-max-ratio: var(--ratio-perfect-fifth);
+
+    /* Radii are derived from the spacing scale: radius = space × scale (0 = square, 1 = very round) */
+    --radius-scale: 0.15;
+
+    /* ---- 1.6 Layout ---- */
+    --container-narrow: 45rem;
+    --container:        75rem;
+    --container-wide:   90rem;
+    --gutter:           var(--space-m);
+    --section-space:    var(--space-3xl);
+    --grid-gap:         var(--space-l);
+
+    /* ---- 1.7 Component roles (which radius / border each kind of thing uses) ---- */
+    --radius-button: var(--radius-m);
+    --radius-card:   var(--radius-l);
+    --radius-input:  var(--radius-s);
+    --radius-image:  var(--radius-m);
+    --border-width:  var(--border-width-s);
+    --icon-size:     1.25em;
+  }
+}
+

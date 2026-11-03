@@ -1,0 +1,52 @@
+/* ==========================================================================
+   BUTTON  ·  .button  (--secondary | --outline | --ghost | --s | --l | --full)
+   Works on <a> and <button>. Variants only set the --button-* properties.
+   ========================================================================== */
+
+@layer components {
+  .button {
+    --button-bg: var(--color-primary);
+    --button-bg-hover: var(--color-primary-hover);
+    --button-fg: var(--color-on-primary);
+    --button-border: transparent;
+
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-2xs);
+    padding: var(--space-xs) var(--space-m);
+    color: var(--button-fg);
+    background-color: var(--button-bg);
+    border: var(--border-width) solid var(--button-border);
+    border-radius: var(--radius-button);
+    font-size: var(--text-m);
+    font-weight: var(--weight-medium);
+    line-height: 1.2;
+    text-decoration: none;
+    transition: background-color var(--transition), color var(--transition), border-color var(--transition);
+  }
+  .button:hover { color: var(--button-fg); background-color: var(--button-bg-hover); }
+  .button:disabled,
+  .button[aria-disabled="true"] { opacity: var(--opacity-disabled); pointer-events: none; }
+
+  .button--secondary {
+    --button-bg: var(--color-secondary);
+    --button-bg-hover: var(--color-secondary-hover);
+    --button-fg: var(--color-on-secondary);
+  }
+  .button--outline {
+    --button-bg: transparent;
+    --button-bg-hover: var(--primary-alpha-10);
+    --button-fg: var(--color-link);
+    --button-border: currentColor;
+  }
+  .button--ghost {
+    --button-bg: transparent;
+    --button-bg-hover: var(--primary-alpha-10);
+    --button-fg: var(--color-link);
+  }
+
+  .button--s { padding: var(--space-2xs) var(--space-s); font-size: var(--text-s); }
+  .button--l { padding: var(--space-s) var(--space-l); font-size: var(--text-l); }
+  .button--full { display: flex; width: 100%; }
+}

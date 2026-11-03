@@ -1,0 +1,8 @@
+{
+  "recommendations": [
+    "ecmel.vscode-html-css",
+    "vunguyentuan.vscode-css-variables",
+    "editorconfig.editorconfig",
+    "ritwickdey.liveserver"
+  ]
+}
