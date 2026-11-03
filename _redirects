@@ -1,0 +1,4 @@
+# Netlify / Cloudflare Pages. One template page answers every /item/<slug> URL.
+# For a real 404 on unknown slugs, list each slug with status 200 before a final `/item/*  /404.html  404`
+# (see docs/data-driven-pages.md). tools/serve.mjs reads the 200 rules for local preview.
+/item/*  /item.html  200

@@ -3,19 +3,20 @@
 // All items live in the HTML, so the list works without JS. Needs Alpine; GSAP + Flip are optional
 // (without them the grid just updates). Motion is skipped when prefers-reduced-motion: reduce.
 
-document.addEventListener('alpine:init', () => {
-  Alpine.data('gridFilter', () => ({
+// The factory is also exposed as window.GridFilter so data-driven lists can extend it (js/items-list.js).
+const GridFilter = () => ({
     query: '',
     tag: 'all',
     count: 0,
     total: 0,
 
     init() {
-      this.total = this.count = this.items().length;
+      this.total = this.count = this.elements().length;
     },
 
-    items() {
-      return [...this.$refs.grid.children];
+    elements() {
+      // skip the <template x-for> that data-driven lists keep inside the grid
+      return [...this.$refs.grid.children].filter((el) => !(el instanceof HTMLTemplateElement));
     },
 
     // Called from `:hidden="!matches($el, query, tag)"`. query and tag are arguments (not read
@@ -49,7 +50,7 @@ document.addEventListener('alpine:init', () => {
         return;
       }
 
-      const items = this.items();
+      const items = this.elements();
       const style = getComputedStyle(document.documentElement);
       const duration = parseFloat(style.getPropertyValue('--duration-slow')) / 1000 || 0.4;
       const ease = 'power2.inOut';
@@ -79,7 +80,9 @@ document.addEventListener('alpine:init', () => {
     },
 
     recount() {
-      this.count = this.items().filter((el) => !el.hidden).length;
+      this.count = this.elements().filter((el) => !el.hidden).length;
     },
-  }));
-});
+  });
+window.GridFilter = GridFilter;
+
+document.addEventListener('alpine:init', () => Alpine.data('gridFilter', GridFilter));

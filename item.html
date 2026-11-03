@@ -1,0 +1,133 @@
+<!doctype html>
+<html lang="en" data-root-absolute>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Team member | Site name</title>
+  <meta name="description" content="Profile page template: filled from data/items.json for every /item/ address.">
+  <link rel="canonical" href="https://example.com/item.html">
+  <link rel="icon" href="/images/favicon.svg" type="image/svg+xml">
+  <meta name="robots" content="index, follow">
+  <meta name="theme-color" content="#ffffff">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Site name">
+  <meta property="og:locale" content="en_AU">
+  <meta property="og:title" content="Team member | Site name">
+  <meta property="og:description" content="Profile page template: filled from data/items.json for every /item/ address.">
+  <meta property="og:url" content="https://example.com/item.html">
+  <meta property="og:image" content="https://example.com/images/og.svg">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="Site name">
+  <meta name="twitter:card" content="summary_large_image">
+
+  <script src="/js/theme-init.js"></script>
+  <link rel="stylesheet" href="/css/main.css">
+
+  <script src="/js/components.js" defer></script>
+  <script src="/js/seo.js" defer></script>
+  <script src="/js/items-data.js" defer></script>
+  <script src="/js/item-profile.js" defer></script>
+  <script src="/js/vendor/alpine.min.js" defer></script>
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to main content</a>
+
+  <header class="nav" x-data="nav" :class="{ 'nav--open': open }" @keydown.escape="close">
+    <div class="container nav__inner">
+      <a class="nav__brand" href="/index.html">Site name</a>
+      <div class="nav__actions">
+        <button class="theme-toggle" type="button" x-data="themeToggle" @click="switchTheme" :aria-pressed="dark" aria-label="Dark mode">
+          <svg class="icon theme-toggle__icon theme-toggle__icon--sun" aria-hidden="true" focusable="false"><use href="/images/icons.svg#sun"/></svg>
+          <svg class="icon theme-toggle__icon theme-toggle__icon--moon" aria-hidden="true" focusable="false"><use href="/images/icons.svg#moon"/></svg>
+        </button>
+        <button class="nav__toggle" type="button" x-ref="toggle" @click="toggle" :aria-expanded="open" aria-controls="main-menu">
+          <svg class="icon" aria-hidden="true" focusable="false"><use href="/images/icons.svg#menu"/></svg>
+          <span>Menu</span>
+        </button>
+      </div>
+      <nav aria-label="Main" class="nav__menu">
+        <ul class="nav__list" id="main-menu">
+          <li><a class="nav__link" href="/index.html">Home</a></li>
+          <li><a class="nav__link" href="/article.html">Article</a></li>
+          <li><a class="nav__link" href="/items.html">Team</a></li>
+          <li><a class="nav__link" href="/contact.html">Contact</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <main id="main" x-data="itemProfile">
+    <article class="section" aria-labelledby="item-title">
+      <div class="container container--narrow stack stack--l">
+        <nav class="breadcrumb" aria-label="Breadcrumb">
+          <ol class="breadcrumb__list">
+            <li class="breadcrumb__item"><a class="breadcrumb__link" href="/index.html">Home</a></li>
+            <li class="breadcrumb__item"><a class="breadcrumb__link" href="/items.html">Team</a></li>
+            <li class="breadcrumb__item"><span class="breadcrumb__link" aria-current="page" x-text="heading">Loading…</span></li>
+          </ol>
+        </nav>
+
+        <header class="article-header">
+          <h1 class="article-header__title" id="item-title" x-text="heading">Loading…</h1>
+          <p class="profile__role" :hidden="status !== 'ready'" hidden x-text="item.role + ' · ' + item.place"></p>
+        </header>
+
+        <noscript><p class="alert">This page needs JavaScript. <a href="/items.html">Back to the team</a>.</p></noscript>
+
+        <div class="profile__missing" :hidden="status === 'ready' || status === 'loading'" hidden role="status">
+          <p x-text="message"></p>
+          <p><a href="/items.html">Back to the team</a></p>
+        </div>
+
+        <div class="profile" :hidden="status !== 'ready'" hidden>
+          <aside class="profile__aside" aria-label="Quick facts">
+            <span class="profile__avatar" aria-hidden="true" x-text="initials"></span>
+            <dl class="profile__facts">
+              <div class="profile__fact"><dt class="profile__label">Role</dt><dd class="profile__value" x-text="item.role"></dd></div>
+              <div class="profile__fact"><dt class="profile__label">Based in</dt><dd class="profile__value" x-text="item.place"></dd></div>
+              <div class="profile__fact">
+                <dt class="profile__label">Topics</dt>
+                <dd class="profile__value">
+                  <ul class="profile__tags">
+                    <template x-for="tag in tagList" :key="tag.id"><li class="badge badge--primary" x-text="tag.label"></li></template>
+                  </ul>
+                </dd>
+              </div>
+            </dl>
+          </aside>
+          <div class="profile__body stack">
+            <p class="u-text-l" x-text="item.summary"></p>
+            <template x-for="(paragraph, index) in item.bio" :key="index"><p x-text="paragraph"></p></template>
+            <p><a class="button" href="/contact.html">Get in touch</a></p>
+          </div>
+        </div>
+      </div>
+    </article>
+  </main>
+
+  <footer class="footer">
+    <div class="container footer__inner">
+      <div>
+        <p class="footer__brand">Site name</p>
+        <p class="u-text-muted">A short description of the organisation.</p>
+      </div>
+      <nav class="footer__nav" aria-labelledby="footer-explore">
+        <h2 class="u-text-m" id="footer-explore">Explore</h2>
+        <ul class="footer__list">
+          <li><a class="footer__link" href="/index.html">Home</a></li>
+          <li><a class="footer__link" href="/article.html">Article</a></li>
+          <li><a class="footer__link" href="/items.html">Team</a></li>
+        </ul>
+      </nav>
+      <nav class="footer__nav" aria-labelledby="footer-help">
+        <h2 class="u-text-m" id="footer-help">Help</h2>
+        <ul class="footer__list">
+          <li><a class="footer__link" href="/contact.html">Contact</a></li>
+        </ul>
+      </nav>
+      <p class="footer__legal">&copy; 2026 Site name. All rights reserved.</p>
+    </div>
+  </footer>
+</body>
+</html>

@@ -185,11 +185,35 @@ function variantPasses(html) {
 
 const htmlFiles = readdirSync(root).filter((f) => f.endsWith('.html')).map((f) => join(root, f));
 const sharedParts = {};
-const normalise = (s) => s.replace(/\s+/g, ' ').replace(/ aria-current="page"/g, '').replace(/nav__link--current/g, '').replace(/class="nav__link\s+"/g, 'class="nav__link"').trim();
+const seenTitles = new Map(), seenDescriptions = new Map();
+const metaContent = (html, re) => (html.match(re) || [])[1];
+const seoLimits = { title: 60, description: 160 };
+
+// Raster images should be WebP (or SVG/AVIF): flag leftovers in images/
+for (const f of walk(join(root, 'images'), (p) => /\.(jpe?g|png|gif)$/i.test(p))) warn(f, 1, 'convert to WebP (see docs/images.md), keep only the .webp');
+const normalise = (s) => s.replace(/\s+/g, ' ').replace(/\b(href|src)="\//g, '$1="') /* single-template pages use root-absolute paths */.replace(/ aria-current="page"/g, '').replace(/nav__link--current/g, '').replace(/class="nav__link\s+"/g, 'class="nav__link"').trim();
 
 for (const file of htmlFiles) {
   const original = readFileSync(file, 'utf8');
   const base = stripTemplates(original.replace(/<!--[\s\S]*?-->/g, blank));
+
+  // SEO: tags present, length guidance, unique titles and descriptions; JSON-LD must parse
+  const noindex = /<meta[^>]*name="robots"[^>]*noindex/i.test(base);
+  if (!/data-page="styleguide"/.test(base) && !noindex && file !== join(root, '_template.html')) {
+    const title = (metaContent(base, /<title>([^<]*)<\/title>/i) || '').trim();
+    const description = metaContent(base, /<meta[^>]*name="description"[^>]*content="([^"]*)"/i) || '';
+    if (!/<link[^>]*rel="canonical"/i.test(base)) warn(file, 1, 'missing <link rel="canonical"> (docs/seo.md)');
+    for (const og of ['og:title', 'og:description', 'og:image']) if (!new RegExp(`<meta[^>]*property="${og}"`, 'i').test(base)) warn(file, 1, `missing <meta property="${og}"> (docs/seo.md)`);
+    if (title.length > seoLimits.title) warn(file, 1, `title is ${title.length} characters (aim for ${seoLimits.title} or fewer)`);
+    if (description.length > seoLimits.description) warn(file, 1, `meta description is ${description.length} characters (aim for ${seoLimits.description} or fewer)`);
+    for (const [map, value, what] of [[seenTitles, title, 'title'], [seenDescriptions, description, 'meta description']]) {
+      if (value && map.has(value)) warn(file, 1, `${what} is the same as ${relative(root, map.get(value))}: every page needs its own`);
+      else if (value) map.set(value, file);
+    }
+  }
+  for (const m of base.matchAll(/<script\b[^>]*type="application\/ld\+json"[^>]*>([\s\S]*?)<\/script>/gi)) {
+    try { JSON.parse(m[1]); } catch (e) { error(file, lineOf(base, m.index), `JSON-LD is not valid JSON: ${e.message}`); }
+  }
   for (const html of variantPasses(base)) {
     const isGuide = /data-page="styleguide"/.test(html);
     const here = (re) => { const m = html.match(re); return m ? lineOf(html, m.index) : 1; };
@@ -234,6 +258,8 @@ for (const file of htmlFiles) {
     for (const m of html.matchAll(/<img\b[^>]*>/gi)) {
       if (!/\salt=/.test(m[0])) error(file, lineOf(html, m.index), '<img> needs an alt attribute (empty for decorative)');
       if (!/\swidth=/.test(m[0]) || !/\sheight=/.test(m[0])) warn(file, lineOf(html, m.index), '<img> should set width and height');
+      if (!/\sloading="(eager|lazy)"/.test(m[0])) warn(file, lineOf(html, m.index), '<img> needs loading="eager" (in the first 1920x1080 screen) or loading="lazy" (everything else)');
+      if (/\ssrc="[^"]*\.(jpe?g|png|gif)(\?[^"]*)?"/i.test(m[0])) error(file, lineOf(html, m.index), '<img> uses a JPEG/PNG/GIF: convert it to WebP (docs/images.md)');
     }
     for (const m of html.matchAll(/<svg\b[^>]*class="icon[^"]*"[^>]*>/gi)) {
       if (!/aria-hidden="true"|role="img"/.test(m[0])) warn(file, lineOf(html, m.index), 'icon svg should be aria-hidden="true" (decorative) or role="img" with a label');

@@ -1,0 +1,133 @@
+<!doctype html>
+<html lang="en" data-root-absolute>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Our team | Site name</title>
+  <meta name="description" content="Meet the example team. Filter by topic or search by name, role or place.">
+  <link rel="canonical" href="https://example.com/items.html">
+  <link rel="icon" href="/images/favicon.svg" type="image/svg+xml">
+  <meta name="robots" content="index, follow">
+  <meta name="theme-color" content="#ffffff">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Site name">
+  <meta property="og:locale" content="en_AU">
+  <meta property="og:title" content="Our team | Site name">
+  <meta property="og:description" content="Meet the example team. Filter by topic or search by name, role or place.">
+  <meta property="og:url" content="https://example.com/items.html">
+  <meta property="og:image" content="https://example.com/images/og.svg">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="Site name">
+  <meta name="twitter:card" content="summary_large_image">
+
+  <script src="/js/theme-init.js"></script>
+  <link rel="stylesheet" href="/css/main.css">
+
+  <script src="/js/vendor/gsap.min.js?v=3.13.0" defer></script>
+  <script src="/js/vendor/Flip.min.js?v=3.13.0" defer></script>
+  <script src="/js/components.js" defer></script>
+  <script src="/js/seo.js" defer></script>
+  <script src="/js/items-data.js" defer></script>
+  <script src="/js/grid-filter.js" defer></script>
+  <script src="/js/items-list.js" defer></script>
+  <script src="/js/vendor/alpine.min.js" defer></script>
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to main content</a>
+
+  <header class="nav" x-data="nav" :class="{ 'nav--open': open }" @keydown.escape="close">
+    <div class="container nav__inner">
+      <a class="nav__brand" href="/index.html">Site name</a>
+      <div class="nav__actions">
+        <button class="theme-toggle" type="button" x-data="themeToggle" @click="switchTheme" :aria-pressed="dark" aria-label="Dark mode">
+          <svg class="icon theme-toggle__icon theme-toggle__icon--sun" aria-hidden="true" focusable="false"><use href="/images/icons.svg#sun"/></svg>
+          <svg class="icon theme-toggle__icon theme-toggle__icon--moon" aria-hidden="true" focusable="false"><use href="/images/icons.svg#moon"/></svg>
+        </button>
+        <button class="nav__toggle" type="button" x-ref="toggle" @click="toggle" :aria-expanded="open" aria-controls="main-menu">
+          <svg class="icon" aria-hidden="true" focusable="false"><use href="/images/icons.svg#menu"/></svg>
+          <span>Menu</span>
+        </button>
+      </div>
+      <nav aria-label="Main" class="nav__menu">
+        <ul class="nav__list" id="main-menu">
+          <li><a class="nav__link" href="/index.html">Home</a></li>
+          <li><a class="nav__link" href="/article.html">Article</a></li>
+          <li><a class="nav__link" href="/items.html" aria-current="page">Team</a></li>
+          <li><a class="nav__link" href="/contact.html">Contact</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <main id="main">
+    <section class="section" aria-labelledby="items-title" x-data="itemList">
+      <div class="container stack stack--l">
+        <header class="section-header">
+          <p class="section-header__eyebrow">Team</p>
+          <h1 id="items-title">Our team</h1>
+          <p class="section-header__lead">Meet the example team. Filter by topic or search by name, role or place.</p>
+        </header>
+
+        <noscript><p class="alert">This list needs JavaScript. Please enable it, or <a href="/contact.html">contact us</a> and we will help.</p></noscript>
+
+        <p class="filter__empty" :hidden="loadState !== 'error'" hidden role="status">Sorry, the list could not be loaded. Please try again later.</p>
+
+        <div class="filter" :hidden="loadState !== 'ready'" hidden>
+          <div class="filter__toolbar">
+            <div class="field filter__search">
+              <label class="field__label" for="items-search">Search the team</label>
+              <input class="field__input" id="items-search" type="search" autocomplete="off" @input="setQuery($event.target.value)">
+            </div>
+            <div class="filter__tags" role="group" aria-label="Filter by topic">
+              <button class="filter__chip" type="button" :aria-pressed="tag === 'all'" @click="setTag('all')">All</button>
+              <template x-for="topic in topics" :key="topic.id">
+                <button class="filter__chip" type="button" :aria-pressed="tag === topic.id" @click="setTag(topic.id)" x-text="topic.label"></button>
+              </template>
+            </div>
+            <p class="filter__status" role="status" aria-live="polite" x-text="status"></p>
+          </div>
+          <ul class="filter__grid" x-ref="grid">
+            <template x-for="item in items" :key="item.slug">
+              <li class="filter__item" :hidden="!matchesItem(item, query, tag)">
+                <article class="card card--raised u-clickable">
+                  <div class="card__body">
+                    <h2 class="card__title"><a :href="pageUrl(item.slug)" x-text="item.name"></a></h2>
+                    <p class="card__text" x-text="item.role + ' · ' + item.place"></p>
+                    <p class="card__text" x-text="item.summary"></p>
+                  </div>
+                </article>
+              </li>
+            </template>
+          </ul>
+          <p class="filter__empty" hidden :hidden="count > 0">No one matches. Try a different search or topic.</p>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="container footer__inner">
+      <div>
+        <p class="footer__brand">Site name</p>
+        <p class="u-text-muted">A short description of the organisation.</p>
+      </div>
+      <nav class="footer__nav" aria-labelledby="footer-explore">
+        <h2 class="u-text-m" id="footer-explore">Explore</h2>
+        <ul class="footer__list">
+          <li><a class="footer__link" href="/index.html">Home</a></li>
+          <li><a class="footer__link" href="/article.html">Article</a></li>
+          <li><a class="footer__link" href="/items.html">Team</a></li>
+        </ul>
+      </nav>
+      <nav class="footer__nav" aria-labelledby="footer-help">
+        <h2 class="u-text-m" id="footer-help">Help</h2>
+        <ul class="footer__list">
+          <li><a class="footer__link" href="/contact.html">Contact</a></li>
+        </ul>
+      </nav>
+      <p class="footer__legal">&copy; 2026 Site name. All rights reserved.</p>
+    </div>
+  </footer>
+</body>
+</html>

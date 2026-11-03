@@ -8,12 +8,66 @@
   <link rel="canonical" href="https://example.com/contact.html">
   <link rel="icon" href="images/favicon.svg" type="image/svg+xml">
 
+  <meta name="robots" content="index, follow">
+  <meta name="theme-color" content="#ffffff">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Site name">
+  <meta property="og:locale" content="en_AU">
+  <meta property="og:title" content="Contact · Site name">
+  <meta property="og:description" content="Example contact page: an accessible form with an error summary, consent checkbox and honeypot, plus contact details.">
+  <meta property="og:url" content="https://example.com/contact.html">
+  <meta property="og:image" content="https://example.com/images/og.svg">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="Site name">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Contact · Site name">
+  <meta name="twitter:description" content="Example contact page: an accessible form with an error summary, consent checkbox and honeypot, plus contact details.">
+
   <script src="js/theme-init.js"></script>
   <link rel="stylesheet" href="css/main.css">
 
   <script src="js/forms.js" defer></script>
   <script src="js/components.js" defer></script>
   <script src="js/vendor/alpine.min.js" defer></script>
+  <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Organization",
+      "@id": "https://example.com/#organization",
+      "name": "Site name",
+      "url": "https://example.com/",
+      "description": "A short description of the organisation.",
+      "contactPoint": {
+        "@type": "ContactPoint",
+        "contactType": "customer support",
+        "email": "hello@example.com"
+      }
+    },
+    {
+      "@type": "WebSite",
+      "@id": "https://example.com/#website",
+      "url": "https://example.com/",
+      "name": "Site name",
+      "publisher": {
+        "@id": "https://example.com/#organization"
+      }
+    },
+    {
+      "@type": "ContactPage",
+      "@id": "https://example.com/contact.html#webpage",
+      "url": "https://example.com/contact.html",
+      "name": "Contact us",
+      "description": "Example contact page: an accessible form with an error summary, consent checkbox and honeypot, plus contact details.",
+      "isPartOf": {
+        "@id": "https://example.com/#website"
+      }
+    }
+  ]
+}
+  </script>
 </head>
 <body>
   <a class="skip-link" href="#main">Skip to main content</a>
@@ -35,6 +89,7 @@
         <ul class="nav__list" id="main-menu">
           <li><a class="nav__link" href="index.html">Home</a></li>
           <li><a class="nav__link" href="article.html">Article</a></li>
+          <li><a class="nav__link" href="items.html">Team</a></li>
           <li><a class="nav__link" href="contact.html" aria-current="page">Contact</a></li>
         </ul>
       </nav>
@@ -144,6 +199,7 @@
         <ul class="footer__list">
           <li><a class="footer__link" href="index.html">Home</a></li>
           <li><a class="footer__link" href="article.html">Article</a></li>
+          <li><a class="footer__link" href="items.html">Team</a></li>
         </ul>
       </nav>
       <nav class="footer__nav" aria-labelledby="footer-help">

@@ -8,6 +8,9 @@ Static HTML + CSS sites, built and maintained by AI agents and edited by hand in
 | Which component exists? | [COMPONENTS.md](COMPONENTS.md) (live gallery: `components.html`) |
 | Semantics + accessibility rules and patterns | [docs/accessibility.md](docs/accessibility.md) |
 | Motion and `prefers-reduced-motion` | [docs/motion.md](docs/motion.md) |
+| SEO, meta tags, JSON-LD schema | [docs/seo.md](docs/seo.md) |
+| Images: WebP, eager/lazy | [docs/images.md](docs/images.md) |
+| Content from JSON with one template page | [docs/data-driven-pages.md](docs/data-driven-pages.md) |
 | Step-by-step: new site / page / component / audit | [docs/workflows.md](docs/workflows.md) |
 | Forms, browser support, security headers | [docs/forms.md](docs/forms.md), [docs/browser-support.md](docs/browser-support.md), [docs/security.md](docs/security.md) |
 | Why this site deviates from the base | [DESIGN-NOTES.md](DESIGN-NOTES.md) |
@@ -45,6 +48,15 @@ These apply at **every level**: markup, CSS, JavaScript, components, content, an
 - Content reflows at 320px wide and 200% zoom, with `rem`-based sizing, no fixed heights on text containers. Respect `forced-colors`.
 - No time limits, no auto-playing or auto-updating content without pause/stop. Announce dynamic changes with a live region.
 
+**SEO and structured data** (every page, by default; [docs/seo.md](docs/seo.md))
+- Unique `<title>` (60 characters or fewer) and meta description (160 or fewer), written from the actual page content in the site's language and voice. Plus canonical, `robots`, `theme-color`, Open Graph (type, site name, locale, title, description, url, image with width, height, alt) and Twitter card tags. `_template.html` has the block; replace every placeholder.
+- JSON-LD (`<script type="application/ld+json">`) wherever it fits, chosen from the table in docs/seo.md. It is data and never executed, so it does not break the no-inline-scripts rule or a CSP. Stable `@id`s, reference don't duplicate, mark up only what is visible, **never invent data** (ratings, addresses, phone numbers, hours, reviews): leave it out and list it as "still to supply".
+- When content comes from JSON, the SEO is built from that same JSON with `js/seo.js`; never hand-write a second copy.
+
+**Images** ([docs/images.md](docs/images.md))
+- Convert every JPEG, PNG and GIF to **WebP** (delete the original); SVG stays for vector art.
+- Judge a standard 1920×1080 screen: everything inside the first screen (always including the header logo) is `loading="eager"`, the LCP image also `fetchpriority="high"`; everything else is `loading="lazy" decoding="async"` (native lazy loading). Always `width` and `height`.
+
 **Reduced motion** (`prefers-reduced-motion`)
 - **Movement is opt-in.** Write any animation, transform movement, parallax, scroll-linked effect, smooth scroll, auto-play or looping inside `@media (prefers-reduced-motion: no-preference)`. Opacity/colour fades are fine.
 - JavaScript checks `$reducedMotion()` (Alpine magic) or `matchMedia('(prefers-reduced-motion: reduce)')` before any scripted motion (`scrollTo`, GSAP, Web Animations, video autoplay, carousels). With reduce: no motion, no autoplay, jump instead of glide.
@@ -68,8 +80,12 @@ css/components/*.css            one BEM block per file (add an @import to main.c
 js/theme-init.js                sync script in <head>: applies the saved theme before first paint
 js/components.js                shared Alpine components (nav, tabs, toasts, themeToggle, $reducedMotion)
 js/forms.js                     accessible form validation (formValidation)
+js/seo.js                       setSeo/setMeta/setLink/setJsonLd + schema builders (window.Seo)
+js/items-data.js, items-list.js, item-profile.js, grid-filter.js   JSON-driven list + single template page (docs/data-driven-pages.md)
+data/*.json                     content collections; item.html is the template for /item/<slug>
+_redirects .htaccess            rewrite /item/* to item.html
 js/*.js                         other small readable Alpine components
-js/vendor/alpine.min.js         pinned local copy of Alpine.js
+js/vendor/                      pinned local copies: Alpine.js, GSAP + Flip + ScrollTrigger (see README)
 images/ fonts/                  assets (see their README.md); images/icons.svg sprite
 themes/*.css                    starting presets for css/theme.css
 tools/                          dev-only: check.mjs, sync-shared.mjs, bundle-css.mjs, browser-checks.mjs
@@ -93,7 +109,7 @@ Cascade layers (declared in `theme.css` and `framework.css`): `reset, tokens, ba
 
 - **Native first**, Alpine second, custom JS last. Alpine's standard build needs `'unsafe-eval'` in a CSP (docs/security.md). No inline `<script>` blocks. Alpine attributes (`x-data`, `x-show`, `@click`, `:class`, `:aria-*`) in the HTML keep behaviour where it is used.
 - Anything beyond a one-line expression goes in `js/<name>.js` as `Alpine.data('name', () => ({…}))` inside an `alpine:init` listener; load it **before** `alpine.min.js`, both `defer`.
-- No bundlers, transpilers, TypeScript, JSX or npm packages. Vendor third-party libraries into `js/vendor/` with a pinned version.
+- JSON-LD blocks are data, not scripts: allowed. No bundlers, transpilers, TypeScript, JSX or npm packages. Vendor third-party libraries into `js/vendor/` with a pinned version.
 - Interactive widgets follow their WAI-ARIA Authoring Practices pattern (keyboard, roles, focus management). Add `x-cloak` to anything hidden at load.
 - Pages must remain usable without JavaScript where feasible: content in HTML, enhancement in Alpine.
 
@@ -103,7 +119,7 @@ Cascade layers (declared in `theme.css` and `framework.css`): `reset, tokens, ba
 2. Set the theme (or choose a preset) before building pages.
 3. Build from `_template.html`. Reuse before you create. Study the example pages (`index.html`, `article.html`, `contact.html`) for how components compose. Edit the shared header/footer in `_template.html` only, then run `node tools/sync-shared.mjs`.
 4. Check light and dark, 320px / 768px / 1280px, keyboard only, and reduced motion.
-5. Run `node tools/check.mjs` and fix everything it reports. Preview with `python3 -m http.server 8000`.
+5. Run `node tools/check.mjs` and fix everything it reports. Preview with `node tools/serve.mjs`.
 6. Keep `components.html`, `COMPONENTS.md`, `TOKENS.md` and `DESIGN-NOTES.md` current with what you changed.
 
 ## 7. Definition of done
@@ -112,6 +128,8 @@ Cascade layers (declared in `theme.css` and `framework.css`): `reset, tokens, ba
 - [ ] Keyboard-only walkthrough works; focus always visible; no keyboard traps
 - [ ] Text/background uses `-a11y` partners or semantic tokens; contrast ≥ AA in both themes
 - [ ] Alt text, labels, accessible names, `lang`, `<title>`, meta description present
+- [ ] SEO: real title (≤60) and description (≤160), canonical, Open Graph + Twitter tags, JSON-LD of the right type that parses, page in `sitemap.xml`, missing business facts listed for the client
+- [ ] Images are WebP/SVG, `loading="eager"` inside the first 1920×1080 screen and `loading="lazy"` elsewhere, with `width`/`height`
 - [ ] All movement gated by `prefers-reduced-motion: no-preference`; JS motion checks `$reducedMotion()`
 - [ ] Tokens only: no literals. BEM (or `u-*`) for every class in CSS and HTML; no IDs/`!important`
 - [ ] Both themes and 320 / 768 / 1280 widths checked, no horizontal scroll, no console errors
@@ -121,7 +139,8 @@ Cascade layers (declared in `theme.css` and `framework.css`): `reset, tokens, ba
 ## 8. Commands
 
 ```bash
-python3 -m http.server 8000      # preview at http://localhost:8000
+node tools/serve.mjs              # preview at http://localhost:8765 (rewrites /item/* to item.html; use instead of python's http.server)
+node tools/build-sitemap.mjs     # item URLs in sitemap.xml from data/items.json
 node tools/check.mjs             # guardrails: tokens, BEM, semantics, a11y, motion, imports
 node tools/sync-shared.mjs       # copy the _template.html header/footer into every page (--dry to preview)
 node tools/browser-checks.mjs    # optional: axe scan + screenshots (see tools/README.md)

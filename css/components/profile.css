@@ -1,0 +1,70 @@
+/* ==========================================================================
+   PROFILE  ·  .profile
+   Elements: __aside  __avatar  __facts  __fact  __label  __value  __tags  __body  __role  __missing
+   Detail view for one entity (person, product, place) filled from JSON by item.html.
+   The conditional blocks use the `hidden` attribute, so [hidden] must stay display:none.
+   A11y: __avatar is decorative (initials, aria-hidden); __facts is a <dl>; __missing is a status message.
+   Reduced motion: no movement.
+   ========================================================================== */
+
+@layer components {
+  .profile {
+    --profile-aside-width: 16rem;
+    --profile-avatar-size: var(--space-3xl);
+
+    display: grid;
+    gap: var(--space-xl);
+    align-items: start;
+  }
+  @media (min-width: 48em) {
+    .profile { grid-template-columns: var(--profile-aside-width) 1fr; }
+  }
+
+  .profile__aside {
+    display: grid;
+    gap: var(--space-m);
+    padding: var(--space-m);
+    background-color: var(--color-surface-alt);
+    border: var(--border-width) solid var(--color-border);
+    border-radius: var(--radius-card);
+  }
+
+  .profile__avatar {
+    display: grid;
+    place-items: center;
+    inline-size: var(--profile-avatar-size);
+    block-size: var(--profile-avatar-size);
+    color: var(--color-on-primary);
+    background-color: var(--color-primary);
+    border-radius: var(--radius-full);
+    font-family: var(--font-heading);
+    font-size: var(--text-xl);
+    font-weight: var(--weight-heading);
+  }
+
+  .profile__facts { display: grid; gap: var(--space-s); margin: 0; }
+  .profile__fact { display: grid; gap: var(--space-3xs); }
+  .profile__label { color: var(--color-text-muted); font-size: var(--text-s); }
+  .profile__value { margin: 0; font-weight: var(--weight-medium); }
+
+  .profile__tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2xs);
+    padding: 0;
+    margin: 0;
+    list-style: none;
+  }
+
+  .profile__body { max-inline-size: var(--measure); }
+  .profile__role { margin: 0; color: var(--color-text-muted); font-size: var(--text-l); }
+
+  .profile__missing {
+    padding: var(--space-l);
+    background-color: var(--color-surface-alt);
+    border: var(--border-width) dashed var(--color-border-strong);
+    border-radius: var(--radius-card);
+  }
+
+  :is(.profile, .profile__role, .profile__missing)[hidden] { display: none; }
+}

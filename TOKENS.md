@@ -56,6 +56,8 @@ Ratios (theme): `--ratio-minor-second 1.067 · major-second 1.125 · minor-third
 
 `--a11y-light-y` / `--a11y-dark-y`: luminance (0–1) of the near-white and near-black text colours used by the `-a11y` pairs.
 
+`profile` public properties: `--profile-aside-width`, `--profile-avatar-size`.
+
 ## Surfaces (utilities)
 
 `u-surface-1 | 2 | 3 | accent | primary | secondary | inverse` (accent is re-pointable with theme `--accent-bg/-text/-heading/-muted/-link/-border/-button…`): set background and re-point `--color-text/-muted`, `--color-h1…h6`, `--color-link(-hover)`, `--color-border`, `--color-primary*` for everything inside. Don't nest colour surfaces.

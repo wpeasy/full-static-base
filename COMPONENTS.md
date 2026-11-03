@@ -32,6 +32,7 @@ Reuse before you create; change a component when the design needs it (see AGENTS
 | `error-summary` | form error list | `__title __list __link` | focused by `formValidation` |
 | `theme-toggle` | persistent dark-mode button | `__icon` (`--sun`/`--moon`) | Alpine `themeToggle` + `js/theme-init.js` |
 | `filter` | search + topic chips + filterable grid | `__toolbar __search __tags __chip __status __grid __item __empty` | Alpine `gridFilter` (`js/grid-filter.js`), optional GSAP Flip |
+| `profile` | detail view of one entity (filled from JSON) | `__aside __avatar __facts __fact __label __value __tags __body __role __missing` | Alpine `itemProfile` (`js/item-profile.js`), `[hidden]` blocks |
 | `icon` | SVG sprite icon | `--s --l` | `images/icons.svg#name` |
 
 Layout objects (`container section stack cluster grid`) live in `css/core/layout.css`; utilities and surfaces in `css/core/utilities.css`. Names in [TOKENS.md](TOKENS.md).
@@ -44,6 +45,10 @@ Needs `js/grid-filter.js` and, for animation, vendored `gsap` + `Flip` (see `js/
 - Toolbar is `x-cloak`. Chips are `<button type="button" :aria-pressed="tag === 'x'" @click="setTag('x')">`; the search input calls `setQuery($event.target.value)`.
 - `__status` is a polite live region; `__empty` has `hidden :hidden="count > 0"`.
 - All changes go through `update(change)`: it runs Flip (`absolute: true`, fades for enter/leave) and tweens the grid height so content below does not jump. Under `prefers-reduced-motion: reduce` it just runs `change()`. See `docs/motion.md`.
+
+## Recipe: JSON-driven list + template page
+
+`items.html` (list: `filter` + `card`s from `x-for`) and `item.html` (template: `profile`) are filled from `data/items.json`. Full guide: [docs/data-driven-pages.md](docs/data-driven-pages.md); SEO from the same JSON: [docs/seo.md](docs/seo.md). In the data-driven list the base class method is `elements()` and filtering uses `matchesItem(item, query, tag)`.
 
 ## Snippets
 

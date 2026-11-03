@@ -4,3 +4,5 @@ description: Set up a new static site from this framework: choose a theme preset
 ---
 
 First read `AGENTS.md` (foundation principle; semantics, accessibility and reduced-motion rules) and then follow the **New site** workflow in `docs/workflows.md` exactly. Use `TOKENS.md` and `COMPONENTS.md` instead of reading all CSS. Finish by running `node tools/check.mjs` and the Definition of done in `AGENTS.md`.
+
+Also: write real titles and descriptions, choose the schema type from `docs/seo.md`, convert images to WebP (`docs/images.md`), add pages to `sitemap.xml`, and list the missing business facts to ask the client for.

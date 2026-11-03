@@ -1,8 +1,5 @@
 # images/
 
-- Names: lowercase-kebab (`team-photo.jpg`). Describe content, not size.
-- Formats: AVIF/WebP with a JPEG/PNG fallback via `<picture>` for photos; SVG for logos and icons.
-- Always set `width` and `height` attributes (prevents layout shift) and meaningful `alt` text. Decorative images: `alt=""`.
-- Below-the-fold images: `loading="lazy" decoding="async"`. The main hero image: no lazy loading, add `fetchpriority="high"`.
-- Provide `srcset` + `sizes` for anything wider than ~600px.
-- `icons.svg` is the icon sprite (see `.icon` component).
+- Raster images are **WebP** (convert JPEG/PNG/GIF and delete the originals); logos and icons are SVG. See [docs/images.md](../docs/images.md).
+- `icons.svg` is the icon sprite; `favicon.svg` the favicon; `og.svg` a placeholder share image (replace it with a 1200×630 image).
+- In pages: `loading="eager"` for what is inside the first 1920×1080 screen (including the header logo), `loading="lazy" decoding="async"` for everything else, and always `width`/`height`.

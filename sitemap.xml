@@ -2,4 +2,14 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <!-- One <url> per public page. Exclude 404.html, _template.html, style guide pages. -->
   <url><loc>https://example.com/</loc></url>
+  <url><loc>https://example.com/article.html</loc></url>
+  <url><loc>https://example.com/contact.html</loc></url>
+  <url><loc>https://example.com/items.html</loc></url>
+  <!-- Item pages come from data/items.json: run `node tools/build-sitemap.mjs`. item.html (the template) is not listed. -->
+  <!-- items:start -->
+  <url><loc>https://example.com/item/sam-rivera</loc></url>
+  <url><loc>https://example.com/item/amelie-dubois</loc></url>
+  <url><loc>https://example.com/item/jordan-lee</loc></url>
+  <url><loc>https://example.com/item/priya</loc></url>
+  <!-- items:end -->
 </urlset>

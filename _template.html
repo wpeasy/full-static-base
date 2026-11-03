@@ -8,18 +8,36 @@
   <link rel="canonical" href="https://example.com/page.html">
   <link rel="icon" href="images/favicon.svg" type="image/svg+xml">
 
+  <meta name="robots" content="index, follow">
+  <meta name="theme-color" content="#ffffff">
   <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Site name">
+  <meta property="og:locale" content="en_AU">
   <meta property="og:title" content="Page title · Site name">
   <meta property="og:description" content="One-sentence summary of this page.">
   <meta property="og:url" content="https://example.com/page.html">
-  <meta property="og:image" content="https://example.com/images/og.jpg">
+  <meta property="og:image" content="https://example.com/images/og.svg">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="Site name">
   <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Page title · Site name">
+  <meta name="twitter:description" content="One-sentence summary of this page.">
 
   <script src="js/theme-init.js"></script>
   <link rel="stylesheet" href="css/main.css">
 
   <script src="js/components.js" defer></script>
   <script src="js/vendor/alpine.min.js" defer></script>
+  <!-- JSON-LD is data, never executed (CSP-safe). Pick the type from docs/seo.md and mark up only what is visible on the page. -->
+  <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    { "@type": "WebPage", "@id": "https://example.com/page.html#webpage", "url": "https://example.com/page.html", "name": "Page title", "description": "One-sentence summary of this page.", "isPartOf": { "@id": "https://example.com/#website" } }
+  ]
+}
+  </script>
 </head>
 <body>
   <a class="skip-link" href="#main">Skip to main content</a>
@@ -42,6 +60,7 @@
         <ul class="nav__list" id="main-menu">
           <li><a class="nav__link" href="index.html">Home</a></li>
           <li><a class="nav__link" href="article.html">Article</a></li>
+          <li><a class="nav__link" href="items.html">Team</a></li>
           <li><a class="nav__link" href="contact.html">Contact</a></li>
         </ul>
       </nav>
@@ -69,6 +88,7 @@
         <ul class="footer__list">
           <li><a class="footer__link" href="index.html">Home</a></li>
           <li><a class="footer__link" href="article.html">Article</a></li>
+          <li><a class="footer__link" href="items.html">Team</a></li>
         </ul>
       </nav>
       <nav class="footer__nav" aria-labelledby="footer-help">

@@ -1,0 +1,80 @@
+{
+  "note": "Example content collection. Replace the sample people with your own; every page and the SEO tags are generated from this file (docs/data-driven-pages.md).",
+  "site": {
+    "name": "Site name",
+    "url": "https://example.com",
+    "locale": "en_AU",
+    "language": "en-AU",
+    "themeColor": "#ffffff",
+    "shareImage": "/images/og.svg",
+    "shareImageAlt": "Site name",
+    "shareImageWidth": 1200,
+    "shareImageHeight": 630,
+    "organisation": {
+      "type": "Organization",
+      "name": "Site name",
+      "description": "A short description of the organisation.",
+      "logo": "/images/favicon.svg",
+      "sameAs": []
+    },
+    "offers": [
+      { "name": "Starter", "price": 0, "currency": "AUD", "unit": "MON" },
+      { "name": "Pro", "price": 29, "currency": "AUD", "unit": "MON" }
+    ],
+    "home": {
+      "title": "Build calmer, faster websites",
+      "description": "Example home page for the data-driven pattern: a team list built from one JSON file."
+    },
+    "collection": {
+      "name": "Our team",
+      "description": "Meet the example team. Filter by topic or search by name, role or place.",
+      "path": "/items.html",
+      "cta": "Get in touch to work with us."
+    }
+  },
+  "topics": {
+    "design": "Design",
+    "accessibility": "Accessibility",
+    "motion": "Motion",
+    "content": "Content"
+  },
+  "items": [
+    {
+      "name": "Sam Rivera",
+      "role": "Design lead",
+      "place": "Sydney",
+      "summary": "Sam turns brand ideas into calm, consistent design systems.",
+      "bio": [
+        "Sam leads design and has built systems for small teams and large ones.",
+        "Outside work, Sam runs a monthly type club."
+      ],
+      "tags": ["design", "content"]
+    },
+    {
+      "name": "Amélie Dubois",
+      "role": "Accessibility lead",
+      "place": "Melbourne",
+      "summary": "Amélie audits pages and teaches teams to ship accessible work first time.",
+      "bio": ["Amélie reviews pages with keyboards and screen readers, then fixes the cause, not just the symptom."],
+      "tags": ["accessibility"],
+      "seoDescription": "Meet Amélie Dubois, accessibility lead in Melbourne. Get in touch for an audit."
+    },
+    {
+      "name": "Jordan Lee",
+      "role": "Motion designer",
+      "place": "Brisbane",
+      "summary": "Jordan designs small movements that help people, and switch off for those who ask.",
+      "bio": ["Jordan designs motion that respects reduced-motion settings from the first sketch."],
+      "tags": ["motion", "design"]
+    },
+    {
+      "name": "Priya Nair",
+      "role": "Content strategist",
+      "place": "Perth",
+      "slug": "priya",
+      "summary": "Priya writes plain, useful copy and keeps it consistent across every page.",
+      "bio": ["Priya plans content so each page has one clear job."],
+      "tags": ["content", "accessibility"]
+    }
+  ]
+}

@@ -1,0 +1,4 @@
+# Apache: one template page answers every /item/<slug> URL.
+RewriteEngine On
+RewriteRule ^item/[^/.]+/?$ /item.html [L]
+ErrorDocument 404 /404.html
