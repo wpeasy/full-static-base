@@ -2,16 +2,20 @@
 
 Static HTML + CSS sites, built and maintained by AI agents and edited by hand in VS Code / Cursor. No build step, no npm, no compiled JavaScript: every file is served exactly as written. Read this file fully before changing anything, then use the quick references below instead of reading all the CSS.
 
+> **First thing, every time:** check whether `FIRST-BUILD.md` exists at the repo root. If it does, this is the first build: follow it (it clears the sample content out of `public/` and deletes itself) *before* doing anything else. If it does not exist, ignore this note and never clear `public/`.
+
 | Need | Read |
 |---|---|
 | Which token do I use? | [TOKENS.md](TOKENS.md) |
 | Which component exists? | [COMPONENTS.md](COMPONENTS.md) (live gallery: `components.html`) |
+| Brand and design guide page for the site (template + skill) | [docs/brand-guide.md](docs/brand-guide.md) |
 | Semantics + accessibility rules and patterns | [docs/accessibility.md](docs/accessibility.md) |
-| Motion and `prefers-reduced-motion` | [docs/motion.md](docs/motion.md) |
+| Motion, `prefers-reduced-motion`, **GSAP effects (use <https://gsap.brxprod.com/> first)** | [docs/motion.md](docs/motion.md) |
 | SEO, meta tags, JSON-LD schema | [docs/seo.md](docs/seo.md) |
 | Images: WebP, eager/lazy | [docs/images.md](docs/images.md) |
 | Content from JSON with one template page | [docs/data-driven-pages.md](docs/data-driven-pages.md) |
 | JS-filled pages: loading shell, skeleton, entrance | [docs/js-rendered-pages.md](docs/js-rendered-pages.md), [docs/alpine.md](docs/alpine.md) |
+| First build: clear the sample content out of `public/` | [FIRST-BUILD.md](FIRST-BUILD.md) (present only until the first build is done) |
 | Step-by-step: new site / page / component / audit | [docs/workflows.md](docs/workflows.md) |
 | Forms, browser support, security headers | [docs/forms.md](docs/forms.md), [docs/browser-support.md](docs/browser-support.md), [docs/security.md](docs/security.md) |
 | Deploying (publish `public/` only), host specifics, caching | [docs/deploy.md](docs/deploy.md), [docs/hosting.md](docs/hosting.md), [docs/security.md](docs/security.md) |
@@ -62,6 +66,7 @@ These apply at **every level**: markup, CSS, JavaScript, components, content, an
 **Reduced motion** (`prefers-reduced-motion`)
 - **Movement is opt-in.** Write any animation, transform movement, parallax, scroll-linked effect, smooth scroll, auto-play or looping inside `@media (prefers-reduced-motion: no-preference)`. Opacity/colour fades are fine.
 - JavaScript checks `$reducedMotion()` (Alpine magic) or `matchMedia('(prefers-reduced-motion: reduce)')` before any scripted motion (`scrollTo`, GSAP, Web Animations, video autoplay, carousels). With reduce: no motion, no autoplay, jump instead of glide.
+- **GSAP effects: look in the effects library at <https://gsap.brxprod.com/> first** (hover, text, button, card, scroll, cursor, SVG effects, ...). Its effects already handle reduced motion, keyboard focus and screen readers; use one wherever it fits and write new GSAP code only when none does. Ignore anything specific to Bricks Builder. How to fetch, adapt (vendored GSAP, BEM, tokens) and verify an effect: docs/motion.md, "GSAP effects".
 - `base.css` has a safety net that collapses stray motion under `reduce`. Do not rely on it. It is a backstop, not the design.
 - Every new component that moves must state its reduced-motion behaviour in its CSS header comment.
 
@@ -69,16 +74,18 @@ These apply at **every level**: markup, CSS, JavaScript, components, content, an
 
 **Only `public/` is published.** Everything outside it is development material and must never be deployed. Set the host's publish directory (or document root) to `public`.
 
-**Path convention:** paths in these docs (`css/...`, `js/...`, `images/...`, `fonts/...`, `data/...`, page names like `index.html`) are relative to `public/`, unless they start with `tools/`, `docs/` or `themes/` (repo root). Pages themselves link to each other and to assets with paths relative to `public/` (or root-absolute `/css/...` on template pages).
+**Path convention:** paths in these docs (`css/...`, `js/...`, `images/...`, `fonts/...`, `data/...`, page names like `index.html`) are relative to `public/`, unless they start with `tools/`, `docs/`, `templates/` or `themes/` (repo root). Pages themselves link to each other and to assets with paths relative to `public/` (or root-absolute `/css/...` on template pages).
 
 ```
 Repo root: development, never published
 AGENTS.md CLAUDE.md             this file (CLAUDE.md just imports it)
 TOKENS.md COMPONENTS.md         quick references
+FIRST-BUILD.md                  flag + clean-out procedure; present only until the first build is done (then deleted)
 DESIGN-NOTES.md CHANGELOG.md VERSION
 _template.html                  source of the shared header/footer and the default <head> block; copy it for new pages
 docs/                           guides (accessibility, motion, SEO, images, data-driven pages, workflows, fonts, vendor …)
 themes/*.css                    starting presets: copy one over public/css/theme.css
+templates/                      page templates that are filled and copied into public/ (brand-guide.template.html); never published
 tools/                          check.mjs, sync-shared.mjs, serve.mjs, build-sitemap.mjs, bundle-css.mjs, browser-checks.mjs
 .claude/ .vscode/ .editorconfig .gitignore
 
@@ -134,9 +141,10 @@ Cascade layers (declared in `theme.css` and `framework.css`): `reset, tokens, ba
 
 ## 6. Working method
 
+0. **First build only:** if `FIRST-BUILD.md` exists at the repo root, do what it says (clear the sample pages out of `public/`, delete the file, commit) before anything else.
 1. Understand the brief; list sections and map each to components. Note gaps (they become variants or new components, per section 1).
 2. Set the theme (or choose a preset) before building pages.
-3. Build from `_template.html`. Reuse before you create. Study the example pages (`index.html`, `article.html`, `contact.html`) for how components compose. Edit the shared header/footer in `_template.html` (repo root) only, then run `node tools/sync-shared.mjs`, which updates the pages in `public/`.
+3. Build from `_template.html`. Reuse before you create. Study `components.html` and `COMPONENTS.md` for how components compose (the sample pages `index.html`, `article.html`, `contact.html` exist only until the first build clears them; later they are in git history). Edit the shared header/footer in `_template.html` (repo root) only, then run `node tools/sync-shared.mjs`, which updates the pages in `public/`.
 4. Check light and dark, 320px / 768px / 1280px, keyboard only, and reduced motion.
 5. Run `node tools/check.mjs` and fix everything it reports. Preview with `node tools/serve.mjs` (serves `public/`).
 6. Keep `components.html`, `COMPONENTS.md`, `TOKENS.md` and `DESIGN-NOTES.md` current with what you changed.

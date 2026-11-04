@@ -1,0 +1,351 @@
+<!doctype html>
+<!--
+  BRAND & DESIGN GUIDE TEMPLATE  (repo root: templates/, never published)
+
+  The skill `new-brand-guide` (.claude/skills/new-brand-guide, docs/brand-guide.md) copies this file to
+  public/brand-guide.html and fills it from the site's real theme and content. Paths are relative to public/.
+
+  Rules for filling it:
+  - Replace every {{PLACEHOLDER}} with real content; delete any section the site does not need (and its nav link).
+  - Never invent brand facts. If something was not supplied, delete the block or write "To be confirmed".
+  - Colours, type and spacing come from the LIVE tokens (css/theme.css): this page renders them, it does not copy values.
+    Only the contrast table and the "values" captions contain numbers: compute them from theme.css, do not guess.
+  - Classes: only existing BEM blocks, layout objects, u-* utilities and the style guide helpers (sg-*, ramp, chip, scale).
+  - The theme button starts at light (like styleguide.html), so keep data-theme="light" on <html>; no theme-init.js.
+  - Keep data-page="styleguide" and noindex: it is a reference page, not a content page (not in sitemap.xml).
+-->
+<html lang="{{LANG}}" data-theme="light" data-page="styleguide">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{{SITE_NAME}} brand and design guide</title>
+  <meta name="description" content="Brand and design guide for {{SITE_NAME}}: logo, colour, typography, spacing, components, imagery, motion and voice.">
+  <meta name="robots" content="noindex">
+  <link rel="icon" href="{{FAVICON}}" type="image/svg+xml">
+
+  <link rel="stylesheet" href="css/main.css">
+
+  <script src="js/styleguide.js" defer></script>
+  <script src="js/vendor/alpine.min.js" defer></script>
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to main content</a>
+
+  <header class="sg-header">
+    <div class="container sg-header__inner cluster cluster--between">
+      <strong>{{SITE_NAME}}</strong>
+      <nav class="sg-header__nav" aria-label="Sections">
+        <a href="#overview">Overview</a>
+        <a href="#logo">Logo</a>
+        <a href="#colour">Colour</a>
+        <a href="#type">Type</a>
+        <a href="#layout">Layout</a>
+        <a href="#components">Components</a>
+        <a href="#imagery">Imagery</a>
+        <a href="#motion">Motion</a>
+        <a href="#voice">Voice</a>
+        <a href="#accessibility">Accessibility</a>
+      </nav>
+      <div x-data="themeCycle">
+        <button type="button" class="sg-toggle" @click="cycle" x-text="'Theme: ' + theme"></button>
+      </div>
+    </div>
+  </header>
+
+  <main id="main">
+
+    <!-- OVERVIEW -->
+    <section class="section" id="overview">
+      <div class="container stack stack--l">
+        <header class="section-header">
+          <p class="section-header__eyebrow">{{VERSION_AND_DATE}}</p>
+          <h1>{{SITE_NAME}} brand and design guide</h1>
+          <p class="section-header__lead">{{ONE_LINE_PROPOSITION}}</p>
+        </header>
+        <div class="grid grid--3">
+          <article class="card"><div class="card__body"><h2 class="card__title u-text-xl">Who we are</h2><p class="card__text">{{BRAND_STORY}}</p></div></article>
+          <article class="card"><div class="card__body"><h2 class="card__title u-text-xl">Who we talk to</h2><p class="card__text">{{AUDIENCE}}</p></div></article>
+          <article class="card"><div class="card__body"><h2 class="card__title u-text-xl">How we feel</h2><p class="card__text">{{PERSONALITY_WORDS}}</p></div></article>
+        </div>
+        <p class="u-measure">{{HOW_TO_USE_THIS_GUIDE}} Everything on this page is rendered from the site's live design tokens in <code>css/theme.css</code>, so it never drifts from the build. Use the theme button (top right) to check light, dark and auto.</p>
+      </div>
+    </section>
+
+    <!-- LOGO -->
+    <section class="section section--alt" id="logo">
+      <div class="container stack stack--l">
+        <h2>Logo</h2>
+        <p class="u-measure">{{LOGO_RATIONALE}}</p>
+        <div class="grid grid--2">
+          <figure class="sg-surface">
+            <img src="{{LOGO_ON_LIGHT}}" alt="{{SITE_NAME}} logo on a light background" width="{{LOGO_W}}" height="{{LOGO_H}}" loading="lazy" decoding="async">
+            <figcaption class="sg-label">On light</figcaption>
+          </figure>
+          <figure class="sg-surface u-surface-inverse">
+            <img src="{{LOGO_ON_DARK}}" alt="{{SITE_NAME}} logo on a dark background" width="{{LOGO_W}}" height="{{LOGO_H}}" loading="lazy" decoding="async">
+            <figcaption class="sg-label">On dark</figcaption>
+          </figure>
+          <figure class="sg-surface">
+            <img src="{{MARK}}" alt="{{SITE_NAME}} mark" width="{{MARK_W}}" height="{{MARK_H}}" loading="lazy" decoding="async">
+            <figcaption class="sg-label">Mark only (favicon, avatar, small sizes)</figcaption>
+          </figure>
+          <figure class="sg-surface u-surface-primary">
+            <img src="{{LOGO_MONO}}" alt="{{SITE_NAME}} logo in one colour" width="{{LOGO_W}}" height="{{LOGO_H}}" loading="lazy" decoding="async">
+            <figcaption class="sg-label">One colour on a brand colour</figcaption>
+          </figure>
+        </div>
+        <div class="grid grid--2">
+          <div class="stack"><h3>Use</h3>
+            <ul><li>{{CLEAR_SPACE_RULE}}</li><li>{{MIN_SIZE_RULE}}</li><li>Use the on-dark version on dark surfaces and the on-light version on light ones.</li></ul></div>
+          <div class="stack"><h3>Do not</h3>
+            <ul><li>Recolour, outline, stretch, rotate or add effects.</li><li>Place it on a busy photograph without a scrim.</li><li>Rebuild it in another typeface.</li></ul></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- COLOUR -->
+    <section class="section" id="colour">
+      <div class="container stack stack--l">
+        <h2>Colour</h2>
+        <p class="u-measure">{{COLOUR_STORY}} Each brand colour is one OKLCH value in <code>css/theme.css</code>; ramps, tints and accessible text partners are derived from it.</p>
+
+        <h3>Brand colours</h3>
+        <div class="grid" style="--grid-min: 12rem; --grid-gap: var(--space-s)">
+          <!-- AGENT: one chip per brand colour (primary, secondary, surface, status). Caption = name, role, hex and OKLCH read from theme.css. -->
+          <div class="chip"><div class="chip__color" style="--chip: var(--primary)"></div><strong>{{PRIMARY_NAME}}</strong><span class="sg-label">--primary · {{PRIMARY_HEX}} · {{PRIMARY_OKLCH}}</span><span class="u-text-s">{{PRIMARY_ROLE}}</span></div>
+          <div class="chip"><div class="chip__color" style="--chip: var(--secondary)"></div><strong>{{SECONDARY_NAME}}</strong><span class="sg-label">--secondary · {{SECONDARY_HEX}} · {{SECONDARY_OKLCH}}</span><span class="u-text-s">{{SECONDARY_ROLE}}</span></div>
+          <div class="chip"><div class="chip__color" style="--chip: var(--surface)"></div><strong>{{SURFACE_NAME}}</strong><span class="sg-label">--surface · {{SURFACE_HEX}} · {{SURFACE_OKLCH}}</span><span class="u-text-s">{{SURFACE_ROLE}}</span></div>
+        </div>
+
+        <h3>Ramps</h3>
+        <div class="stack stack--l" x-data="{ colors: ['primary', 'secondary', 'surface'] }">
+          <template x-for="c in colors" :key="c">
+            <div class="ramp" x-data="ramp(c)">
+              <h4 x-text="c"></h4>
+              <span class="sg-label">light 10 → 1</span>
+              <div class="ramp__row">
+                <template x-for="n in [...steps].reverse()" :key="n">
+                  <div class="ramp__swatch" :style="`--swatch: var(--${name}-light-${n}); --swatch-text: var(--${name}-light-${n}-a11y)`" x-text="n"></div>
+                </template>
+              </div>
+              <span class="sg-label">base</span>
+              <div class="ramp__base"><div class="ramp__swatch ramp__swatch--tall" :style="`--swatch: var(--${name}); --swatch-text: var(--${name}-a11y)`" x-text="name"></div></div>
+              <span class="sg-label">dark 1 → 10</span>
+              <div class="ramp__row">
+                <template x-for="n in steps" :key="n">
+                  <div class="ramp__swatch" :style="`--swatch: var(--${name}-dark-${n}); --swatch-text: var(--${name}-dark-${n}-a11y)`" x-text="n"></div>
+                </template>
+              </div>
+            </div>
+          </template>
+        </div>
+
+        <h3>Semantic colours (what components use)</h3>
+        <div class="grid" style="--grid-min: 10rem; --grid-gap: var(--space-s)"
+             x-data="{ tokens: ['bg','bg-alt','surface','surface-alt','border','border-strong','text','text-muted','text-inverse','link','link-hover','primary','primary-hover','secondary','secondary-hover','focus','success','warning','danger','info'] }">
+          <template x-for="t in tokens" :key="t">
+            <div class="chip"><div class="chip__color" :style="`--chip: var(--color-${t})`"></div><span class="sg-label" x-text="'--color-' + t"></span></div>
+          </template>
+        </div>
+
+        <h3>Proportion and pairing</h3>
+        <p class="u-measure">{{COLOUR_USAGE_RULES}}</p>
+
+        <h3>Contrast (WCAG 2.2)</h3>
+        <!-- AGENT: compute ratios from theme.css values for BOTH themes; list the pairs the site actually uses. Mark any pair below 4.5:1 as "large text / graphics only". -->
+        <div class="table" role="region" aria-labelledby="bg-contrast-caption" tabindex="0">
+          <table class="table__grid">
+            <caption class="u-visually-hidden" id="bg-contrast-caption">Contrast ratios for the colour pairs used on this site</caption>
+            <thead><tr><th scope="col">Pair</th><th scope="col">Light</th><th scope="col">Dark</th><th scope="col">Use</th></tr></thead>
+            <tbody>
+              <tr><th scope="row">{{PAIR_1}}</th><td>{{LIGHT_1}}</td><td>{{DARK_1}}</td><td>{{USE_1}}</td></tr>
+              <tr><th scope="row">{{PAIR_2}}</th><td>{{LIGHT_2}}</td><td>{{DARK_2}}</td><td>{{USE_2}}</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- TYPE -->
+    <section class="section section--alt" id="type">
+      <div class="container stack stack--l">
+        <h2>Typography</h2>
+        <p class="u-measure">{{TYPE_STORY}} All fonts are self-hosted (<code>css/fonts.css</code>); no third-party font requests.</p>
+        <div class="grid grid--3">
+          <article class="card"><div class="card__body"><p class="sg-label">Headings · {{HEADING_FONT}} · {{HEADING_WEIGHTS}}</p><p class="u-h1">Aa Bb 123</p><p class="card__text">{{HEADING_USE}}</p></div></article>
+          <article class="card"><div class="card__body"><p class="sg-label">Body and UI · {{BODY_FONT}} · {{BODY_WEIGHTS}}</p><p class="u-text-5xl">Aa Bb 123</p><p class="card__text">{{BODY_USE}}</p></div></article>
+          <article class="card"><div class="card__body"><p class="sg-label">Accent · {{MONO_FONT}} · {{MONO_WEIGHTS}}</p><p class="u-text-5xl"><code>Aa 123</code></p><p class="card__text">{{MONO_USE}}</p></div></article>
+        </div>
+
+        <h3>Hierarchy</h3>
+        <div class="stack">
+          <p class="u-h1">Heading 1 · {{SAMPLE_HEADLINE}}</p>
+          <p class="u-h2">Heading 2 · {{SAMPLE_HEADLINE}}</p>
+          <p class="u-h3">Heading 3 · {{SAMPLE_HEADLINE}}</p>
+          <p class="u-h4">Heading 4 · {{SAMPLE_HEADLINE}}</p>
+          <p class="u-h5">Heading 5 · {{SAMPLE_HEADLINE}}</p>
+          <p class="u-h6">Heading 6 · {{SAMPLE_HEADLINE}}</p>
+          <p class="u-measure">{{SAMPLE_PARAGRAPH}} <a href="#type">A link inside text</a>, <strong>strong</strong>, <code>inline code</code> and <small>small print</small>.</p>
+          <blockquote class="u-measure">{{SAMPLE_QUOTE}}</blockquote>
+        </div>
+
+        <h3>Fluid type scale</h3>
+        <p class="sg-label">Resize the window: values are measured live.</p>
+        <div class="scale" x-data="scale('text', ['5xl','4xl','3xl','2xl','xl','l','m','s','xs','2xs'])">
+          <template x-for="row in rows" :key="row.name">
+            <div class="scale__row">
+              <span class="sg-label" x-text="'--text-' + row.name"></span>
+              <span class="sg-label" x-text="row.px.toFixed(1) + 'px'"></span>
+              <span class="scale__sample" :style="`font-size: var(--text-${row.name})`">Hamburgefonstiv</span>
+            </div>
+          </template>
+        </div>
+        <p class="u-measure">{{TYPE_RULES}}</p>
+      </div>
+    </section>
+
+    <!-- LAYOUT -->
+    <section class="section" id="layout">
+      <div class="container stack stack--l">
+        <h2>Spacing, radii, shadows and surfaces</h2>
+        <h3>Fluid spacing</h3>
+        <div class="scale" x-data="scale('space', ['3xs','2xs','xs','s','m','l','xl','2xl','3xl','4xl'])">
+          <template x-for="row in rows" :key="row.name">
+            <div class="scale__row">
+              <span class="sg-label" x-text="'--space-' + row.name"></span>
+              <span class="sg-label" x-text="row.px.toFixed(1) + 'px'"></span>
+              <div class="scale__bar" :style="`width: var(--space-${row.name})`"></div>
+            </div>
+          </template>
+        </div>
+        <h3>Radii</h3>
+        <div class="cluster" x-data="{ r: ['xs','s','m','l','xl','2xl','full'] }">
+          <template x-for="name in r" :key="name">
+            <div class="stack stack--s"><div class="scale__radius" :style="`border-radius: var(--radius-${name})`"></div><span class="sg-label" x-text="'--radius-' + name"></span></div>
+          </template>
+        </div>
+        <h3>Shadows</h3>
+        <div class="grid" style="--grid-min: 9rem" x-data="{ s: ['xs','s','m','l','xl'] }">
+          <template x-for="name in s" :key="name">
+            <div class="scale__shadow" :style="`box-shadow: var(--shadow-${name})`"><span class="sg-label" x-text="'--shadow-' + name"></span></div>
+          </template>
+        </div>
+        <h3>Surfaces</h3>
+        <div class="grid" style="--grid-min: 12rem" x-data="{ s: ['1','2','3','accent','primary','secondary','inverse'] }">
+          <template x-for="s2 in s" :key="s2">
+            <div class="sg-surface" :class="'u-surface-' + s2"><h4 x-text="'u-surface-' + s2"></h4><p>Text, <a href="#layout">link</a> and button re-pointed.</p><span class="button">Action</span></div>
+          </template>
+        </div>
+        <p class="u-measure">{{LAYOUT_RULES}}</p>
+      </div>
+    </section>
+
+    <!-- COMPONENTS -->
+    <section class="section section--alt" id="components">
+      <div class="container stack stack--l">
+        <h2>Components in use</h2>
+        <p class="u-measure">A working sample of the components this site uses. The full catalogue with every variant is on <a href="components.html">the component gallery</a>.</p>
+        <!-- AGENT: keep only the components the site uses; add others from COMPONENTS.md. Replace sample copy with the site's voice. -->
+        <div class="cluster">
+          <a class="button" href="#components">{{BUTTON_PRIMARY}}</a>
+          <a class="button button--secondary" href="#components">{{BUTTON_SECONDARY}}</a>
+          <a class="button button--outline" href="#components">Outline</a>
+          <a class="button button--ghost" href="#components">Ghost</a>
+          <span class="badge badge--primary">Badge</span><span class="badge badge--success">Success</span><span class="badge badge--warning">Warning</span>
+        </div>
+        <div class="grid grid--2">
+          <div class="alert alert--success"><p class="alert__text">{{SUCCESS_MESSAGE}}</p></div>
+          <div class="alert alert--danger"><p class="alert__text">{{ERROR_MESSAGE}}</p></div>
+        </div>
+        <div class="grid grid--2">
+          <article class="card"><div class="card__body"><h3 class="card__title"><a href="#components">{{CARD_TITLE}}</a></h3><p class="card__text">{{CARD_TEXT}}</p></div></article>
+          <div class="stack">
+            <div class="field"><label class="field__label" for="bg-name">Name</label><input class="field__input" id="bg-name" name="name" type="text" autocomplete="name" placeholder="{{PLACEHOLDER_TEXT}}"></div>
+            <div class="field field--invalid"><label class="field__label" for="bg-email">Email</label><input class="field__input" id="bg-email" name="email" type="email" aria-invalid="true" aria-describedby="bg-email-error" value="not-an-email"><span class="field__error" id="bg-email-error">Enter a valid email address.</span></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- IMAGERY -->
+    <section class="section" id="imagery">
+      <div class="container stack stack--l">
+        <h2>Imagery</h2>
+        <p class="u-measure">{{IMAGERY_DIRECTION}}</p>
+        <div class="grid grid--3">
+          <!-- AGENT: three real, approved images (WebP, width/height, loading="lazy"); delete the section if none exist. -->
+          <figure class="stack stack--s"><img class="u-aspect-photo u-object-cover u-rounded" src="{{IMAGE_1}}" alt="{{IMAGE_1_ALT}}" width="{{IMG_W}}" height="{{IMG_H}}" loading="lazy" decoding="async"><figcaption class="sg-label">{{IMAGE_1_CAPTION}}</figcaption></figure>
+          <figure class="stack stack--s"><img class="u-aspect-photo u-object-cover u-rounded" src="{{IMAGE_2}}" alt="{{IMAGE_2_ALT}}" width="{{IMG_W}}" height="{{IMG_H}}" loading="lazy" decoding="async"><figcaption class="sg-label">{{IMAGE_2_CAPTION}}</figcaption></figure>
+          <figure class="stack stack--s"><img class="u-aspect-photo u-object-cover u-rounded" src="{{IMAGE_3}}" alt="{{IMAGE_3_ALT}}" width="{{IMG_W}}" height="{{IMG_H}}" loading="lazy" decoding="async"><figcaption class="sg-label">{{IMAGE_3_CAPTION}}</figcaption></figure>
+        </div>
+        <div class="grid grid--2">
+          <div class="stack"><h3>Do</h3><ul><li>{{IMAGE_DO_1}}</li><li>{{IMAGE_DO_2}}</li><li>Write alt text that describes the content; mark decoration with <code>alt=""</code>.</li><li>Supply WebP with <code>width</code> and <code>height</code>; eager above the fold, lazy below.</li></ul></div>
+          <div class="stack"><h3>Don't</h3><ul><li>{{IMAGE_DONT_1}}</li><li>{{IMAGE_DONT_2}}</li><li>Put text on a photo without checking contrast.</li></ul></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- MOTION -->
+    <section class="section section--alt" id="motion">
+      <div class="container stack stack--l">
+        <h2>Motion</h2>
+        <p class="u-measure">{{MOTION_PERSONALITY}} Movement is opt-in: everything that moves sits inside <code>prefers-reduced-motion: no-preference</code>; with reduced motion, content simply appears.</p>
+        <ul>
+          <li>Durations and easing come from tokens: <code>--duration-fast</code>, <code>--duration-base</code>, <code>--duration-slow</code>, <code>--ease-out</code>, <code>--ease-in-out</code>.</li>
+          <li>Scroll reveals: <code>data-reveal</code> (timed fade and 24px rise, replays). Slow hero zoom: <code>data-ken-burns</code>.</li>
+          <li>Other effects come from the GSAP effects library (<a href="https://gsap.brxprod.com/">gsap.brxprod.com</a>), adapted per docs/motion.md. Effects used here: {{EFFECTS_USED}}.</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- VOICE -->
+    <section class="section" id="voice">
+      <div class="container stack stack--l">
+        <h2>Voice and tone</h2>
+        <p class="u-measure">{{VOICE_SUMMARY}}</p>
+        <div class="grid grid--2">
+          <div class="stack"><h3>We say</h3><ul><li>{{SAY_1}}</li><li>{{SAY_2}}</li><li>{{SAY_3}}</li></ul></div>
+          <div class="stack"><h3>We avoid</h3><ul><li>{{AVOID_1}}</li><li>{{AVOID_2}}</li><li>{{AVOID_3}}</li></ul></div>
+        </div>
+        <div class="grid grid--3">
+          <article class="card"><div class="card__body"><p class="sg-label">Headline</p><p class="card__text">{{EXAMPLE_HEADLINE}}</p></div></article>
+          <article class="card"><div class="card__body"><p class="sg-label">Button</p><p class="card__text">{{EXAMPLE_BUTTON}}</p></div></article>
+          <article class="card"><div class="card__body"><p class="sg-label">Error message</p><p class="card__text">{{EXAMPLE_ERROR}}</p></div></article>
+        </div>
+      </div>
+    </section>
+
+    <!-- ACCESSIBILITY -->
+    <section class="section section--alt" id="accessibility">
+      <div class="container stack stack--l">
+        <h2>Accessibility</h2>
+        <p class="u-measure">The site is built to WCAG 2.2 AA. These commitments apply to every page and every future change.</p>
+        <ul>
+          <li>Semantic HTML first: one <code>h1</code> per page, headings in order, landmarks, skip link.</li>
+          <li>Text on any brand colour uses its <code>-a11y</code> partner; meaning is never carried by colour alone.</li>
+          <li>Everything works by keyboard with a visible focus ring (<code>--focus-ring</code>); targets are at least 24×24 px, ideally 44.</li>
+          <li>Every control has a label and an accessible name; errors and hints are linked with <code>aria-describedby</code>.</li>
+          <li>Content reflows at 320px and 200% zoom; light, dark and forced-colours modes are supported.</li>
+          <li>Reduced motion: no movement, no autoplay.</li>
+        </ul>
+        <p class="u-measure">{{ACCESSIBILITY_CONTACT_OR_NOTES}}</p>
+      </div>
+    </section>
+
+    <!-- ASSETS -->
+    <section class="section">
+      <div class="container stack stack--l">
+        <h2>Files</h2>
+        <!-- AGENT: list only files that exist in public/ (logo SVGs, favicons, share images, fonts). Link them. -->
+        <ul>
+          <li><a href="{{LOGO_ON_LIGHT}}">Logo, on light</a></li>
+          <li><a href="{{LOGO_ON_DARK}}">Logo, on dark</a></li>
+          <li><a href="{{MARK}}">Mark</a></li>
+        </ul>
+        <p class="u-text-s u-text-muted">{{FOOTER_NOTE}}</p>
+      </div>
+    </section>
+
+  </main>
+</body>
+</html>

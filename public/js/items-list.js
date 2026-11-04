@@ -32,6 +32,8 @@ document.addEventListener('alpine:init', () => {
           this.total = this.count = data.items.length;
           this.status = 'ready';
           this.seo();
+          // The grid was hidden while loading: let reveal.js pick up new [data-reveal] elements and re-measure every trigger.
+          this.$nextTick(() => { window.Reveal?.scan(); window.Reveal?.refresh(); });
         } catch (error) {
           console.error(error);
           this.status = 'error';

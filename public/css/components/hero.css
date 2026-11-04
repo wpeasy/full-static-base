@@ -2,6 +2,9 @@
    HERO  ·  .hero  (--center)
    Elements: __content  __eyebrow  __title  __lead  __actions  __media
    Use inside <section class="section">. Put the page's single <h1> in __title.
+   Ken Burns (optional): add data-ken-burns to the hero and apply transform: scale(var(--hero-zoom, 1)) to an art layer
+   inside a hero with overflow: hidden. js/reveal.js tweens --hero-zoom 1 -> 1.25 over 24s once per entry, only under
+   prefers-reduced-motion: no-preference (otherwise the variable stays unset and nothing moves). docs/motion.md.
    ========================================================================== */
 
 @layer components {

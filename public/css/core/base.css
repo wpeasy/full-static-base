@@ -22,10 +22,16 @@
     text-size-adjust: 100%;
   }
 
-  /* Smooth scrolling only for people who haven't asked for less motion */
+  /* Smooth scrolling only for people who haven't asked for less motion.
+     GSAP ScrollTrigger needs this OFF: it measures triggers by jumping to the top of the page, and a smooth jump is animated,
+     so every trigger is measured at the wrong offset (visible after Back/Forward or reload). js/reveal.js turns it off while
+     it runs and glides in-page anchors itself. Keep the rule: sites without ScrollTrigger rely on it (docs/motion.md). */
   @media (prefers-reduced-motion: no-preference) {
     html { scroll-behavior: smooth; }
   }
+
+  /* In-page anchors land clear of the sticky header (nav). Raise it if a site's header is taller. */
+  html { scroll-padding-block-start: var(--space-3xl); }
 
   /* Lock page scroll behind an open modal <dialog> */
   body:has(dialog[open]) { overflow: hidden; }

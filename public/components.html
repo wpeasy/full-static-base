@@ -11,7 +11,9 @@
   <link rel="stylesheet" href="css/main.css">
 
   <script src="js/vendor/gsap.min.js?v=3.13.0" defer></script>
+  <script src="js/vendor/ScrollTrigger.min.js?v=3.13.0" defer></script>
   <script src="js/vendor/Flip.min.js?v=3.13.0" defer></script>
+  <script src="js/reveal.js" defer></script>
   <script src="js/components.js" defer></script>
   <script src="js/grid-filter.js" defer></script>
   <script src="js/vendor/alpine.min.js" defer></script>
@@ -346,6 +348,23 @@
           <div class="skeleton" aria-hidden="true"><span class="skeleton__block"></span><span class="skeleton__line skeleton__line--title"></span><span class="skeleton__line"></span><span class="skeleton__line skeleton__line--short"></span></div>
           <div class="skeleton" aria-hidden="true"><span class="skeleton__avatar"></span><span class="skeleton__line"></span><span class="skeleton__line"></span><span class="skeleton__line skeleton__line--short"></span></div>
         </div>
+      </div>
+    </section>
+
+    <section class="section section--alt" id="reveal">
+      <div class="container stack stack--l">
+        <header class="section-header">
+          <p class="section-header__eyebrow">Pattern</p>
+          <h2>Scroll-triggered reveals</h2>
+          <p class="section-header__lead">Add <code>data-reveal</code> to a block: it fades in and rises 24px when its top edge is 80px inside the viewport, resets when it leaves, and replays on the way back. Timed, not scrubbed. Nothing is hidden without JavaScript or under reduced motion. <a href="#reveal-last">Jump to the last block</a> to test the anchor glide (<code>js/reveal.js</code>, docs/motion.md).</p>
+        </header>
+        <div class="grid" data-reveal>
+          <article class="card"><div class="card__body"><h3 class="card__title">Grid wrapper</h3><p class="card__text">The whole grid reveals as one block.</p></div></article>
+          <article class="card"><div class="card__body"><h3 class="card__title">One trigger</h3><p class="card__text">Put <code>data-reveal</code> on the wrapper, not on filtered items.</p></div></article>
+        </div>
+        <article class="card" data-reveal><div class="card__body"><h3 class="card__title">Reveal block two</h3><p class="card__text">Scroll away and back: it replays from both directions.</p></div></article>
+        <article class="card" data-reveal><div class="card__body"><h3 class="card__title">Reveal block three</h3><p class="card__text">After Back/Forward or a reload, anything already on screen must be visible.</p></div></article>
+        <article class="card" id="reveal-last" data-reveal><div class="card__body"><h3 class="card__title">Last block</h3><p class="card__text">The anchor above scrolls here without a page reload and lands clear of the sticky header.</p></div></article>
       </div>
     </section>
 

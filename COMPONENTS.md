@@ -6,7 +6,7 @@ Paths are relative to `public/` (see AGENTS.md section 3). Reuse before you crea
 |---|---|---|---|
 | `skip-link` | first focusable link to `#main` | | CSS only |
 | `nav` | site header + collapsing menu | `__inner __brand __toggle __menu __list __link(--current)`, `--open` | Alpine `nav` (Esc closes) |
-| `hero` | page intro with the `h1` | `--center`; `__content __eyebrow __title __lead __actions __media` | |
+| `hero` | page intro with the `h1` | `--center`; `__content __eyebrow __title __lead __actions __media`. Optional Ken Burns art layer: put the image/scrim on a pseudo-element or layer inside a hero with `overflow: hidden` and `transform: scale(var(--hero-zoom, 1))`; `data-ken-burns` on the hero animates `--hero-zoom` | `js/reveal.js` (optional) |
 | `section-header` | intro for a section | `--center`; `__eyebrow __title __lead` | |
 | `button` | action or link-as-button | `--secondary --outline --ghost --s --l --full` | `<a>` or `<button>` |
 | `card` | content item | `--raised --flat`; `__media __body __title __text __footer` | combine `u-clickable` |
@@ -22,6 +22,7 @@ Paths are relative to `public/` (see AGENTS.md section 3). Reuse before you crea
 | `accordion` | disclosure group | `__item __trigger __panel` | native `<details name>` |
 | `modal` | dialog | `__header __title __close __body __footer` | native `<dialog>.showModal()` |
 | `footer` | page footer | `__inner __brand __nav __list __link __legal` | |
+| `data-reveal` / `data-ken-burns` | scroll-triggered fade-and-rise; slow hero zoom | attributes only, no CSS block; `--hero-zoom` variable | `js/reveal.js` (GSAP + ScrollTrigger); `Reveal.scan()`/`refresh()` after un-hiding content; docs/motion.md |
 | `feature` | icon + heading + sentence | `--center`; `__icon __title __text` | lay out with `.grid` |
 | `stat` | figure with caption | `__value __label` | inside `<dl class="grid">` |
 | `testimonial` | quote with attribution | `__quote __author __name __role` | `<figure>`/`<blockquote>` |

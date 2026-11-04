@@ -4,6 +4,7 @@ Each workflow assumes you've read `AGENTS.md`. The Claude skills in `.claude/ski
 
 ## New site
 
+0. **First build?** If `FIRST-BUILD.md` exists at the repo root, follow it now: it removes the sample pages from `public/` and deletes itself. Skip this step when the file is absent.
 1. Gather the brief: audience, brand colours/fonts (if any), tone, pages, content, imagery, required features.
 2. Pick a starting preset from `themes/` closest to the tone and copy it over `public/css/theme.css`; then tune brand colours (OKLCH), fonts, `--text-*` and `--space-*` sizes/ratios, `--radius-scale`, heading styles and component roles. Self-host fonts (`docs/fonts.md`).
 3. Open `index.html` (style guide) in both themes; fix anything that looks wrong at the theme level before building pages. Check contrast of brand colours (the `-a11y` pairs adapt automatically).
@@ -29,7 +30,7 @@ Each workflow assumes you've read `AGENTS.md`. The Claude skills in `.claude/ski
 2. Pick the semantic element and, for interactive widgets, the WAI-ARIA pattern and keyboard model.
 3. Create `css/components/<block>.css`: header comment (elements, modifiers, states, a11y notes, reduced-motion behaviour), everything inside `@layer components`, tokens only, public `--block-*` custom properties for variants, movement inside `no-preference`.
 4. Add `@import url("components/<block>.css");` to `css/main.css`.
-5. Behaviour: native HTML → Alpine in `js/components.js` (or `js/<block>.js`) → custom JS.
+5. Behaviour: native HTML → Alpine in `js/components.js` (or `js/<block>.js`) → custom JS. For any GSAP animation check the effects library first (docs/motion.md, "GSAP effects").
 6. Add it to `components.html` (all variants and states) and a snippet to `COMPONENTS.md`. Add new tokens to `TOKENS.md`.
 7. Run `node tools/check.mjs`; test both themes, keyboard, reduced motion.
 
@@ -50,5 +51,6 @@ Allowed when the design needs it (AGENTS.md section 1). Edit the source, keep to
 - **Use a real, visible browser window.** A hidden or background preview pane freezes CSS animations and `requestAnimationFrame` (GSAP's ticker stops too), so animations appear not to run and timing numbers are wrong.
 - **Measure before guessing.** Use the Performance API: `performance.getEntriesByType('paint')` (first paint), `'resource'` (when the JSON arrived), and a `PerformanceObserver` for `layout-shift`. Typical question: was the data ready before first paint? Compare the JSON's `responseEnd` with `first-paint`.
 - To see a skeleton, delay the JSON beyond 150ms (network throttling); a fast or cached load must not show it. Check the entrance animation on a cached load too.
+- **Scroll-effects checklist** (`data-reveal`, `data-ken-burns`; docs/motion.md): (a) fresh load at the top; (b) scroll slowly: the fade and rise is **timed**, not scrubbed with the scrollbar; (c) scroll away and back: it replays from both directions; (d) click an in-page anchor: it glides with no full reload and lands clear of the sticky header (`scroll-padding-block-start`); (e) **Back/Forward** from a detail page and **Reload** at several restored scroll positions (mid page, a JSON-filled section, the bottom): every element inside the viewport is visible, nothing stuck at opacity 0; (f) filters and hidden containers shown by Alpine; (g) light and dark, 320/768/1280; (h) reduced motion: everything visible, nothing moves. A hidden or background preview pane freezes animations and `requestAnimationFrame`, so use a real visible browser window; tests that restore scroll instantly need waits of at least 1s before reading state.
 - **Always hard-refresh after a deploy** (and after a Pages export): a host or browser cache can serve old CSS/JS with new HTML. Rules: docs/security.md.
 - JS-filled pages: docs/js-rendered-pages.md. Hosting and export: docs/hosting.md.
