@@ -35,11 +35,14 @@ When the largest above-the-fold image is a **CSS background** (a hero banner), t
 <link rel="preload" as="image" type="image/webp" fetchpriority="high" media="(min-width: 40em)" href="images/hero-wide.webp">
 ```
 
+For an `<img>` with `srcset`, preload with the same candidates: `imagesrcset="…" imagesizes="…"` instead of `href`.
+
 The "LCP request discovery" audit then passes. An `<img>` in the HTML is discovered by the preload scanner already: give the LCP `<img>` `loading="eager"` and `fetchpriority="high"` and no extra link is needed. Preload only the LCP image; every extra preload steals bandwidth from it.
 
 ## 4. Size images to what is displayed; cache them for a week
 
 - **Size to the largest displayed CSS size**, at 2x only where it matters (a hero or a large card). An image served at 1600px into a 400px card wastes most of its bytes (the "Improve image delivery" audit).
+- **Interim sizes + `srcset`/`sizes`:** run `node tools/make-image-sizes.mjs` on every image (new or already WebP) so phones download the 480px file and desktops the 1600px one; write `sizes` from the measured displayed width (docs/images.md, section 4).
 - **WebP, quality about 70** (`cwebp -q 70`), SVG for vector art. Accurate `width` and `height` attributes (they reserve space and stop layout shift).
 - **Data-driven lists:** give items an optional smaller `thumb` (+ `thumbWidth`, `thumbHeight`) sized to the list card; the list template uses `thumb` and the detail page uses the full `image` (docs/data-driven-pages.md).
 - First screen (1920×1080) `loading="eager"`, everything else `loading="lazy" decoding="async"` (docs/images.md).

@@ -9,6 +9,7 @@
 import { readFileSync, readdirSync, existsSync, statSync } from 'node:fs';
 import { join, relative, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { imageSize } from './image-size.mjs';
 
 const root = join(dirname(fileURLToPath(import.meta.url)), '..'); // repo root: never published
 const site = join(root, 'public');   // the only published folder
@@ -311,6 +312,23 @@ for (const file of htmlFiles) {
       if (!/\swidth=/.test(m[0]) || !/\sheight=/.test(m[0])) warn(file, lineOf(html, m.index), '<img> should set width and height');
       if (!/\sloading="(eager|lazy)"/.test(m[0])) warn(file, lineOf(html, m.index), '<img> needs loading="eager" (in the first 1920x1080 screen) or loading="lazy" (everything else)');
       if (/\ssrc="[^"]*\.(jpe?g|png|gif)(\?[^"]*)?"/i.test(m[0])) error(file, lineOf(html, m.index), '<img> uses a JPEG/PNG/GIF: convert it to WebP (docs/images.md)');
+      // Responsive images (docs/images.md): wide local images need interim sizes; srcset needs sizes and real files
+      const local = (u) => (/^(https?:)?\/\/|^data:/.test(u) ? null : join(site, u.split(/[?#]/)[0]));
+      const srcset = m[0].match(/\ssrcset="([^"]*)"/)?.[1];
+      const src = m[0].match(/\ssrc="([^"]*)"/)?.[1];
+      if (srcset) {
+        for (const candidate of srcset.split(',').map((c) => c.trim().split(/\s+/)[0]).filter(Boolean)) {
+          const path = local(candidate);
+          if (path && !existsSync(path)) error(file, lineOf(html, m.index), `srcset file ${candidate} does not exist (node tools/make-image-sizes.mjs, docs/images.md)`);
+        }
+        if (/\s\d+w\b/.test(srcset) && !/\ssizes="/.test(m[0])) warn(file, lineOf(html, m.index), '<img srcset> with width descriptors needs sizes (the displayed width), otherwise the browser assumes 100vw');
+      } else if (src && /\.webp(\?|$)/i.test(src) && !/-\d+\.webp/i.test(src)) {
+        const before = html.slice(0, m.index);
+        const inPicture = before.lastIndexOf('<picture') > before.lastIndexOf('</picture>');
+        const path = local(src);
+        const size = path && !inPicture ? imageSize(path) : null;
+        if (size && size.width > 800) warn(file, lineOf(html, m.index), `${src} is ${size.width}px wide and has no srcset: run node tools/make-image-sizes.mjs ${relative(root, path)} and add srcset + sizes (docs/images.md)`);
+      }
     }
     for (const m of html.matchAll(/<svg\b[^>]*class="icon[^"]*"[^>]*>/gi)) {
       if (!/aria-hidden="true"|role="img"/.test(m[0])) warn(file, lineOf(html, m.index), 'icon svg should be aria-hidden="true" (decorative) or role="img" with a label');

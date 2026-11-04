@@ -18,7 +18,7 @@ Each workflow assumes you've read `AGENTS.md`. The Claude skills in `.claude/ski
 
 1. Copy `_template.html` to `public/<slug>.html` (fix its relative links if you nest it). Set `<title>`, meta description, canonical, Open Graph, the single `<h1>`, `aria-current="page"` on the nav link.
 2. Structure: `main#main` → sections (`.section`, optional `u-surface-*`) → `.container` → layout objects (`.stack`, `.grid`, `.cluster`) → components. Alternate section surfaces for rhythm.
-3. **Write a real title and description** from the page content (≤60 / ≤160 characters), set canonical, Open Graph and Twitter tags. **Choose the schema type from the table in docs/seo.md** and write the JSON-LD. If the page has a breadcrumb, **add `BreadcrumbList`**. Images: WebP, `loading="eager"` inside the first 1920×1080 screen, `lazy` elsewhere.
+3. **Write a real title and description** from the page content (≤60 / ≤160 characters), set canonical, Open Graph and Twitter tags. **Choose the schema type from the table in docs/seo.md** and write the JSON-LD. If the page has a breadcrumb, **add `BreadcrumbList`**. Images: WebP plus interim sizes (`node tools/make-image-sizes.mjs`), `srcset` + `sizes` on wide images, `loading="eager"` inside the first 1920×1080 screen, `lazy` elsewhere.
 3a. If `<main>` is filled by JavaScript, use the `page` wrapper, `aria-busy` and a skeleton (docs/js-rendered-pages.md; template rules in docs/alpine.md).
 3b. Pick heading levels by outline, restyle with `u-h*` if needed. Write real content, real alt text, descriptive link text.
 4. **Add the page to `sitemap.xml`.** Note any missing business facts for the client. For new nav/footer links, edit `_template.html` and run `node tools/sync-shared.mjs` so every page stays identical.
