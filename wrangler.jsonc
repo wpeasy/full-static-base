@@ -1,11 +1,13 @@
 // Cloudflare Workers Static Assets. Run from tools/: npm run cf:dev | cf:deploy | cf:login (docs/hosting.md).
-// Only public/ is uploaded. _headers and _redirects inside public/ are honoured.
+// Only dist/ is uploaded: tools/build-dist.mjs copies public/ to dist/ and ships ONE minified css/main.css
+// (cf:dev and cf:deploy build it first). _headers and _redirects are honoured.
+// ROUTE: keep `run_worker_first` and the ROUTE constant in worker/index.js in sync (docs/hosting.md).
 {
   "name": "full-static-site",
   "main": "worker/index.js",
   "compatibility_date": "2026-11-01",
   "assets": {
-    "directory": "./public",
+    "directory": "./dist",
     "binding": "ASSETS",
     // The Worker runs first only for the template URLs; everything else is served straight from assets
     "run_worker_first": ["/item/*"],

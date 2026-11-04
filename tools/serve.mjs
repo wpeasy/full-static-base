@@ -11,9 +11,13 @@ import { readFileSync, existsSync, statSync } from 'node:fs';
 import { join, extname, normalize, dirname, sep } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
-const root = join(dirname(fileURLToPath(import.meta.url)), '..', 'public');
+// --dir dist previews the deploy build (tools/build-dist.mjs) instead of public/; only public, dist and dist-pages are allowed.
+const dirFlag = process.argv.indexOf('--dir');
+const dir = dirFlag > -1 ? process.argv[dirFlag + 1] : 'public';
+if (!['public', 'dist', 'dist-pages'].includes(dir)) { console.error('--dir must be public, dist or dist-pages'); process.exit(1); }
+const root = join(dirname(fileURLToPath(import.meta.url)), '..', dir);
 const flag = process.argv.indexOf('--port');
-const port = Number(flag > -1 ? process.argv[flag + 1] : process.argv[2] || process.env.PORT) || 8765;
+const port = Number(flag > -1 ? process.argv[flag + 1] : /^\d+$/.test(process.argv[2] || '') ? process.argv[2] : process.env.PORT) || 8765;
 
 const types = {
   '.html': 'text/html; charset=utf-8', '.css': 'text/css; charset=utf-8', '.js': 'text/javascript; charset=utf-8',

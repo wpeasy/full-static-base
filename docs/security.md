@@ -29,7 +29,7 @@ The site is static, so the main protections are HTTP headers set by the host. `p
 | `/`, `/*.html`, `/item/*` | `no-cache` | always revalidate |
 | `/css/*`, `/js/*` | `no-cache` | revalidate on every load; an unchanged file costs one cheap `304` (ETag) |
 | `/data/*` | `public, max-age=300, stale-while-revalidate=86400` | content changes rarely; fast repeat loads |
-| `/images/*` | `public, max-age=86400` | |
+| `/images/*` | `public, max-age=604800, stale-while-revalidate=86400` | a week; anything longer needs versioned file names (docs/performance.md) |
 | `/fonts/*` | `public, max-age=31536000, immutable` | never edited in place |
 
 Keep a long `immutable` cache only for fonts and for files whose **name** is versioned (`app.3f2a1c.js`). A `?v=` query on a file is not enough on every host. Don't put `Cache-Control` in the `/*` block: hosts merge matching rules and some join duplicate values. `tools/check.mjs` warns when `_headers` gives `/css/*` or `/js/*` a `max-age` without `immutable`. Hosts with no header control (GitHub Pages) are covered in docs/hosting.md.

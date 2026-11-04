@@ -5,12 +5,14 @@ Dev-only helpers. Nothing here ships with the site (only `public/` is deployed);
 | Command | What it does | Needs |
 |---|---|---|
 | `node tools/check.mjs` | Guardrails: tokens not literals, BEM, no IDs/`!important`, motion gating, HTML semantics, a11y basics, shared header/footer, asset links, `main.css` imports. Exit 1 on errors. | Node only |
-| `node tools/serve.mjs [--port n]` | Static preview server for `public/` (default port 8765; `node tools/serve.mjs 9000` to change) that applies the `_redirects` 200 rewrites (`/item/*` → `item.html`), serves `404.html`, never caches. Anything outside `public/` (AGENTS.md, tools/, _template.html) is a 404 | Node only |
+| `node tools/serve.mjs [--port n] [--dir dist]` | Static preview server for `public/` (default port 8765; `node tools/serve.mjs 9000` to change) that applies the `_redirects` 200 rewrites (`/item/*` → `item.html`), serves `404.html`, never caches. Anything outside `public/` (AGENTS.md, tools/, _template.html) is a 404 | Node only |
 | `node tools/build-sitemap.mjs [collection] [singular]` | Rewrites item URLs in `public/sitemap.xml` between `<!-- items:start -->` / `<!-- items:end -->` from `public/data/items.json` (`site.url`) | Node only |
-| `node tools/export-pages.mjs [--out dir] [--base /repo]` | GitHub Pages export of `public/`: skips host-config files, writes `.nojekyll`, prefixes root-absolute links, one template copy per slug, `?v=<hash>` cache busting (docs/hosting.md) | Node only |
+| `node tools/export-pages.mjs [--out dir] [--base /repo]` | GitHub Pages export of `public/` (default `dist-pages/`): skips host-config files, bundled minified CSS, `.nojekyll`, prefixes root-absolute links, one template copy per slug, `?v=<hash>` cache busting (docs/hosting.md) | Node only |
 | `node tools/deploy-pages.mjs --repo owner/name` | Export, commit and push to a separate Pages repo, wait for the build | `git`, `gh` |
-| `npm run cf:dev` / `cf:deploy` / `cf:login` (in `tools/`) | Cloudflare Workers static assets via `wrangler.jsonc` and `worker/index.js` (docs/hosting.md) | `npm install` in `tools/` |
-| `node tools/bundle-css.mjs` | Inline `public/css/main.css` imports into `public/css/main.bundle.css` for deploy (git-ignored) | Node only |
+| `npm run cf:build` / `cf:dev` / `cf:deploy` / `cf:login` (in `tools/`) | Cloudflare Workers static assets via `wrangler.jsonc` and `worker/index.js`; `cf:dev` and `cf:deploy` build `dist/` first (docs/hosting.md) | `npm install` in `tools/` |
+| `node tools/build-dist.mjs` | **Deploy build:** copy `public/` to `dist/` with ONE minified `css/main.css` (no `@import`, relative `url()`s rewritten); runs `check-dist.mjs`. `dist/` is git-ignored | Node only |
+| `node tools/check-dist.mjs` | Verify `dist/`: no `@import` in `css/main.css`, every CSS `url()` and local HTML reference resolves. Exit 1 on failure | Node only |
+| `node tools/bundle-css.mjs [--min]` | Inline `public/css/main.css` into `public/css/main.bundle.css` (git-ignored); the building block used by `build-dist.mjs` and `export-pages.mjs` | Node only |
 | `node tools/browser-checks.mjs` | axe WCAG scan, horizontal-overflow and console-error checks, screenshots at 320/768/1280 in light/dark with reduced motion | `cd tools && npm install && npx playwright install chromium`, plus `node tools/serve.mjs` running (scans http://localhost:8765) |
 
 ### Pages with side-by-side alternatives

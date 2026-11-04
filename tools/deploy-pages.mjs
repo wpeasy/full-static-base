@@ -3,7 +3,7 @@
 // Usage: node tools/deploy-pages.mjs --repo owner/name [--branch gh-pages] [--base /name] [--message "text"]
 //   --base defaults to /<name> (a project site). Use --base "" for a user/organisation site or a custom domain.
 // Needs git and the GitHub CLI (`gh auth login`). The Pages repo is a separate COPY: it goes stale until you
-// run this again. The clone lives in dist/pages (git-ignored).
+// run this again. The clone lives in dist-pages (git-ignored).
 
 import { execFileSync } from 'node:child_process';
 import { existsSync, mkdirSync } from 'node:fs';
@@ -17,7 +17,7 @@ if (!repo || !repo.includes('/')) { console.error('Usage: node tools/deploy-page
 const branch = arg('--branch', 'gh-pages');
 const base = arg('--base', `/${repo.split('/')[1]}`);
 const message = arg('--message', `Deploy ${new Date().toISOString()}`);
-const out = join(root, 'dist/pages');
+const out = join(root, 'dist-pages');
 
 const run = (cmd, args, cwd = root) => execFileSync(cmd, args, { cwd, encoding: 'utf8', stdio: ['ignore', 'pipe', 'inherit'] }).trim();
 
@@ -30,7 +30,7 @@ try { run('git', ['fetch', 'origin', branch], out); run('git', ['checkout', '-B'
 catch { run('git', ['checkout', '--orphan', branch], out); }
 
 // 2. Export into it
-run('node', [join(root, 'tools/export-pages.mjs'), '--out', 'dist/pages', '--base', base]);
+run('node', [join(root, 'tools/export-pages.mjs'), '--out', 'dist-pages', '--base', base]);
 console.log(`Exported with base "${base || '/'}"`);
 
 // 3. Commit and push (nothing to do when the export is identical)

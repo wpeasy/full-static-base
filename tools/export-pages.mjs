@@ -1,23 +1,25 @@
 #!/usr/bin/env node
 // Export public/ as a GitHub Pages site. Pages has no rewrites, no custom headers and caches everything for
 // about 10 minutes, so the export does what the host cannot (docs/hosting.md):
-//   - copies public/ to the output folder, skipping host-config files (_headers, _redirects, .htaccess)
+//   - copies public/ to the output folder, skipping host-config files (_headers, _redirects, .htaccess) and shipping
+//     ONE minified css/main.css (bundleCss) instead of the @import waterfall, like tools/build-dist.mjs
 //   - writes .nojekyll
 //   - with --base /repo, prefixes root-absolute links (href/src/action/poster="/…") for a project site
 //   - writes one copy of the single template per <singular>/<slug>/index.html (from _redirects 200 rules + data JSON)
-//   - appends ?v=<content hash> to local CSS/JS references and css @imports (cache busting)
-// Usage: node tools/export-pages.mjs [--out dist/pages] [--base /repo]
+//   - appends ?v=<content hash> to local CSS/JS references (cache busting)
+// Usage: node tools/export-pages.mjs [--out dist-pages] [--base /repo]
 // An existing .git folder in the output is kept (deploy-pages.mjs uses it) and excluded from the hash.
 
 import { createHash } from 'node:crypto';
 import { readFileSync, writeFileSync, readdirSync, statSync, mkdirSync, copyFileSync, rmSync, existsSync } from 'node:fs';
 import { join, relative, dirname, extname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { bundleCss } from './bundle-css.mjs';
 
 const root = join(dirname(fileURLToPath(import.meta.url)), '..');
 const site = join(root, 'public');
 const arg = (name, fallback) => { const i = process.argv.indexOf(name); return i > -1 ? process.argv[i + 1] : fallback; };
-const out = resolve(root, arg('--out', 'dist/pages'));
+const out = resolve(root, arg('--out', 'dist-pages'));
 const base = arg('--base', '').replace(/\/+$/, ''); // '' or '/repo'
 const hostFiles = new Set(['_headers', '_redirects', '.htaccess']);
 const slugify = (s) => s.normalize('NFKD').replace(/[̀-ͯ]/g, '').toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '');
@@ -34,12 +36,15 @@ const files = (dir, skip = () => false, list = []) => {
 // 1. Clean the output (keep .git) and copy
 mkdirSync(out, { recursive: true });
 for (const name of readdirSync(out)) if (name !== '.git') rmSync(join(out, name), { recursive: true, force: true });
-for (const from of files(site, (name) => hostFiles.has(name) || name === '.DS_Store')) {
+const bundled = (path) => /[\\/]css[\\/](components|core|fonts\.css|theme\.css|main\.bundle\.css)/.test(path);
+for (const from of files(site, (name, path) => hostFiles.has(name) || name === '.DS_Store' || bundled(path))) {
   const to = join(out, relative(site, from));
   mkdirSync(dirname(to), { recursive: true });
   copyFileSync(from, to);
 }
 writeFileSync(join(out, '.nojekyll'), '');
+mkdirSync(join(out, 'css'), { recursive: true });
+writeFileSync(join(out, 'css', 'main.css'), bundleCss({ minify: true, outDir: join(site, 'css') }));
 
 // 2. One copy of the template per slug: `/item/*  /item.html  200` + data/<collection>.json
 const redirects = existsSync(join(site, '_redirects')) ? readFileSync(join(site, '_redirects'), 'utf8').split('\n') : [];

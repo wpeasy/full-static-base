@@ -13,7 +13,9 @@ For a list of entities (people, products, locations), keep the content in **one 
 | `note` | what the file is and who edits it |
 | `site` | `name`, `url`, `locale`, `language`, `themeColor`, `shareImage` (+ `shareImageAlt`, `…Width`, `…Height`), `organisation` facts (`type`, `name`, `description`, `logo`, `sameAs`, and only the contact facts you really have), `offers`, `home` (`title`, `description`), `collection` (`name`, `description`, `path`, `cta`) |
 | lookup tables | e.g. `topics`: `{ "design": "Design" }`. Chips and labels are built from these, never hand-typed |
-| the item array | `items: [{ name, role, place, summary, bio[], tags[], slug?, seoTitle?, seoDescription? }]` |
+| the item array | `items: [{ name, role, place, summary, bio[], tags[], slug?, seoTitle?, seoDescription?, image?, imageWidth?, imageHeight?, thumb?, thumbWidth?, thumbHeight? }]` |
+
+**Images.** `image` (+ `imageWidth`, `imageHeight`) is the full-size image used on the detail page. Optionally add a smaller `thumb` (+ `thumbWidth`, `thumbHeight`) sized to the list card's displayed size. **List templates must use `thumb` when it exists and fall back to `image`** (`item.thumb || item.image`, with the matching width and height); the detail template uses `image`. Serving the full image in a list of cards is the usual cause of the "Improve image delivery" warning (docs/performance.md).
 
 **Slug**: an item may set `slug`; otherwise it is the sluggified name: NFKD, strip accents, lowercase, non-alphanumerics to hyphens (`Amélie Dubois` → `amelie-dubois`).
 
@@ -25,8 +27,11 @@ Scheme: `/<singular>/<slug>` (for example `/item/amelie-dubois`), all answered b
 |---|---|
 | Netlify / Cloudflare Pages | `_redirects`: `/item/*  /item.html  200` |
 | Apache | `.htaccess`: `RewriteRule ^item/[^/.]+/?$ /item.html [L]` |
-| Cloudflare Workers, GitHub Pages | see docs/hosting.md |
+| Cloudflare Workers | `worker/index.js` constants `ROUTE` (the URL segment of the detail pages) and `TEMPLATE` (the template file name without `.html`), with `run_worker_first: ["/<ROUTE>/*"]` in `wrangler.jsonc`; see docs/hosting.md |
+| GitHub Pages | see docs/hosting.md |
 | Local | `node tools/serve.mjs` (reads `_redirects`; port 8765, `--port` to change; 404.html fallback; no caching) |
+
+**A collection's list page and its detail template must not share a name.** For a list at `/things`, call the template `thing.html` (route `/thing/<slug>`), not `things.html`. The rewrite maps `/<ROUTE>/*` to `/<TEMPLATE>`, so a clash makes the list and the template the same URL.
 
 `python3 -m http.server` cannot rewrite; use `serve.mjs` (it serves `public/` only; `_redirects` and `.htaccess` live in `public/` so the host picks them up). `item.html?slug=amelie-dubois` also works as a fallback.
 

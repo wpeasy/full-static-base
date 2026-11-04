@@ -2,11 +2,15 @@
 
 Rules for every image on every page. `tools/check.mjs` enforces the checkable parts.
 
+## 0. Size
+
+Export each image at the largest size it is **displayed** (CSS pixels; 2x only for heroes and large cards), never the camera original. Data-driven lists use a smaller `thumb` per item. Full guidance, LCP preload and caching: [performance.md](performance.md).
+
 ## 1. Format: WebP
 
 - **Convert every JPEG, PNG and GIF to WebP** and delete the original. Do this whenever you add or receive an image, including images supplied by the client.
 - Keep **SVG** for logos, icons and illustrations (vector), and AVIF is acceptable. No other raster formats in `images/`.
-- Photos: quality about 80. Graphics with flat colour or transparency: `-lossless` or quality 90.
+- Photos: quality about 70 to 80 (`-q 70` is usually indistinguishable and smaller). Graphics with flat colour or transparency: `-lossless` or quality 90.
 - Animated GIF becomes animated WebP (or, better, a muted looping `<video>` with a pause control, gated by reduced motion: docs/motion.md).
 
 ```bash

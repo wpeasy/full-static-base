@@ -6,9 +6,12 @@
   "scripts": {
     "check": "node check.mjs",
     "bundle": "node bundle-css.mjs",
+    "build": "node build-dist.mjs",
+    "check:dist": "node check-dist.mjs",
     "browser": "node browser-checks.mjs",
-    "cf:dev": "wrangler dev --config ../wrangler.jsonc",
-    "cf:deploy": "wrangler deploy --config ../wrangler.jsonc",
+    "cf:build": "node build-dist.mjs",
+    "cf:dev": "node build-dist.mjs && wrangler dev --config ../wrangler.jsonc",
+    "cf:deploy": "node build-dist.mjs && wrangler deploy --config ../wrangler.jsonc",
     "cf:login": "wrangler login"
   },
   "devDependencies": {

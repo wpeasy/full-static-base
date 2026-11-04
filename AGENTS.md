@@ -18,7 +18,8 @@ Static HTML + CSS sites, built and maintained by AI agents and edited by hand in
 | First build: clear the sample content out of `public/` | [FIRST-BUILD.md](FIRST-BUILD.md) (present only until the first build is done) |
 | Step-by-step: new site / page / component / audit | [docs/workflows.md](docs/workflows.md) |
 | Forms, browser support, security headers | [docs/forms.md](docs/forms.md), [docs/browser-support.md](docs/browser-support.md), [docs/security.md](docs/security.md) |
-| Deploying (publish `public/` only), host specifics, caching | [docs/deploy.md](docs/deploy.md), [docs/hosting.md](docs/hosting.md), [docs/security.md](docs/security.md) |
+| Deploying (publish the `dist/` build of `public/`), host specifics, caching | [docs/deploy.md](docs/deploy.md), [docs/hosting.md](docs/hosting.md), [docs/security.md](docs/security.md) |
+| Making it fast: one CSS bundle, LCP preload, images, PageSpeed | [docs/performance.md](docs/performance.md) |
 | Why this site deviates from the base | [DESIGN-NOTES.md](DESIGN-NOTES.md) |
 
 ## 1. This is a foundation, not a cage
@@ -59,7 +60,7 @@ These apply at **every level**: markup, CSS, JavaScript, components, content, an
 - JSON-LD (`<script type="application/ld+json">`) wherever it fits, chosen from the table in docs/seo.md. It is data and never executed, so it does not break the no-inline-scripts rule or a CSP. Stable `@id`s, reference don't duplicate, mark up only what is visible, **never invent data** (ratings, addresses, phone numbers, hours, reviews): leave it out and list it as "still to supply".
 - When content comes from JSON, the SEO is built from that same JSON with `js/seo.js`; never hand-write a second copy.
 
-**Images** ([docs/images.md](docs/images.md))
+**Images** ([docs/images.md](docs/images.md), [docs/performance.md](docs/performance.md))
 - Convert every JPEG, PNG and GIF to **WebP** (delete the original); SVG stays for vector art.
 - Judge a standard 1920×1080 screen: everything inside the first screen (always including the header logo) is `loading="eager"`, the LCP image also `fetchpriority="high"`; everything else is `loading="lazy" decoding="async"` (native lazy loading). Always `width` and `height`.
 
@@ -72,7 +73,7 @@ These apply at **every level**: markup, CSS, JavaScript, components, content, an
 
 ## 3. Structure
 
-**Only `public/` is published.** Everything outside it is development material and must never be deployed. Set the host's publish directory (or document root) to `public`.
+**Only `public/` (built to `dist/`) is published.** Everything outside it is development material and must never be deployed. Edit `public/`; deploy the `dist/` build of it (`node tools/build-dist.mjs`: the same files with ONE minified `css/main.css`). Never point a host at the repo root.
 
 **Path convention:** paths in these docs (`css/...`, `js/...`, `images/...`, `fonts/...`, `data/...`, page names like `index.html`) are relative to `public/`, unless they start with `tools/`, `docs/`, `templates/` or `themes/` (repo root). Pages themselves link to each other and to assets with paths relative to `public/` (or root-absolute `/css/...` on template pages).
 
@@ -86,7 +87,7 @@ _template.html                  source of the shared header/footer and the defau
 docs/                           guides (accessibility, motion, SEO, images, data-driven pages, workflows, fonts, vendor …)
 themes/*.css                    starting presets: copy one over public/css/theme.css
 templates/                      page templates that are filled and copied into public/ (brand-guide.template.html); never published
-tools/                          check.mjs, sync-shared.mjs, serve.mjs, build-sitemap.mjs, bundle-css.mjs, browser-checks.mjs
+tools/                          check.mjs, sync-shared.mjs, serve.mjs, build-sitemap.mjs, build-dist.mjs, check-dist.mjs, bundle-css.mjs, browser-checks.mjs
 .claude/ .vscode/ .editorconfig .gitignore
 
 public/                         the ONLY deployed folder; files are served exactly as written (no build step)
@@ -112,7 +113,7 @@ public/                         the ONLY deployed folder; files are served exact
   images/ fonts/                assets (docs/images.md, docs/image-files.md, docs/fonts.md); images/icons.svg sprite
 ```
 
-Rules: no guide, note, tool, theme preset or `_template.html` inside `public/` (`tools/check.mjs` warns); no published page may reference a file outside `public/` (it errors). Deploy: Netlify / Cloudflare Pages publish directory `public`; Apache document root `public`; GitHub Pages deploy the `public` folder.
+Rules: no guide, note, tool, theme preset or `_template.html` inside `public/` (`tools/check.mjs` warns); no published page may reference a file outside `public/` (it errors). Deploy: build `dist/` and publish it (Netlify / Cloudflare publish directory `dist`; Apache document root `dist`; GitHub Pages `node tools/deploy-pages.mjs`). Details: docs/deploy.md.
 
 Cascade layers (declared in `theme.css` and `framework.css`): `reset, tokens, base, layout, components, utilities`.
 
@@ -157,6 +158,7 @@ Cascade layers (declared in `theme.css` and `framework.css`): `reset, tokens, ba
 - [ ] Alt text, labels, accessible names, `lang`, `<title>`, meta description present
 - [ ] SEO: real title (≤60) and description (≤160), canonical, Open Graph + Twitter tags, JSON-LD of the right type that parses, page in `sitemap.xml`, missing business facts listed for the client
 - [ ] Images are WebP/SVG, `loading="eager"` inside the first 1920×1080 screen and `loading="lazy"` elsewhere, with `width`/`height`
+- [ ] Performance: `node tools/build-dist.mjs` passes (one CSS file, no `@import`, every `url()` resolves); an LCP image that is a CSS background is preloaded in the page `<head>`; images are sized to their displayed size
 - [ ] Caching: `_headers` gives `/css/*` and `/js/*` no `max-age` (unless the file name is versioned); JS-filled `<main>` has `aria-busy`
 - [ ] All movement gated by `prefers-reduced-motion: no-preference`; JS motion checks `$reducedMotion()`
 - [ ] Tokens only: no literals. BEM (or `u-*`) for every class in CSS and HTML; no IDs/`!important`
@@ -172,7 +174,9 @@ node tools/build-sitemap.mjs     # item URLs in public/sitemap.xml from public/d
 node tools/check.mjs             # guardrails: tokens, BEM, semantics, a11y, motion, imports
 node tools/sync-shared.mjs       # copy the _template.html header/footer into every page in public/ (--dry to preview)
 node tools/browser-checks.mjs    # optional: axe scan + screenshots (see tools/README.md)
-node tools/bundle-css.mjs        # production: inline public/css/main.css imports -> public/css/main.bundle.css (git-ignored)
+node tools/build-dist.mjs         # production: copy public/ -> dist/ with ONE minified css/main.css (no @import); publish dist/
+node tools/check-dist.mjs         # verify dist/: no @import, every url() resolves (build-dist runs it)
+node tools/bundle-css.mjs [--min] # building block: public/css/main.css -> public/css/main.bundle.css (git-ignored)
 ```
 
 Upgrading the framework in an existing site: overwrite `public/css/core/*`, `tools/*`, `docs/*`, `AGENTS.md`, `TOKENS.md`, `COMPONENTS.md` from the newer version (see `CHANGELOG.md`/`VERSION`), keep `public/css/theme.css`, your components and pages, then re-apply anything listed in `DESIGN-NOTES.md`.
