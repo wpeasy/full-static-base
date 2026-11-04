@@ -1,0 +1,91 @@
+{
+  "_note": "All six projects are fictional placeholders for testing. Replace with real work and photography.",
+  "topics": {
+    "decks": "Decks",
+    "shade": "Pergolas and shade",
+    "kitchens": "Outdoor kitchens",
+    "joinery": "Joinery",
+    "reno": "Renovations",
+    "repairs": "Repairs"
+  },
+  "items": [
+    {
+      "slug": "burleigh-heads-spotted-gum-deck",
+      "name": "Spotted gum deck with built-in seating",
+      "suburb": "Burleigh Heads",
+      "topic": "decks",
+      "summary": "Placeholder summary: describe the brief, the materials and the result in two or three sentences.",
+      "materials": [],
+      "durationWeeks": null,
+      "year": null,
+      "image": "images/project-burleigh-heads-spotted-gum-deck.webp",
+      "imageAlt": null,
+      "placeholder": true
+    },
+    {
+      "slug": "palm-beach-pergola-and-lounge",
+      "name": "Pergola and outdoor lounge",
+      "suburb": "Palm Beach",
+      "topic": "shade",
+      "summary": "Placeholder summary: describe the brief, the materials and the result in two or three sentences.",
+      "materials": [],
+      "durationWeeks": null,
+      "year": null,
+      "image": "images/project-palm-beach-pergola-and-lounge.webp",
+      "imageAlt": null,
+      "placeholder": true
+    },
+    {
+      "slug": "currumbin-outdoor-kitchen",
+      "name": "Outdoor kitchen for a hillside home",
+      "suburb": "Currumbin",
+      "topic": "kitchens",
+      "summary": "Placeholder summary: describe the brief, the materials and the result in two or three sentences.",
+      "materials": [],
+      "durationWeeks": null,
+      "year": null,
+      "image": "images/project-currumbin-outdoor-kitchen.webp",
+      "imageAlt": null,
+      "placeholder": true
+    },
+    {
+      "slug": "mermaid-beach-built-in-wardrobes",
+      "name": "Built-in wardrobes and study nook",
+      "suburb": "Mermaid Beach",
+      "topic": "joinery",
+      "summary": "Placeholder summary: describe the brief, the materials and the result in two or three sentences.",
+      "materials": [],
+      "durationWeeks": null,
+      "year": null,
+      "image": "images/project-mermaid-beach-built-in-wardrobes.webp",
+      "imageAlt": null,
+      "placeholder": true
+    },
+    {
+      "slug": "robina-rear-extension",
+      "name": "Rear extension and kitchen refresh",
+      "suburb": "Robina",
+      "topic": "reno",
+      "summary": "Placeholder summary: describe the brief, the materials and the result in two or three sentences.",
+      "materials": [],
+      "durationWeeks": null,
+      "year": null,
+      "image": "images/project-robina-rear-extension.webp",
+      "imageAlt": null,
+      "placeholder": true
+    },
+    {
+      "slug": "coomera-balustrade-replacement",
+      "name": "Balcony balustrade and timber replacement",
+      "suburb": "Coomera",
+      "topic": "repairs",
+      "summary": "Placeholder summary: describe the brief, the materials and the result in two or three sentences.",
+      "materials": [],
+      "durationWeeks": null,
+      "year": null,
+      "image": "images/project-coomera-balustrade-replacement.webp",
+      "imageAlt": null,
+      "placeholder": true
+    }
+  ]
+}

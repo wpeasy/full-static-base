@@ -1,0 +1,25 @@
+{
+  "items": [
+    {
+      "q": "Do you give fixed-price quotes?",
+      "a": "Yes. After a site visit you receive a written fixed-price quote that lists what is included and what is not."
+    },
+    {
+      "q": "Do I need council approval for a deck or pergola?",
+      "a": "It depends on height, size and position. We check the requirements for your property and handle approvals where needed."
+    },
+    {
+      "q": "What timber works best near the beach?",
+      "a": "Species such as spotted gum, blackbutt and merbau perform well with the right finish, and composite is a low-maintenance alternative. We explain the trade-offs for your site."
+    },
+    {
+      "q": "How long until you can start?",
+      "a": null,
+      "_note": "Supply current lead times."
+    },
+    {
+      "q": "What areas do you cover?",
+      "a": "The Gold Coast from Coolangatta to Coomera, plus the hinterland. See the service area list."
+    }
+  ]
+}

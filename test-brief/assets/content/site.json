@@ -1,0 +1,52 @@
+{
+  "_note": "Fictional test client. Facts marked null are deliberately missing: do not invent them (AGENTS.md, SEO).",
+  "name": "Banksia Build Co.",
+  "legalName": null,
+  "tagline": "Built to last. Built for the coast.",
+  "description": "Carpenters and builders on the Gold Coast: decks, pergolas, outdoor kitchens, custom cabinetry and renovations.",
+  "locale": "en_AU",
+  "language": "en-AU",
+  "url": "https://banksiabuild.example",
+  "type": "HomeAndConstructionBusiness",
+  "contact": {
+    "phone": null,
+    "email": null,
+    "address": null,
+    "hours": null
+  },
+  "credentials": {
+    "abn": null,
+    "qbccLicence": null,
+    "insurer": null,
+    "warrantyYears": null
+  },
+  "serviceArea": [
+    "Burleigh Heads",
+    "Burleigh Waters",
+    "Palm Beach",
+    "Currumbin",
+    "Tugun",
+    "Miami",
+    "Mermaid Beach",
+    "Broadbeach",
+    "Robina",
+    "Varsity Lakes",
+    "Nerang",
+    "Coomera",
+    "Helensvale",
+    "Tamborine Mountain"
+  ],
+  "social": {
+    "instagram": null,
+    "facebook": null,
+    "google": null
+  },
+  "theme": {
+    "default": "dark",
+    "themeColor": "#0F1419"
+  },
+  "cta": {
+    "primary": "Get a quote",
+    "secondary": "See our work"
+  }
+}

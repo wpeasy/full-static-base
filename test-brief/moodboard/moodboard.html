@@ -1,0 +1,277 @@
+<!doctype html>
+<html lang="en-AU">
+<head>
+<meta charset="utf-8">
+<title>Banksia Build Co. mood board</title>
+<link rel="stylesheet" href="../assets/fonts/fonts.css">
+<style>
+@page { size: 1280px 720px; margin: 0; }
+:root{--ink:#0F1419;--slate:#18202A;--harbour:#232E3B;--ember:#FF5A1F;--surf:#19D9C8;--sun:#FFC933;--sand:#F4EFE6;--fog:#A9B4C0;
+--head:"Barlow Condensed","Arial Narrow",sans-serif;--body:Figtree,system-ui,sans-serif;--mono:"DM Mono",ui-monospace,monospace}
+*{box-sizing:border-box;margin:0;padding:0}
+html{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+body{background:var(--ink);color:var(--sand);font-family:var(--body);font-size:17px;line-height:1.45}
+.page{width:1280px;height:720px;position:relative;overflow:hidden;page-break-after:always;break-after:page;padding:56px 64px;background:var(--ink)}
+.page--light{background:var(--sand);color:var(--ink)}
+.kicker{font-family:var(--mono);font-weight:500;font-size:13px;letter-spacing:.2em;text-transform:uppercase;color:var(--ember)}
+.page--light .kicker{color:#B93A08}
+h1,h2,h3{font-family:var(--head);font-weight:800;text-transform:uppercase;line-height:.95;letter-spacing:.01em}
+h2{font-size:64px;margin:8px 0 24px}
+h3{font-size:30px;margin-bottom:8px}
+p{max-width:60ch}
+.mono{font-family:var(--mono);font-weight:500}
+.foot{position:absolute;left:64px;right:64px;bottom:26px;display:flex;justify-content:space-between;font-family:var(--mono);font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--fog)}
+.page--light .foot{color:#5A6673}
+.cols{display:grid;gap:28px}
+.c2{grid-template-columns:1fr 1fr}.c3{grid-template-columns:repeat(3,1fr)}.c4{grid-template-columns:repeat(4,1fr)}
+.card{background:var(--slate);border-radius:14px;padding:22px}
+.page--light .card{background:#E7E0D3}
+.pill{display:inline-block;font-family:var(--mono);font-weight:500;font-size:13px;letter-spacing:.12em;text-transform:uppercase;padding:6px 12px;border-radius:999px;border:1.5px solid currentColor;margin:0 8px 8px 0}
+.bleed{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+img{display:block}
+/* cover */
+.cover h1{font-size:112px;margin:14px 0 18px}
+.cover h1 span{color:var(--ember)}
+.scrim{position:absolute;inset:0;background:linear-gradient(90deg,rgba(15,20,25,.94) 8%,rgba(15,20,25,.5) 55%,rgba(15,20,25,0))}
+.front{position:relative}
+/* swatches */
+.sw{border-radius:14px;overflow:hidden;background:var(--slate);}
+.sw__chip{height:150px;display:flex;align-items:flex-end;padding:14px;font-family:var(--head);font-weight:800;font-size:34px;text-transform:uppercase}
+.sw__meta{padding:12px 14px;font-family:var(--mono);font-size:12px;line-height:1.6;color:var(--fog)}
+.bar{display:flex;height:46px;border-radius:10px;overflow:hidden;margin-top:6px}
+.bar span{display:flex;align-items:center;padding-left:12px;font-family:var(--mono);font-size:12px;font-weight:500}
+/* type */
+.spec{font-size:150px;line-height:.85}
+.ramp{display:grid;gap:6px}
+/* ui */
+.btn{display:inline-block;font-family:var(--head);font-weight:700;text-transform:uppercase;letter-spacing:.06em;font-size:22px;padding:12px 26px;border-radius:10px}
+.btn--p{background:var(--ember);color:var(--ink)}
+.btn--s{border:2px solid var(--surf);color:var(--surf)}
+.field{background:var(--harbour);border:1.5px solid #3a485a;border-radius:10px;padding:12px 14px;color:var(--fog);font-size:15px}
+.tag{font-family:var(--mono);font-size:12px;letter-spacing:.1em;text-transform:uppercase;background:var(--sun);color:var(--ink);padding:4px 9px;border-radius:6px}
+.mini{border-radius:14px;overflow:hidden;position:relative;border:1px solid #2b394a}
+.mini--light{background:var(--sand);color:var(--ink);border-color:#d6cdbb}
+.mini--light .btn--p{background:#E04A0F;color:var(--ink)}
+.mini--light .btn--s{border-color:#077A70;color:#077A70}
+.mini--light .field{background:#fff;border-color:#b9ae98;color:#5A6673}
+.mini--light .tag{background:#E8A800}
+.cp{display:grid;grid-template-columns:auto 1fr auto;gap:8px 14px;align-items:center;font-family:var(--mono);font-size:13px}
+.dot{width:26px;height:26px;border-radius:6px;display:grid;place-items:center;font-weight:500;font-size:14px;font-family:var(--head)}
+.pass{color:var(--surf)}.warn{color:var(--sun)}
+.page--light .pass{color:#077A70}.page--light .warn{color:#B93A08}
+ul.plain{list-style:none}
+ul.plain li{padding:7px 0;border-bottom:1px solid rgba(169,180,192,.22)}
+.page--light ul.plain li{border-color:rgba(15,20,25,.15)}
+.grid-bg{position:absolute;inset:0;background:url("../assets/images/texture-blueprint-grid.svg");opacity:.55}
+.no{color:#FF7A4D}
+</style>
+</head>
+<body>
+
+<!-- 1 COVER -->
+<section class="page cover" style="padding:0">
+  <img class="bleed" src="../logo-pack/headers/hero-dark.webp" alt="">
+  <div class="scrim"></div>
+  <div class="front" style="padding:56px 64px">
+    <img src="../logo-pack/svg/logo-horizontal-on-dark.svg" width="300" height="83" alt="Banksia Build Co.">
+    <div style="margin-top:150px"><span class="kicker">Brand &amp; web mood board · v1.0</span>
+    <h1>Built to last.<br><span>Built for the coast.</span></h1>
+    <p class="mono" style="font-size:14px;letter-spacing:.14em;text-transform:uppercase;color:var(--fog)">Prepared by Tidewater Creative · Carpentry &amp; building · Gold Coast, QLD</p></div>
+  </div>
+</section>
+
+<!-- 2 BRAND -->
+<section class="page">
+  <span class="kicker">01 · Brand idea</span>
+  <h2>Tough. Local. Beautiful up close.</h2>
+  <div class="cols c2" style="gap:56px">
+    <div>
+      <p>The banksia is a hardy Gold Coast native whose seed pod opens only after fire. It is resilient, local and far more beautiful when you look closely. That is how Banksia Build Co. wants its work to feel: built to cope with salt, sun and storms, and finished with real craft.</p>
+      <p style="margin-top:16px">The mark is a square-edged B: a teal spine like a carpenter's square edge, two warm bowls like timber ends. Confident, simple, and it works at favicon size.</p>
+      <div style="margin-top:28px"><span class="pill" style="color:var(--ember)">Warm</span><span class="pill" style="color:var(--surf)">Direct</span><span class="pill" style="color:var(--sun)">Skilled</span><span class="pill" style="color:var(--fog)">Sun-baked</span><span class="pill" style="color:var(--fog)">Good-humoured</span></div>
+    </div>
+    <div class="cols c2" style="gap:20px">
+      <div class="card"><h3 style="color:var(--surf)">We are</h3><ul class="plain"><li>Plain-spoken</li><li>Proud of the detail</li><li>Honest about price</li><li>Relaxed, never sloppy</li></ul></div>
+      <div class="card"><h3 style="color:var(--ember)">We are not</h3><ul class="plain"><li>Corporate or stiff</li><li>"Mate-rates" cliché</li><li>Hype and exclamation marks</li><li>Stock-photo generic</li></ul></div>
+    </div>
+  </div>
+  <div class="foot"><span>Banksia Build Co.</span><span>Tidewater Creative · 02</span></div>
+</section>
+
+<!-- 3 COLOUR -->
+<section class="page">
+  <span class="kicker">02 · Colour</span>
+  <h2>Ink-dark, sunset-bright.</h2>
+  <div class="cols" style="grid-template-columns:repeat(6,1fr);gap:16px">
+    <div class="sw"><div class="sw__chip" style="background:#0F1419;color:var(--sand);box-shadow:inset 0 0 0 1px #2b394a">Ink</div><div class="sw__meta">#0F1419<br>oklch(0.19 0.01 249)<br>Page background</div></div>
+    <div class="sw"><div class="sw__chip" style="background:#18202A;color:var(--sand)">Slate</div><div class="sw__meta">#18202A<br>oklch(0.24 0.02 254)<br>Cards, header</div></div>
+    <div class="sw"><div class="sw__chip" style="background:#FF5A1F;color:var(--ink)">Ember</div><div class="sw__meta">#FF5A1F<br>oklch(0.68 0.21 38)<br>Primary, actions</div></div>
+    <div class="sw"><div class="sw__chip" style="background:#19D9C8;color:var(--ink)">Surf</div><div class="sw__meta">#19D9C8<br>oklch(0.80 0.14 185)<br>Secondary, links</div></div>
+    <div class="sw"><div class="sw__chip" style="background:#FFC933;color:var(--ink)">Sun</div><div class="sw__meta">#FFC933<br>oklch(0.86 0.16 87)<br>Flashes, badges</div></div>
+    <div class="sw"><div class="sw__chip" style="background:#F4EFE6;color:var(--ink)">Sand</div><div class="sw__meta">#F4EFE6<br>oklch(0.95 0.01 82)<br>Text, light theme</div></div>
+  </div>
+  <div style="margin-top:30px" class="cols c2">
+    <div><span class="mono" style="font-size:12px;letter-spacing:.16em;color:var(--fog)">DARK THEME PROPORTION</span>
+      <div class="bar"><span style="width:62%;background:#0F1419;box-shadow:inset 0 0 0 1px #2b394a">Ink 62%</span><span style="width:20%;background:#18202A">Slate 20%</span><span style="width:8%;background:#F4EFE6;color:var(--ink)">Sand</span><span style="width:6%;background:#FF5A1F;color:var(--ink)"></span><span style="width:2.5%;background:#19D9C8"></span><span style="width:1.5%;background:#FFC933"></span></div></div>
+    <div><span class="mono" style="font-size:12px;letter-spacing:.16em;color:var(--fog)">RULES</span>
+      <p style="font-size:15px;margin-top:6px">One vibrant accent per view. Ember leads, Surf supports, Sun is a spark. Light theme deepens each accent: Ember #E04A0F, Surf #0A9D90, Sun #E8A800 (graphics); text uses #B93A08 and #077A70.</p></div>
+  </div>
+  <div class="foot"><span>Banksia Build Co.</span><span>Tidewater Creative · 03</span></div>
+</section>
+
+<!-- 4 TYPE -->
+<section class="page">
+  <span class="kicker">03 · Typography · self-hosted Google Fonts</span>
+  <div class="cols" style="grid-template-columns:1.25fr 1fr;gap:48px;margin-top:26px">
+    <div>
+      <div class="mono" style="font-size:12px;letter-spacing:.16em;color:var(--fog)">HEADINGS · BARLOW CONDENSED 600 / 700 / 800</div>
+      <div class="spec" style="font-family:var(--head);font-weight:800;text-transform:uppercase;color:var(--ember)">Aa Bb 123</div>
+      <div style="font-family:var(--head);font-weight:800;font-size:48px;text-transform:uppercase;line-height:1">Decks that outlast the summer</div>
+      <div class="mono" style="font-size:12px;letter-spacing:.16em;color:var(--fog);margin-top:24px">BODY · FIGTREE VARIABLE 400–700</div>
+      <p style="font-size:20px;margin-top:6px">We build decks, pergolas and outdoor kitchens that handle salt air, sun and storms. Every quote is fixed-price, in writing, and explains exactly what's included.</p>
+      <div class="mono" style="font-size:12px;letter-spacing:.16em;color:var(--fog);margin-top:20px">ACCENT · DM MONO 400 / 500</div>
+      <div class="mono" style="font-size:20px;margin-top:4px;color:var(--surf)">FROM $ · 4.8 × 3.6 M · SPOTTED GUM · 3 WEEKS</div>
+    </div>
+    <div class="card" style="align-self:start">
+      <h3>Rules</h3>
+      <ul class="plain" style="font-size:15.5px">
+        <li><b>Self-hosted only.</b> Variable or static woff2 in <span class="mono">/fonts</span>. No Google requests at runtime.</li>
+        <li><b>Subset</b> to latin + latin-ext, <span class="mono">font-display: swap</span>.</li>
+        <li><b>Preload</b> only the latin files used above the fold.</li>
+        <li><b>Headings</b> uppercase at display sizes; sentence case below 28 px.</li>
+        <li><b>Body</b> 17–20 px, 1.5 line-height, 60–70 characters per line.</li>
+        <li><b>Mono</b> for numbers, specs, tags and prices only.</li>
+        <li>Fallbacks: Arial Narrow · system-ui · ui-monospace.</li>
+      </ul>
+    </div>
+  </div>
+  <div class="foot"><span>All three families are SIL Open Font Licence</span><span>Tidewater Creative · 04</span></div>
+</section>
+
+<!-- 5 LOGO -->
+<section class="page">
+  <span class="kicker">04 · Logo</span>
+  <h2 style="margin-bottom:18px">A B that stands up.</h2>
+  <div class="cols" style="grid-template-columns:1.2fr 1fr 1fr;gap:20px">
+    <div class="card" style="display:grid;place-items:center;height:210px;background:var(--ink);border:1px solid #2b394a"><img src="../logo-pack/svg/logo-horizontal-on-dark.svg" width="330" alt="Horizontal logo on dark"></div>
+    <div class="card" style="display:grid;place-items:center;height:210px;background:var(--sand)"><img src="../logo-pack/svg/logo-stacked-on-light.svg" width="190" alt="Stacked logo on light"></div>
+    <div class="card" style="display:grid;place-items:center;height:210px;background:var(--ember)"><img src="../logo-pack/svg/logo-stacked-black.svg" width="190" alt="Stacked logo in black"></div>
+  </div>
+  <div class="cols c4" style="margin-top:20px;gap:20px">
+    <div class="card" style="display:grid;place-items:center;height:130px"><img src="../logo-pack/svg/mark-on-dark.svg" width="86" alt="Mark"></div>
+    <div class="card" style="display:grid;place-items:center;height:130px;background:var(--surf)"><img src="../logo-pack/svg/mark-black.svg" width="86" alt="Mark in black"></div>
+    <div class="card" style="display:grid;place-items:center;height:130px;background:var(--harbour)"><img src="../logo-pack/svg/mark-white.svg" width="86" alt="Mark in white"></div>
+    <div class="card" style="display:grid;place-items:center;height:130px;gap:6px;grid-auto-flow:column"><img src="../logo-pack/favicon/icon-192.png" width="72" height="72" style="border-radius:16px" alt="App icon"><img src="../logo-pack/favicon/icon-32.png" width="32" height="32" alt="Favicon"></div>
+  </div>
+  <p style="margin-top:14px;font-size:14.5px;color:var(--fog);max-width:none">Clear space: the width of the spine on all sides. Minimum size: mark 20 px, horizontal lockup 120 px wide. Use <b>on-dark</b> on Ink/Slate, <b>on-light</b> on Sand, <b>white/black</b> on photography and brand-colour fills. Never recolour, outline, stretch or add effects.</p>
+  <div class="foot"><span>Logo pack: /logo-pack</span><span>Tidewater Creative · 05</span></div>
+</section>
+
+<!-- 6 IMAGERY -->
+<section class="page">
+  <span class="kicker">05 · Imagery &amp; art direction</span>
+  <div class="cols" style="grid-template-columns:1.5fr 1fr;gap:28px;margin-top:8px">
+    <div style="position:relative;border-radius:14px;overflow:hidden;height:560px"><img src="../logo-pack/headers/hero-light.webp" alt="" style="width:100%;height:100%;object-fit:cover;object-position:60% 60%"><div style="position:absolute;inset:auto 0 0 0;padding:18px 22px;background:linear-gradient(0deg,rgba(15,20,25,.85),transparent);font-family:var(--mono);font-size:12px;letter-spacing:.14em">ILLUSTRATIVE STAND-IN · REPLACE WITH GOLDEN-HOUR PROJECT PHOTOGRAPHY</div></div>
+    <div style="display:grid;gap:16px;align-content:start">
+      <h2 style="font-size:50px;margin:0">Real work, low sun.</h2>
+      <ul class="plain" style="font-size:15.5px">
+        <li><b>Light:</b> golden hour, long shadows, warm timber against deep shade.</li>
+        <li><b>Subjects:</b> finished decks, pergolas and kitchens in use; joinery macros; crew at work.</li>
+        <li><b>Framing:</b> wide horizontal heroes with space on the left for text; 3:2 for cards; 4:5 portrait for mobile.</li>
+        <li><b>Grade:</b> rich, slightly warm, deep blacks. No heavy filters, no stock handshakes.</li>
+        <li><b>Format:</b> WebP, eager above the fold, lazy elsewhere, with width and height.</li>
+      </ul>
+      <div style="display:flex;gap:12px">
+        <div style="flex:1;height:110px;border-radius:12px;background:#2A1D12 url('../assets/images/texture-timber-grain.svg');background-size:cover"></div>
+        <div style="flex:1;height:110px;border-radius:12px;background:var(--ink) url('../assets/images/texture-blueprint-grid.svg');box-shadow:inset 0 0 0 1px #2b394a"></div>
+      </div>
+      <span class="mono" style="font-size:12px;letter-spacing:.12em;color:var(--fog)">TEXTURES: TIMBER GRAIN · BLUEPRINT GRID, USED SPARINGLY</span>
+    </div>
+  </div>
+  <div class="foot"><span>Shot list in brief §11</span><span>Tidewater Creative · 06</span></div>
+</section>
+
+<!-- 7 UI DARK -->
+<section class="page">
+  <span class="kicker">06 · Interface mood · dark (default)</span>
+  <div class="mini" style="margin-top:12px;height:560px;background:var(--ink)">
+    <img class="bleed" src="../logo-pack/headers/hero-dark.webp" alt="" style="height:316px;object-position:50% 40%">
+    <div style="position:absolute;inset:0;height:316px;background:linear-gradient(90deg,rgba(15,20,25,.92),rgba(15,20,25,.15))"></div>
+    <div style="position:absolute;top:0;left:0;right:0;display:flex;justify-content:space-between;align-items:center;padding:18px 30px">
+      <img src="../logo-pack/svg/logo-horizontal-on-dark.svg" width="190" alt=""><div class="mono" style="font-size:13px;letter-spacing:.12em;display:flex;gap:26px;align-items:center"><span>SERVICES</span><span>PROJECTS</span><span>PROCESS</span><span>ABOUT</span><span class="btn btn--p" style="font-size:17px;padding:8px 18px">Get a quote</span></div></div>
+    <div style="position:absolute;top:96px;left:30px"><h2 style="font-size:66px;margin:0 0 16px">Decks that<br><span style="color:var(--ember)">outlast summer.</span></h2><span class="btn btn--p">Get a quote</span> &nbsp;<span class="btn btn--s">See our work</span></div>
+    <div style="position:absolute;top:316px;left:0;right:0;padding:18px 30px;display:grid;grid-template-columns:1fr 1fr 1fr 1.1fr;gap:18px">
+      <div class="card"><span class="tag">Decks</span><h3 style="margin-top:10px;font-size:26px">Decks &amp; patios</h3><p class="mono" style="font-size:13px;color:var(--surf)">2–4 WEEKS · FROM $ —</p></div>
+      <div class="card"><span class="tag">Shade</span><h3 style="margin-top:10px;font-size:26px">Pergolas</h3><p class="mono" style="font-size:13px;color:var(--surf)">2–5 WEEKS · FROM $ —</p></div>
+      <div class="card"><span class="tag">Kitchens</span><h3 style="margin-top:10px;font-size:26px">Outdoor kitchens</h3><p class="mono" style="font-size:13px;color:var(--surf)">3–6 WEEKS · FROM $ —</p></div>
+      <div class="card" style="display:grid;gap:10px"><div class="field">Your name</div><div class="field">Suburb</div><span class="btn btn--p" style="text-align:center">Send request</span></div>
+    </div>
+  </div>
+  <div class="foot"><span>Illustrative only · final layout follows the build</span><span>Tidewater Creative · 07</span></div>
+</section>
+
+<!-- 8 UI LIGHT -->
+<section class="page page--light">
+  <span class="kicker">07 · Interface mood · light theme</span>
+  <div class="mini mini--light" style="margin-top:12px;height:560px">
+    <img class="bleed" src="../logo-pack/headers/hero-light.webp" alt="" style="height:316px;object-position:50% 40%">
+    <div style="position:absolute;inset:0;height:316px;background:linear-gradient(90deg,rgba(244,239,230,.94),rgba(244,239,230,.1))"></div>
+    <div style="position:absolute;top:0;left:0;right:0;display:flex;justify-content:space-between;align-items:center;padding:18px 30px">
+      <img src="../logo-pack/svg/logo-horizontal-on-light.svg" width="190" alt=""><div class="mono" style="font-size:13px;letter-spacing:.12em;display:flex;gap:26px;align-items:center"><span>SERVICES</span><span>PROJECTS</span><span>PROCESS</span><span>ABOUT</span><span class="btn btn--p" style="font-size:17px;padding:8px 18px">Get a quote</span></div></div>
+    <div style="position:absolute;top:96px;left:30px"><h2 style="font-size:66px;margin:0 0 16px">Decks that<br><span style="color:#B93A08">outlast summer.</span></h2><span class="btn btn--p">Get a quote</span> &nbsp;<span class="btn btn--s">See our work</span></div>
+    <div style="position:absolute;top:316px;left:0;right:0;padding:18px 30px;display:grid;grid-template-columns:1fr 1fr 1fr 1.1fr;gap:18px">
+      <div class="card"><span class="tag">Decks</span><h3 style="margin-top:10px;font-size:26px">Decks &amp; patios</h3><p class="mono" style="font-size:13px;color:#077A70">2–4 WEEKS · FROM $ —</p></div>
+      <div class="card"><span class="tag">Shade</span><h3 style="margin-top:10px;font-size:26px">Pergolas</h3><p class="mono" style="font-size:13px;color:#077A70">2–5 WEEKS · FROM $ —</p></div>
+      <div class="card"><span class="tag">Kitchens</span><h3 style="margin-top:10px;font-size:26px">Outdoor kitchens</h3><p class="mono" style="font-size:13px;color:#077A70">3–6 WEEKS · FROM $ —</p></div>
+      <div class="card" style="display:grid;gap:10px"><div class="field">Your name</div><div class="field">Suburb</div><span class="btn btn--p" style="text-align:center">Send request</span></div>
+    </div>
+  </div>
+  <div class="foot"><span>Designed, not inverted: accents deepen to hold contrast</span><span>Tidewater Creative · 08</span></div>
+</section>
+
+<!-- 9 SOCIAL + HEADERS -->
+<section class="page">
+  <span class="kicker">08 · Social &amp; header system</span>
+  <div style="display:grid;grid-template-columns:540px 260px 308px;gap:18px;margin-top:12px;align-items:start">
+    <div style="display:grid;gap:14px">
+      <img src="../logo-pack/social/og-image-dark.png" width="540" height="283" style="border-radius:10px" alt="Open Graph image, dark">
+      <img src="../logo-pack/headers/page-header-dark.webp" width="540" height="118" style="border-radius:10px;object-fit:cover" alt="Page header, dark">
+      <img src="../logo-pack/headers/page-header-blueprint-light.webp" width="540" height="118" style="border-radius:10px;object-fit:cover" alt="Blueprint page header, light">
+    </div>
+    <div style="display:grid;gap:14px">
+      <img src="../logo-pack/social/post-square-dark.png" width="260" height="260" style="border-radius:10px" alt="Square post, dark">
+      <img src="../logo-pack/social/post-square-light.png" width="260" height="260" style="border-radius:10px" alt="Square post, light">
+    </div>
+    <img src="../logo-pack/social/story-dark.png" width="308" height="547" style="border-radius:10px" alt="Story, dark">
+  </div>
+  <div class="foot"><span>OG 1200×630 · Square 1080 · Story 1080×1920 · Cover 1640×624 · LinkedIn 1584×396 · Avatar 800</span><span>Tidewater Creative · 09</span></div>
+</section>
+
+<!-- 10 ACCESSIBILITY + MOTION -->
+<section class="page">
+  <span class="kicker">09 · Contrast, motion &amp; iconography</span>
+  <div class="cols c2" style="gap:48px;margin-top:6px">
+    <div>
+      <h3>Contrast (WCAG ratios)</h3>
+      <div class="cp">
+        <span class="dot" style="background:var(--ink);color:var(--sand);box-shadow:inset 0 0 0 1px #2b394a">Aa</span><span>Sand on Ink</span><span class="pass">16.2 AAA</span>
+        <span class="dot" style="background:var(--ink);color:var(--fog)">Aa</span><span>Fog on Ink</span><span class="pass">8.8 AAA</span>
+        <span class="dot" style="background:var(--ink);color:var(--ember)">Aa</span><span>Ember on Ink</span><span class="pass">5.9 AA</span>
+        <span class="dot" style="background:var(--ink);color:var(--surf)">Aa</span><span>Surf on Ink</span><span class="pass">10.4 AAA</span>
+        <span class="dot" style="background:var(--ember);color:var(--ink)">Aa</span><span>Ink on Ember (buttons)</span><span class="pass">5.9 AA</span>
+        <span class="dot" style="background:var(--sand);color:#B93A08">Aa</span><span>Ember-deep on Sand</span><span class="pass">5.0 AA</span>
+        <span class="dot" style="background:var(--sand);color:#077A70">Aa</span><span>Surf-deep on Sand</span><span class="pass">4.6 AA</span>
+        <span class="dot" style="background:var(--sand);color:#E04A0F">Aa</span><span>Ember on Sand</span><span class="warn">3.6 large/graphics only</span>
+      </div>
+    </div>
+    <div style="display:grid;gap:22px;align-content:start">
+      <div><h3>Motion</h3><p style="font-size:16px">Calm and confident, like a tide. Fade-and-rise entrances, slow image reveals, a gentle parallax on the hero sun. Everything that moves sits inside <span class="mono">prefers-reduced-motion: no-preference</span>; with reduce, content simply appears.</p></div>
+      <div><h3>Iconography &amp; shape</h3><p style="font-size:16px">Chunky 2 px line icons with square caps, echoing a carpenter's pencil. Corners: 10–14 px radius on cards and buttons, sharp 90° on the set-square motif. Dividers use a thin Ember rule or the blueprint grid.</p></div>
+      <div><h3>Voice samples</h3><p style="font-size:16px"><b>Hero:</b> "Decks that outlast summer."<br><b>Button:</b> "Get a quote" (never "Submit").<br><b>Process:</b> "We visit, we measure twice, we quote once."</p></div>
+    </div>
+  </div>
+  <div class="foot"><span>Ratios calculated from the final hex values</span><span>Tidewater Creative · 10</span></div>
+</section>
+
+</body>
+</html>

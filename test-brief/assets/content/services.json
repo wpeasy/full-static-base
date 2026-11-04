@@ -1,0 +1,79 @@
+{
+  "_note": "Prices are intentionally null. Supply real 'from' figures before publishing.",
+  "topics": {
+    "decks": "Decks",
+    "shade": "Pergolas and shade",
+    "kitchens": "Outdoor kitchens",
+    "joinery": "Joinery",
+    "reno": "Renovations",
+    "repairs": "Repairs"
+  },
+  "items": [
+    {
+      "slug": "decks-and-patios",
+      "name": "Decks and patios",
+      "topic": "decks",
+      "summary": "Timber and composite decks built for salt air, sun and storms.",
+      "included": "Merbau, spotted gum, blackbutt or composite; hidden fixings; non-slip finishes; council and certifier paperwork handled.",
+      "typicalTimeframe": "2 to 4 weeks",
+      "fromPrice": null,
+      "image": "images/service-decks-and-patios.webp",
+      "imageAlt": null
+    },
+    {
+      "slug": "pergolas-and-awnings",
+      "name": "Pergolas and awnings",
+      "topic": "shade",
+      "summary": "Shade and shelter that extends your living space.",
+      "included": "Timber or steel-framed, open or insulated roofing, lighting and fan-ready, engineered for local wind ratings.",
+      "typicalTimeframe": "2 to 5 weeks",
+      "fromPrice": null,
+      "image": "images/service-pergolas-and-awnings.webp",
+      "imageAlt": null
+    },
+    {
+      "slug": "outdoor-kitchens",
+      "name": "Outdoor kitchens",
+      "topic": "kitchens",
+      "summary": "A proper kitchen outside, built to cope with the coast.",
+      "included": "Marine-grade cabinetry, stone or concrete benchtops, appliance cut-outs, gas and power coordinated with licensed trades.",
+      "typicalTimeframe": "3 to 6 weeks",
+      "fromPrice": null,
+      "image": "images/service-outdoor-kitchens.webp",
+      "imageAlt": null
+    },
+    {
+      "slug": "custom-cabinetry-and-joinery",
+      "name": "Custom cabinetry and joinery",
+      "topic": "joinery",
+      "summary": "Built-ins, vanities, wardrobes and feature joinery made to measure.",
+      "included": "Designed to your space, finished in our workshop, installed clean and level.",
+      "typicalTimeframe": "3 to 8 weeks",
+      "fromPrice": null,
+      "image": "images/service-custom-cabinetry-and-joinery.webp",
+      "imageAlt": null
+    },
+    {
+      "slug": "renovations-and-extensions",
+      "name": "Renovations and extensions",
+      "topic": "reno",
+      "summary": "Small and mid-size renovations delivered by one crew, start to finish.",
+      "included": "Kitchens, bathrooms, rear extensions and second-storey conversions with fixed-price quotes and a weekly progress update.",
+      "typicalTimeframe": "6 to 20 weeks",
+      "fromPrice": null,
+      "image": "images/service-renovations-and-extensions.webp",
+      "imageAlt": null
+    },
+    {
+      "slug": "repairs-and-maintenance",
+      "name": "Repairs and maintenance",
+      "topic": "repairs",
+      "summary": "Fix it properly: rot, balustrades, fencing, steps and compliance work.",
+      "included": "Fast quotes for body corporates, landlords and homeowners; photo-based first assessment.",
+      "typicalTimeframe": "1 to 10 days",
+      "fromPrice": null,
+      "image": "images/service-repairs-and-maintenance.webp",
+      "imageAlt": null
+    }
+  ]
+}

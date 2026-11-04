@@ -1,0 +1,26 @@
+{
+  "_note": "Placeholder reviews for layout testing only. Do NOT publish or mark up as AggregateRating. Replace with real, attributable reviews.",
+  "items": [
+    {
+      "quote": "Placeholder review text about turning up on time and finishing properly.",
+      "author": "Placeholder name",
+      "suburb": "Burleigh Heads",
+      "service": "decks-and-patios",
+      "placeholder": true
+    },
+    {
+      "quote": "Placeholder review text about clear communication and a fixed price.",
+      "author": "Placeholder name",
+      "suburb": "Palm Beach",
+      "service": "pergolas-and-awnings",
+      "placeholder": true
+    },
+    {
+      "quote": "Placeholder review text about the quality of the joinery.",
+      "author": "Placeholder name",
+      "suburb": "Mermaid Beach",
+      "service": "custom-cabinetry-and-joinery",
+      "placeholder": true
+    }
+  ]
+}
