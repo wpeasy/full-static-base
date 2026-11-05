@@ -9,7 +9,7 @@ Each workflow assumes you've read `AGENTS.md`. The Claude skills in `.claude/ski
 2. Pick a starting preset from `themes/` closest to the tone and copy it over `public/css/theme.css`; then tune brand colours (OKLCH), fonts, `--text-*` and `--space-*` sizes/ratios, `--radius-scale`, heading styles and component roles. Self-host fonts (`docs/fonts.md`).
 3. Open `index.html` (style guide) in both themes; fix anything that looks wrong at the theme level before building pages. Check contrast of brand colours (the `-a11y` pairs adapt automatically).
 4. Plan the sitemap; list each page's sections and the component per section; note gaps (AGENTS.md section 1 says how to fill them).
-5. Fill `_template.html` (repo root; site name, nav, footer, favicon, social meta, default SEO block) once. That header/footer is the canonical copy for every page.
+5. Fill `_template.html` (repo root; site name, nav, footer, social meta, default SEO block; favicon set via `node tools/make-favicons.mjs`, docs/favicons.md: an SVG alone is not enough) once. That header/footer is the canonical copy for every page.
 6. Build pages (next workflow). Update `sitemap.xml`, `robots.txt` (real domain), `404.html`. Convert supplied images to WebP (docs/images.md). For a list of entities use docs/data-driven-pages.md.
 7. Write the Organization/WebSite schema for the home page (docs/seo.md) and **list the business facts you still need from the client** (address, phone, hours, social profiles, logo, share image); never invent them.
 8. Run the Definition of done in AGENTS.md. Record deliberate deviations in `DESIGN-NOTES.md`.

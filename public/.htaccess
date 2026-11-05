@@ -3,6 +3,8 @@ RewriteEngine On
 RewriteRule ^item/[^/.]+/?$ /item.html [L]
 ErrorDocument 404 /404.html
 
+AddType application/manifest+json .webmanifest
+
 # Caching (mirror of _headers): unversioned CSS/JS/HTML revalidate on every load
 <IfModule mod_headers.c>
   <FilesMatch "\.(html|css|js)$">

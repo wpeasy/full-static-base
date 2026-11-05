@@ -222,7 +222,7 @@ const metaContent = (html, re) => (html.match(re) || [])[1];
 const seoLimits = { title: 60, description: 160 };
 
 // Raster images should be WebP (or SVG/AVIF): flag leftovers in images/
-for (const f of walk(join(site, 'images'), (p) => /\.(jpe?g|png|gif)$/i.test(p))) warn(f, 1, 'convert to WebP (see docs/images.md), keep only the .webp');
+for (const f of walk(join(site, 'images'), (p) => /\.(jpe?g|png|gif)$/i.test(p) && !/(favicon|apple-touch-icon|icon-\d+)/i.test(p))) warn(f, 1, 'convert to WebP (see docs/images.md), keep only the .webp');
 const normalise = (s) => s.replace(/\s+/g, ' ').replace(/\b(href|src)="\//g, '$1="') /* single-template pages use root-absolute paths */.replace(/ aria-current="page"/g, '').replace(/nav__link--current/g, '').replace(/class="nav__link\s+"/g, 'class="nav__link"').trim();
 
 for (const file of htmlFiles) {
@@ -242,6 +242,12 @@ for (const file of htmlFiles) {
       if (value && map.has(value)) warn(file, 1, `${what} is the same as ${relative(root, map.get(value))}: every page needs its own`);
       else if (value) map.set(value, file);
     }
+  }
+  // Favicons (docs/favicons.md): an SVG alone is not enough (Safari and crawlers ignore it; browsers still ask for /favicon.ico)
+  if (!/data-page="styleguide"/.test(base)) {
+    const icons = [...base.matchAll(/<link\b[^>]*\brel="(?:shortcut )?icon"[^>]*>/gi)].map((m) => m[0]);
+    if (!icons.some((tag) => /\bhref="[^"]*\.(ico|png)(\?[^"]*)?"/i.test(tag))) error(file, 1, 'favicon needs a .ico or .png <link rel="icon">: an SVG alone does not work in Safari or for search engines (docs/favicons.md)');
+    if (!/<link\b[^>]*\brel="apple-touch-icon"/i.test(base)) warn(file, 1, 'missing <link rel="apple-touch-icon"> (180x180 PNG; docs/favicons.md)');
   }
   for (const m of base.matchAll(/<script\b[^>]*type="application\/ld\+json"[^>]*>([\s\S]*?)<\/script>/gi)) {
     try { JSON.parse(m[1]); } catch (e) { error(file, lineOf(base, m.index), `JSON-LD is not valid JSON: ${e.message}`); }

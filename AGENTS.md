@@ -13,6 +13,7 @@ Static HTML + CSS sites, built and maintained by AI agents and edited by hand in
 | Motion, `prefers-reduced-motion`, **GSAP effects (use <https://gsap.brxprod.com/> first)** | [docs/motion.md](docs/motion.md) |
 | SEO, meta tags, JSON-LD schema | [docs/seo.md](docs/seo.md) |
 | Images: WebP, eager/lazy | [docs/images.md](docs/images.md) |
+| Favicon set (ICO + PNG + SVG + manifest) | [docs/favicons.md](docs/favicons.md) |
 | Content from JSON with one template page | [docs/data-driven-pages.md](docs/data-driven-pages.md) |
 | JS-filled pages: loading shell, skeleton, entrance | [docs/js-rendered-pages.md](docs/js-rendered-pages.md), [docs/alpine.md](docs/alpine.md) |
 | First build: clear the sample content out of `public/` | [FIRST-BUILD.md](FIRST-BUILD.md) (present only until the first build is done) |
@@ -62,6 +63,7 @@ These apply at **every level**: markup, CSS, JavaScript, components, content, an
 
 **Images** ([docs/images.md](docs/images.md), [docs/performance.md](docs/performance.md))
 - Convert every JPEG, PNG and GIF to **WebP** (delete the original); SVG stays for vector art. **Then make the interim sizes, in the same step, for every image you add, including ones that are already WebP:** `node tools/make-image-sizes.mjs <file|folder> [--delete-original]`, and use `srcset` + `sizes` on any `<img>` wider than 800px (docs/images.md, section 4).
+- **Favicon: an SVG alone does not work (Safari, crawlers).** Ship `favicon.ico` + `apple-touch-icon.png` + `icon-192/512.png` + `site.webmanifest` with the SVG, and the four `<link>`s in every `<head>`: `node tools/make-favicons.mjs` makes the files; `check.mjs` errors without an `.ico`/`.png` icon link (docs/favicons.md).
 - Judge a standard 1920×1080 screen: everything inside the first screen (always including the header logo) is `loading="eager"`, the LCP image also `fetchpriority="high"`; everything else is `loading="lazy" decoding="async"` (native lazy loading). Always `width` and `height`.
 
 **Reduced motion** (`prefers-reduced-motion`)
@@ -87,7 +89,7 @@ _template.html                  source of the shared header/footer and the defau
 docs/                           guides (accessibility, motion, SEO, images, data-driven pages, workflows, fonts, vendor …)
 themes/*.css                    starting presets: copy one over public/css/theme.css
 templates/                      page templates that are filled and copied into public/ (brand-guide.template.html); never published
-tools/                          check.mjs, sync-shared.mjs, serve.mjs, build-sitemap.mjs, build-dist.mjs, check-dist.mjs, bundle-css.mjs, make-image-sizes.mjs, browser-checks.mjs
+tools/                          check.mjs, sync-shared.mjs, serve.mjs, build-sitemap.mjs, build-dist.mjs, check-dist.mjs, bundle-css.mjs, make-image-sizes.mjs, make-favicons.mjs, browser-checks.mjs
 .claude/ .vscode/ .editorconfig .gitignore
 
 public/                         the ONLY deployed folder; files are served exactly as written (no build step)
@@ -157,6 +159,7 @@ Cascade layers (declared in `theme.css` and `framework.css`): `reset, tokens, ba
 - [ ] Text/background uses `-a11y` partners or semantic tokens; contrast ≥ AA in both themes
 - [ ] Alt text, labels, accessible names, `lang`, `<title>`, meta description present
 - [ ] SEO: real title (≤60) and description (≤160), canonical, Open Graph + Twitter tags, JSON-LD of the right type that parses, page in `sitemap.xml`, missing business facts listed for the client
+- [ ] Favicon set present and linked: `favicon.ico`, `apple-touch-icon.png`, `icon-192/512.png`, `site.webmanifest`, SVG (not SVG alone)
 - [ ] Images are WebP/SVG with interim sizes (`make-image-sizes.mjs`), `srcset` + a correct `sizes` on wide images, `loading="eager"` inside the first 1920×1080 screen and `loading="lazy"` elsewhere, with `width`/`height`
 - [ ] Performance: `node tools/build-dist.mjs` passes (one CSS file, no `@import`, every `url()` resolves); an LCP image that is a CSS background is preloaded in the page `<head>`; images are sized to their displayed size
 - [ ] Caching: `_headers` gives `/css/*` and `/js/*` no `max-age` (unless the file name is versioned); JS-filled `<main>` has `aria-busy`
@@ -177,6 +180,7 @@ node tools/browser-checks.mjs    # optional: axe scan + screenshots (see tools/R
 node tools/build-dist.mjs         # production: copy public/ -> dist/ with ONE minified css/main.css (no @import); publish dist/
 node tools/check-dist.mjs         # verify dist/: no @import, every url() resolves (build-dist runs it)
 node tools/make-image-sizes.mjs public/images/x.jpg --delete-original   # convert to WebP + interim sizes for srcset (file or folder; needs magick or cwebp)
+node tools/make-favicons.mjs      # favicon.ico + apple-touch-icon.png + icon-192/512.png from public/images/favicon.svg (needs magick)
 node tools/bundle-css.mjs [--min] # building block: public/css/main.css -> public/css/main.bundle.css (git-ignored)
 ```
 

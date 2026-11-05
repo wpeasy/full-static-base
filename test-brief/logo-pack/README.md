@@ -6,7 +6,7 @@ Illustrative brand assets for the test brief. The mark is a square-edged B monog
 |---|---|
 | `svg/` | Master logos: `logo-horizontal`, `logo-stacked`, `mark`, each in `on-dark`, `on-light`, `white`, `black` |
 | `png/` | Transparent PNG exports of every logo at native size (2x for print: re-export from SVG) |
-| `favicon/` | `favicon.svg`, `apple-touch-icon.png` (180), `icon-32/192/512.png`, `icon-512-maskable.png` |
+| `favicon/` | `favicon.ico` (16/32/48), `favicon.svg`, `apple-touch-icon.png` (180), `icon-32/192/512.png`, `icon-512-maskable.png`. An SVG alone is not enough: ship the .ico and PNGs too (docs/favicons.md) |
 | `social/` | Open Graph 1200x630, square post 1080, story 1080x1920, Facebook cover 1640x624, LinkedIn banner 1584x396, avatar 800. Light and dark each |
 | `headers/` | Hero 1920x1080, mobile hero 900x1125, page header 1920x420, blueprint page header 1920x420. Light and dark each, WebP |
 
