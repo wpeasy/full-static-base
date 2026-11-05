@@ -63,7 +63,7 @@ These apply at **every level**: markup, CSS, JavaScript, components, content, an
 
 **Images** ([docs/images.md](docs/images.md), [docs/performance.md](docs/performance.md))
 - Convert every JPEG, PNG and GIF to **WebP** (delete the original); SVG stays for vector art. **Then make the interim sizes, in the same step, for every image you add, including ones that are already WebP:** `node tools/make-image-sizes.mjs <file|folder> [--delete-original]`, and use `srcset` + `sizes` on any `<img>` wider than 800px (docs/images.md, section 4).
-- **Favicon: an SVG alone does not work (Safari, crawlers).** Ship `favicon.ico` + `apple-touch-icon.png` + `icon-192/512.png` + `site.webmanifest` with the SVG, and the four `<link>`s in every `<head>`: `node tools/make-favicons.mjs` makes the files; `check.mjs` errors without an `.ico`/`.png` icon link (docs/favicons.md).
+- **Favicon: an SVG alone does not work (Safari, crawlers).** Ship `favicon.ico` + `apple-touch-icon.png` + `icon-192/512.png` + `site.webmanifest` with the SVG, and the four `<link>`s in every `<head>`: `node tools/make-favicons.mjs` (or the `generate-icons` skill, from the client's one icon file) makes the files; `check.mjs` errors without an `.ico`/`.png` icon link (docs/favicons.md).
 - Judge a standard 1920×1080 screen: everything inside the first screen (always including the header logo) is `loading="eager"`, the LCP image also `fetchpriority="high"`; everything else is `loading="lazy" decoding="async"` (native lazy loading). Always `width` and `height`.
 
 **Reduced motion** (`prefers-reduced-motion`)
@@ -180,7 +180,7 @@ node tools/browser-checks.mjs    # optional: axe scan + screenshots (see tools/R
 node tools/build-dist.mjs         # production: copy public/ -> dist/ with ONE minified css/main.css (no @import); publish dist/
 node tools/check-dist.mjs         # verify dist/: no @import, every url() resolves (build-dist runs it)
 node tools/make-image-sizes.mjs public/images/x.jpg --delete-original   # convert to WebP + interim sizes for srcset (file or folder; needs magick or cwebp)
-node tools/make-favicons.mjs      # favicon.ico + apple-touch-icon.png + icon-192/512.png from public/images/favicon.svg (needs magick)
+node tools/make-favicons.mjs [icon.svg|png] --bg "#fff"   # favicon.ico, apple-touch-icon, icon-192/512, maskable, manifest icons from one icon (needs magick); skill: generate-icons
 node tools/bundle-css.mjs [--min] # building block: public/css/main.css -> public/css/main.bundle.css (git-ignored)
 ```
 

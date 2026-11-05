@@ -19,17 +19,21 @@ public/images/favicon.svg       the vector icon for modern browsers (optional bu
 public/apple-touch-icon.png     180x180, opaque background (iOS paints transparency black)
 public/icon-192.png             192x192, listed in the manifest
 public/icon-512.png             512x512, listed in the manifest
+public/icon-maskable-512.png    512x512, icon at 66% on an opaque background (Android adaptive icons crop to a shape)
 public/site.webmanifest         name, colours and the two icons (edit name/short_name/theme_color)
 ```
 
-## One command
+## One command (or the `generate-icons` skill)
+
+Give the client's single icon file to the **`generate-icons` skill** (`.claude/skills/generate-icons`): it inspects the file, picks the background colour from the theme, runs the tool, checks the legibility preview, wires the manifest and verifies. Or run the tool yourself:
 
 ```bash
-node tools/make-favicons.mjs                                  # from public/images/favicon.svg
-node tools/make-favicons.mjs path/to/logo-mark.svg --bg "#0F1419"   # another source; --bg is the apple-touch-icon background
+node tools/make-favicons.mjs                                              # from public/images/favicon.svg
+node tools/make-favicons.mjs path/to/mark.svg --bg "#0F1419" --preview p.png   # SVG source: copied to images/favicon.svg
+node tools/make-favicons.mjs path/to/mark.png --bg "#0F1419" --no-svg           # raster source: no SVG to serve
 ```
 
-It writes `favicon.ico`, `apple-touch-icon.png`, `icon-192.png` and `icon-512.png` into `public/` and needs ImageMagick (`magick`) on the machine. Use the brand **mark** (not the full logo with text): it must read at 16px. Put the mark's SVG at `public/images/favicon.svg` first. Check it at 16px and 32px; simplify the mark if it turns to mush.
+Source: SVG (best) or PNG/WebP/JPEG/ICO, at least 512×512 if raster; any aspect ratio (fitted into a square). It writes `favicon.ico`, `apple-touch-icon.png`, `icon-192.png`, `icon-512.png` and `icon-maskable-512.png` into `public/`, copies an SVG source to `images/favicon.svg`, and updates the icons in `site.webmanifest`. With a raster source `--no-svg` removes the SVG `<link>` from the pages and deletes `images/favicon.svg`. `--bg` fills the apple-touch and maskable icons (pick a colour that contrasts with the mark). `--preview file.png` writes a contact sheet of the 16/32/48px frames on light and dark so you can judge legibility. Needs ImageMagick (`magick`); an SVG is rasterised with `rsvg-convert` or headless Chrome, because ImageMagick's own SVG renderer can drop strokes and arcs. Use the brand **mark** (not the full logo with text): it must read at 16px; simplify it if it turns to mush.
 
 ## The `<head>` (every page, and `_template.html`)
 
