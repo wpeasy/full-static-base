@@ -16,9 +16,12 @@
 // With a raster source use --no-svg: it removes the SVG <link> from _template.html and public/*.html and deletes
 // images/favicon.svg, because there is no vector to serve.
 //
-// Usage: node tools/make-favicons.mjs [source] [--bg "#ffffff"] [--no-svg] [--preview preview.png] [--out public]
+// Usage: node tools/make-favicons.mjs [source] [--bg "#ffffff"] [--no-svg] [--trim] [--preview preview.png] [--out public]
 //   --bg       opaque background for apple-touch-icon and the maskable icon (default white; use a brand colour
 //              that contrasts with the icon, e.g. the dark surface for a white mark)
+//   --trim     remove transparent margins around the artwork before fitting it (use it when the supplied tile has built-in
+//              padding: the margin wastes pixels at 16px and shrinks the maskable icon). For an SVG source the copy written to
+//              images/favicon.svg gets a tighter viewBox too (square viewBox sources only)
 //   --preview  also write a contact sheet (16/32/48/180px on light and dark, magnified) so you can judge legibility
 // Needs ImageMagick (`magick`) installed; the site itself needs nothing. An SVG source is rasterised with `rsvg-convert`
 // or headless Chrome when available (ImageMagick's own SVG renderer can drop strokes, arcs and masks: check --preview).
@@ -38,6 +41,7 @@ const out = resolve(flag('--out', site));
 const bg = flag('--bg', '#ffffff');
 const preview = flag('--preview', '');
 const noSvg = args.includes('--no-svg');
+const trim = args.includes('--trim');
 const isSvg = extname(source).toLowerCase() === '.svg';
 
 try { execFileSync('which', ['magick'], { stdio: 'ignore' }); } catch { console.error('error: install ImageMagick (`brew install imagemagick`) to generate icons'); process.exit(1); }
@@ -65,8 +69,11 @@ function rasteriseSvg(svg) {
   return null;
 }
 const svgPng = isSvg ? rasteriseSvg(source) : null;
+// Where the artwork sits inside the 1024px square render (used to tighten the SVG copy under --trim)
+let trimBox = null;
+if (trim && svgPng) { const g = execFileSync('magick', [svgPng, '-trim', '-format', '%w %h %X %Y', 'info:']).toString().trim().split(' ').map(Number); trimBox = { w: g[0], h: g[1], x: g[2], y: g[3] }; }
 const master = join(tmpdir(), `icon-master-${process.pid}.png`);
-magick('-background', 'none', ...(isSvg && !svgPng ? ['-density', '1024'] : []), `${svgPng || source}[0]`, '-resize', '1024x1024', '-gravity', 'center', '-extent', '1024x1024', master);
+magick('-background', 'none', ...(isSvg && !svgPng ? ['-density', '1024'] : []), `${svgPng || source}[0]`, ...(trim ? ['-trim', '+repage'] : []), '-resize', '1024x1024', '-gravity', 'center', '-extent', '1024x1024', master);
 if (svgPng) unlinkSync(svgPng);
 const info = execFileSync('magick', ['identify', '-format', '%w %h', `${source}[0]`]).toString().trim().split(' ').map(Number);
 if (!isSvg && Math.min(...info) < 512) console.warn(`warn: the source is ${info[0]}x${info[1]}; at least 512x512 is recommended (the large icons will look soft). Ask the client for a larger file or an SVG.`);
@@ -84,7 +91,20 @@ const written = ['favicon.ico', 'apple-touch-icon.png', 'icon-192.png', 'icon-51
 
 // 3. SVG: keep a copy of a vector source; with a raster source there is no SVG to serve
 const svgTarget = join(out, 'images', 'favicon.svg');
-if (isSvg && source !== svgTarget) { mkdirSync(dirname(svgTarget), { recursive: true }); copyFileSync(source, svgTarget); written.push('images/favicon.svg'); }
+if (isSvg && source !== svgTarget) {
+  mkdirSync(dirname(svgTarget), { recursive: true });
+  let svg = readFileSync(source, 'utf8');
+  if (trim && trimBox) {
+    const vb = svg.match(/viewBox="\s*([-\d.]+)[ ,]+([-\d.]+)[ ,]+([-\d.]+)[ ,]+([-\d.]+)\s*"/);
+    if (vb && Math.abs(vb[3] - vb[4]) < 0.01) {
+      const [vx, vy, vw] = [Number(vb[1]), Number(vb[2]), Number(vb[3])], k = vw / 1024;
+      const box = [vx + trimBox.x * k, vy + trimBox.y * k, trimBox.w * k, trimBox.h * k].map((n) => +n.toFixed(2)).join(' ');
+      svg = svg.replace(/<svg\b[^>]*>/, (tag) => tag.replace(vb[0], `viewBox="${box}"`).replace(/\s(width|height)="[^"]*"/g, ''));
+    } else console.warn('note: --trim could not tighten the SVG copy (needs a square viewBox); the PNG and ICO icons are trimmed, the SVG keeps its margin.');
+  }
+  writeFileSync(svgTarget, svg);
+  written.push('images/favicon.svg');
+}
 if (noSvg && out === site) {
   if (existsSync(svgTarget)) unlinkSync(svgTarget);
   const pages = [join(root, '_template.html'), ...readdirSync(site).filter((f) => f.endsWith('.html')).map((f) => join(site, f))].filter(existsSync);

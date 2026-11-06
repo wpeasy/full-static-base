@@ -1,0 +1,266 @@
+<!doctype html>
+<!--
+  MOOD BOARD TEMPLATE for the new-site-plan skill (docs/site-plan.md). Copy to <pack>/moodboard/moodboard.html.
+  1280x720 pages, printed to PDF with headless Chrome (command in test-brief/README.md).
+
+  Fill every double-brace placeholder from the client's real material; delete anything the client did not supply rather
+  than inventing it (mark gaps "To be confirmed"). Delete the AGENT comments when done; no double braces may remain.
+  Do not write an HTML comment inside another comment: the first closing arrow ends it and the rest prints on page 1.
+  Colours: set the CSS variables below from the brand (hex), then name the swatches (--c1 to --c6 are the raw brand colours, in the order of the six swatches; --primary, --secondary, --tertiary are the colours used for buttons and accent shapes). The page background variables
+  (--bg, --fg, --card, --card-2, --muted) follow the brand's DEFAULT theme: a dark brand maps its darkest colour to --bg
+  and a light one maps its lightest. The --alt-* variables are the other theme (used by the alternate-theme mock-up
+  slide; delete that slide if the brand has only one theme, which is the default: do not invent a dark or light theme the client did not ask for).
+  Cover headline: two short lines (about 24 characters each at this size); long lines overflow the slide.
+  Paths are relative to moodboard/: ../assets/fonts/fonts.css, ../logo-pack/..., ../assets/images/...
+  Fonts: only link fonts.css if the font files exist locally (self-hosted); otherwise leave the link out and the
+  named fallback stacks in --head, --body and --mono are used, and the type slide says so.
+-->
+<html lang="{{LANG}}">
+<head>
+<meta charset="utf-8">
+<title>{{CLIENT_NAME}} mood board</title>
+<!-- AGENT: add a stylesheet link to ../assets/fonts/fonts.css here only if the fonts are downloaded and self-hosted -->
+<style>
+@page { size: 1280px 720px; margin: 0; }
+:root{
+  /* brand colours */
+  --c1:{{HEX_1}};--c2:{{HEX_2}};--c3:{{HEX_3}};--c4:{{HEX_4}};--c5:{{HEX_5}};--c6:{{HEX_6}};
+  /* button and accent colours, also used as TEXT on the default background: each must pass AA there (use a deeper partner if the raw brand colour fails) */
+  --primary:{{PRIMARY_HEX}};--secondary:{{SECONDARY_HEX}};--tertiary:{{TERTIARY_HEX}};
+  /* accent colours that pass AA as TEXT (measured with tools/contrast.mjs): --accent on the default background, --accent-alt and --secondary-alt on the alternate one */
+  --accent:{{ACCENT_TEXT_HEX}};--accent-alt:{{ACCENT_ALT_HEX}};--secondary-alt:{{SECONDARY_ALT_HEX}};
+  /* default theme */
+  --bg:{{BG_HEX}};--fg:{{FG_HEX}};--card:{{CARD_HEX}};--card-2:{{CARD2_HEX}};--muted:{{MUTED_HEX}};--line:{{LINE_HEX}};--on-primary:{{ON_PRIMARY_HEX}};
+  /* alternate theme */
+  --alt-bg:{{ALT_BG_HEX}};--alt-fg:{{ALT_FG_HEX}};--alt-card:{{ALT_CARD_HEX}};--alt-muted:{{ALT_MUTED_HEX}};--alt-line:{{ALT_LINE_HEX}};
+  --head:"{{HEADING_FONT}}",{{HEADING_FALLBACK}};--body:"{{BODY_FONT}}",{{BODY_FALLBACK}};--mono:"{{MONO_FONT}}",ui-monospace,Menlo,monospace}
+*{box-sizing:border-box;margin:0;padding:0}
+html{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+body{background:var(--bg);color:var(--fg);font-family:var(--body);font-size:17px;line-height:1.45}
+.page{width:1280px;height:720px;position:relative;overflow:hidden;break-after:page;page-break-after:always;padding:56px 64px;background:var(--bg)}
+.page--alt{background:var(--alt-bg);color:var(--alt-fg)}
+.kicker{font-family:var(--mono);font-weight:500;font-size:13px;letter-spacing:.2em;text-transform:uppercase;color:var(--accent)}
+.page--alt .kicker{color:var(--accent-alt)}
+h1,h2,h3{font-family:var(--head);font-weight:800;text-transform:{{HEADING_CASE}};line-height:.98;letter-spacing:.01em}
+h2{font-size:60px;margin:8px 0 24px}h3{font-size:28px;margin-bottom:8px}
+p{max-width:62ch}.mono{font-family:var(--mono);font-weight:500}
+.foot{position:absolute;left:64px;right:64px;bottom:26px;display:flex;justify-content:space-between;font-family:var(--mono);font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted)}
+.page--alt .foot{color:var(--alt-muted)}
+.cols{display:grid;gap:28px}.c2{grid-template-columns:1fr 1fr}.c3{grid-template-columns:repeat(3,1fr)}.c4{grid-template-columns:repeat(4,1fr)}
+.card{background:var(--card);border-radius:14px;padding:22px}.page--alt .card{background:var(--alt-card)}
+.pill{display:inline-block;font-family:var(--mono);font-weight:500;font-size:13px;letter-spacing:.1em;text-transform:uppercase;padding:6px 12px;border-radius:999px;border:1.5px solid currentColor;margin:0 8px 8px 0}
+.bleed{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+img{display:block}
+.tag{display:inline-block;font-family:var(--mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;padding:2px 8px;border-radius:6px;background:#ffe9a8;color:#1a1a1a;vertical-align:middle}
+.cover h1{font-size:104px;margin:14px 0 18px}.cover h1 span{color:var(--accent)}
+.scrim{position:absolute;inset:0;background:linear-gradient(90deg,var(--bg) 8%,color-mix(in srgb,var(--bg) 55%,transparent) 55%,transparent)}
+.front{position:relative}
+.sw{border-radius:14px;overflow:hidden;background:var(--card)}
+.sw__chip{box-shadow:inset 0 0 0 1px rgba(0,0,0,.1);height:150px;display:flex;align-items:flex-end;padding:14px;font-family:var(--head);font-weight:800;font-size:30px;text-transform:{{HEADING_CASE}}}
+.sw__meta{padding:12px 14px;font-family:var(--mono);font-size:12px;line-height:1.6;color:var(--muted)}
+ul.plain{list-style:none}ul.plain li{padding:7px 0;border-bottom:1px solid var(--line)}
+.page--alt ul.plain li{border-color:var(--alt-line)}
+.spec{font-size:112px;line-height:.95;white-space:nowrap}
+.btn{display:inline-block;font-family:var(--head);font-weight:700;text-transform:{{HEADING_CASE}};letter-spacing:.05em;font-size:22px;padding:12px 26px;border-radius:{{BUTTON_RADIUS}}}
+.btn--p{background:var(--primary);color:var(--on-primary)}
+.btn--s{border:2px solid var(--secondary);color:var(--secondary)}
+.page--alt .btn--p{background:var(--accent-alt);color:var(--alt-bg)}.page--alt .btn--s{border-color:var(--secondary-alt);color:var(--secondary-alt)}
+.field{background:var(--card-2);border:1.5px solid var(--line);border-radius:10px;padding:12px 14px;color:var(--muted);font-size:15px}
+.page--alt .field{background:#fff;border-color:var(--alt-line);color:var(--alt-muted)}
+.mini{border-radius:14px;overflow:hidden;position:relative;border:1px solid var(--line);height:560px;margin-top:12px}
+.mini .card{padding:16px}.mini .field{padding:9px 12px}
+.cp{display:grid;grid-template-columns:auto 1fr auto;gap:8px 14px;align-items:center;font-family:var(--mono);font-size:13px}
+.dot{width:28px;height:28px;border-radius:6px;display:grid;place-items:center;font-weight:700;font-size:14px;font-family:var(--head)}
+.pass{color:var(--secondary)}.warn{color:#d98b00}.fail{color:#e0502f}
+.page--alt .pass{color:var(--secondary-alt)}
+</style>
+</head>
+<body>
+
+<!-- 1 COVER -->
+<section class="page cover" style="padding:0">
+  <!-- AGENT: use a supplied hero photo only if it is good enough (large, on-brief). Generic or low-resolution stock must NOT be used as the cover: delete the img and the scrim for a plain brand-colour cover. -->
+  <img class="bleed" src="{{COVER_IMAGE}}" alt="">
+  <div class="scrim"></div>
+  <div class="front" style="padding:56px 64px">
+    <img src="{{LOGO_ON_BG}}" width="300" alt="{{CLIENT_NAME}}">
+    <div style="margin-top:140px"><span class="kicker">Brand &amp; web mood board · {{VERSION_DATE}}</span>
+    <h1>{{COVER_HEADLINE_LINE_1}}<br><span>{{COVER_HEADLINE_LINE_2}}</span></h1>
+    <p class="mono" style="font-size:14px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted)">{{PREPARED_BY}} · {{CLIENT_SECTOR_AND_PLACE}}</p></div>
+  </div>
+</section>
+
+<!-- 2 BRAND IDEA -->
+<section class="page">
+  <span class="kicker">01 · Brand idea</span>
+  <h2>{{BRAND_IDEA_HEADLINE}}</h2>
+  <div class="cols c2" style="gap:56px">
+    <div>
+      <p>{{BRAND_STORY_FROM_CLIENT_MATERIAL}}</p>
+      <p style="margin-top:16px">{{LOGO_RATIONALE}}</p>
+      <div style="margin-top:28px"><!-- AGENT: the client's own personality words, one pill each -->
+        <span class="pill" style="color:var(--primary)">{{WORD_1}}</span><span class="pill" style="color:var(--secondary)">{{WORD_2}}</span><span class="pill" style="color:var(--tertiary)">{{WORD_3}}</span><span class="pill" style="color:var(--muted)">{{WORD_4}}</span>
+      </div>
+    </div>
+    <div class="cols c2" style="gap:20px">
+      <div class="card"><h3 style="color:var(--secondary)">We are</h3><ul class="plain"><li>{{ARE_1}}</li><li>{{ARE_2}}</li><li>{{ARE_3}}</li><li>{{ARE_4}}</li></ul></div>
+      <div class="card"><h3 style="color:var(--primary)">We are not</h3><ul class="plain"><li>{{NOT_1}}</li><li>{{NOT_2}}</li><li>{{NOT_3}}</li><li>{{NOT_4}}</li></ul></div>
+    </div>
+  </div>
+  <div class="foot"><span>{{CLIENT_NAME}}</span><span>{{PREPARED_BY}} · 02</span></div>
+</section>
+
+<!-- 3 COLOUR -->
+<section class="page">
+  <span class="kicker">02 · Colour</span>
+  <h2>{{COLOUR_HEADLINE}}</h2>
+  <!-- AGENT: one swatch per brand colour (6 columns; use fewer/more with grid-template-columns). Text colour on the chip = whichever of --bg / --fg passes AA on it.
+       hex and OKLCH from `node tools/contrast.mjs --palette ...`. Mark any colour the client did not specify with a [confirm] tag. -->
+  <div class="cols" style="grid-template-columns:repeat(6,1fr);gap:16px">
+    <div class="sw"><div class="sw__chip" style="background:var(--c1);color:{{CHIP_TEXT_1}}">{{NAME_1}}</div><div class="sw__meta">{{HEX_1}}<br>{{OKLCH_1}}<br>{{ROLE_1}}</div></div>
+    <div class="sw"><div class="sw__chip" style="background:var(--c2);color:{{CHIP_TEXT_2}}">{{NAME_2}}</div><div class="sw__meta">{{HEX_2}}<br>{{OKLCH_2}}<br>{{ROLE_2}}</div></div>
+    <div class="sw"><div class="sw__chip" style="background:var(--c3);color:{{CHIP_TEXT_3}}">{{NAME_3}}</div><div class="sw__meta">{{HEX_3}}<br>{{OKLCH_3}}<br>{{ROLE_3}}</div></div>
+    <div class="sw"><div class="sw__chip" style="background:var(--c4);color:{{CHIP_TEXT_4}}">{{NAME_4}}</div><div class="sw__meta">{{HEX_4}}<br>{{OKLCH_4}}<br>{{ROLE_4}}</div></div>
+    <div class="sw"><div class="sw__chip" style="background:var(--c5);color:{{CHIP_TEXT_5}}">{{NAME_5}}</div><div class="sw__meta">{{HEX_5}}<br>{{OKLCH_5}}<br>{{ROLE_5}}</div></div>
+    <div class="sw"><div class="sw__chip" style="background:var(--c6);color:{{CHIP_TEXT_6}}">{{NAME_6}}</div><div class="sw__meta">{{HEX_6}}<br>{{OKLCH_6}}<br>{{ROLE_6}}</div></div>
+  </div>
+  <div class="cols c2" style="margin-top:30px">
+    <div><span class="mono" style="font-size:12px;letter-spacing:.16em;color:var(--muted)">PROPORTION</span>
+      <!-- AGENT: a bar of five of the brand colours in the proportion the brand guidelines imply (percentages must total 100) -->
+      <div style="display:flex;height:46px;border-radius:10px;overflow:hidden;margin-top:6px;box-shadow:inset 0 0 0 1px var(--line)"><span style="width:{{BAR_PCT_1}}%;background:var(--c1)"></span><span style="width:{{BAR_PCT_2}}%;background:var(--c2)"></span><span style="width:{{BAR_PCT_3}}%;background:var(--c3)"></span><span style="width:{{BAR_PCT_4}}%;background:var(--c4)"></span><span style="width:{{BAR_PCT_5}}%;background:var(--c5)"></span></div></div>
+    <div><span class="mono" style="font-size:12px;letter-spacing:.16em;color:var(--muted)">RULES</span><p style="font-size:15px;margin-top:6px">{{COLOUR_RULES}}</p></div>
+  </div>
+  <div class="foot"><span>{{CLIENT_NAME}}</span><span>{{PREPARED_BY}} · 03</span></div>
+</section>
+
+<!-- 4 TYPOGRAPHY -->
+<section class="page">
+  <span class="kicker">03 · Typography · self-hosted</span>
+  <div class="cols" style="grid-template-columns:1.25fr 1fr;gap:48px;margin-top:26px">
+    <div>
+      <div class="mono" style="font-size:12px;letter-spacing:.16em;color:var(--muted)">HEADINGS · {{HEADING_FONT}} {{HEADING_WEIGHTS}}</div>
+      <div class="spec" style="font-family:var(--head);font-weight:800;color:var(--primary)">Aa Bb 123</div>
+      <div style="font-family:var(--head);font-weight:800;font-size:46px;line-height:1.05">{{HEADING_SAMPLE}}</div>
+      <div class="mono" style="font-size:12px;letter-spacing:.16em;color:var(--muted);margin-top:22px">BODY · {{BODY_FONT}} {{BODY_WEIGHTS}}</div>
+      <p style="font-size:20px;margin-top:6px">{{BODY_SAMPLE}}</p>
+      <!-- AGENT: delete the mono block if the brand has no third font -->
+      <div class="mono" style="font-size:12px;letter-spacing:.16em;color:var(--muted);margin-top:18px">ACCENT · {{MONO_FONT}}</div>
+      <div class="mono" style="font-size:20px;margin-top:4px;color:var(--secondary)">{{MONO_SAMPLE}}</div>
+    </div>
+    <div class="card" style="align-self:start"><h3>Rules</h3>
+      <ul class="plain" style="font-size:15.5px">
+        <li><b>Self-hosted only.</b> woff2 in <span class="mono">/fonts</span> per docs/fonts.md; no third-party font requests.</li>
+        <li><b>Status:</b> {{FONT_STATUS}}</li>
+        <li>{{TYPE_RULE_1}}</li><li>{{TYPE_RULE_2}}</li>
+        <li>Fallbacks: {{FALLBACK_STACK}}</li>
+      </ul></div>
+  </div>
+  <div class="foot"><span>{{FONT_LICENCE_NOTE}}</span><span>{{PREPARED_BY}} · 04</span></div>
+</section>
+
+<!-- 5 LOGO AND ICONS -->
+<section class="page">
+  <span class="kicker">04 · Logo and icons</span>
+  <h2 style="margin-bottom:18px">{{LOGO_HEADLINE}}</h2>
+  <!-- AGENT: supplied logos on their backgrounds, then the generated icon set (favicon, apple-touch, maskable). State which logo was redrawn as SVG and the measured difference from the supplied PNG. -->
+  <div class="cols" style="grid-template-columns:1.2fr 1fr 1fr;gap:20px">
+    <div class="card" style="display:grid;place-items:center;height:210px;background:var(--bg);border:1px solid var(--line)"><img src="{{LOGO_ON_BG}}" width="320" alt="Logo on the default background"></div>
+    <div class="card" style="display:grid;place-items:center;height:210px;background:var(--alt-bg)"><img src="{{LOGO_ON_ALT}}" width="190" alt="Logo on the alternate background"></div>
+    <div class="card" style="display:grid;place-items:center;height:210px;background:var(--primary)"><img src="{{LOGO_MONO}}" width="190" alt="Logo in one colour on the primary colour"></div>
+  </div>
+  <div class="cols c4" style="margin-top:20px;gap:20px">
+    <div class="card" style="display:grid;place-items:center;height:130px"><img src="{{MARK}}" width="86" alt="Mark"></div>
+    <div class="card" style="display:grid;place-items:center;height:130px;grid-auto-flow:column;gap:14px"><img src="../logo-pack/favicon/icon-192.png" width="72" height="72" alt="App icon"><img src="../logo-pack/favicon/apple-touch-icon.png" width="72" height="72" alt="Apple touch icon"></div>
+    <div class="card" style="display:grid;place-items:center;height:130px"><img src="../logo-pack/favicon/icon-maskable-512.png" width="86" height="86" style="border-radius:50%" alt="Maskable icon in a circle"></div>
+    <div class="card" style="display:grid;place-items:center;height:130px;grid-auto-flow:column;gap:14px"><img src="../logo-pack/favicon/icon-192.png" width="32" height="32" alt="Favicon at 32px"><img src="../logo-pack/favicon/icon-192.png" width="16" height="16" alt="Favicon at 16px"></div>
+  </div>
+  <p style="margin-top:14px;font-size:14.5px;color:var(--muted);max-width:none">{{LOGO_RULES}} Icon set: <span class="mono">favicon.ico</span>, apple-touch, 192/512, maskable (background {{ICON_BG_HEX}}). {{LOGO_NOTES_AND_GAPS}}</p>
+  <div class="foot"><span>Logo pack: /logo-pack</span><span>{{PREPARED_BY}} · 05</span></div>
+</section>
+
+<!-- 6 IMAGERY -->
+<section class="page">
+  <span class="kicker">05 · Imagery &amp; art direction</span>
+  <div class="cols" style="grid-template-columns:1.5fr 1fr;gap:28px;margin-top:8px">
+    <!-- AGENT: the best supplied photo. If photos are low-resolution or generic stock, say so in the caption: they are placeholders only. -->
+    <div style="position:relative;border-radius:14px;overflow:hidden;height:560px"><img src="{{IMAGERY_IMAGE}}" alt="{{IMAGERY_ALT}}" style="width:100%;height:100%;object-fit:cover"><div style="position:absolute;inset:auto 0 0 0;padding:18px 22px;background:linear-gradient(0deg,rgba(0,0,0,.8),transparent);font-family:var(--mono);font-size:12px;letter-spacing:.12em;color:#fff">{{IMAGERY_CAPTION}}</div></div>
+    <div style="display:grid;gap:16px;align-content:start">
+      <h2 style="font-size:46px;margin:0">{{IMAGERY_HEADLINE}}</h2>
+      <ul class="plain" style="font-size:15.5px">
+        <li><b>Light and mood:</b> {{IMG_LIGHT}}</li><li><b>Subjects:</b> {{IMG_SUBJECTS}}</li>
+        <li><b>Framing:</b> {{IMG_FRAMING}}</li><li><b>Avoid:</b> {{IMG_AVOID}}</li>
+        <li><b>Status:</b> {{IMG_STATUS}}</li>
+      </ul>
+    </div>
+  </div>
+  <div class="foot"><span>Shot list in the brief</span><span>{{PREPARED_BY}} · 06</span></div>
+</section>
+
+<!-- 7 INTERFACE MOCK-UP (default theme) -->
+<section class="page">
+  <span class="kicker">06 · Interface mood · {{DEFAULT_THEME_NAME}} theme</span>
+  <div class="mini" style="background:var(--bg)">
+    <!-- AGENT: a simplified home page: header with logo and nav, hero with the real headline, two buttons, three cards using the real service names, a form. No invented facts. -->
+    <div style="display:flex;justify-content:space-between;align-items:center;padding:18px 30px"><img src="{{LOGO_ON_BG}}" width="190" alt=""><div class="mono" style="font-size:13px;letter-spacing:.12em;display:flex;gap:26px;align-items:center"><span>{{NAV_1}}</span><span>{{NAV_2}}</span><span>{{NAV_3}}</span><span class="btn btn--p" style="font-size:17px;padding:8px 18px">{{CTA_LABEL}}</span></div></div>
+    <div style="padding:10px 30px"><h2 style="font-size:54px;margin:0 0 14px">{{HERO_LINE_1}}<br><span style="color:var(--accent)">{{HERO_LINE_2}}</span></h2><span class="btn btn--p">{{CTA_LABEL}}</span> &nbsp;<span class="btn btn--s">{{CTA_2_LABEL}}</span></div>
+    <div style="padding:14px 30px;display:grid;grid-template-columns:1fr 1fr 1fr 1.1fr;gap:18px">
+      <div class="card"><span class="tag">{{TAG_1}}</span><h3 style="margin-top:10px;font-size:26px">{{CARD_1}}</h3></div>
+      <div class="card"><span class="tag">{{TAG_2}}</span><h3 style="margin-top:10px;font-size:26px">{{CARD_2}}</h3></div>
+      <div class="card"><span class="tag">{{TAG_3}}</span><h3 style="margin-top:10px;font-size:26px">{{CARD_3}}</h3></div>
+      <div class="card" style="display:grid;gap:10px"><div class="field">{{FIELD_1}}</div><div class="field">{{FIELD_2}}</div><span class="btn btn--p" style="text-align:center">{{FORM_BUTTON}}</span></div>
+    </div>
+  </div>
+  <div class="foot"><span>Illustrative only · final layout follows the build</span><span>{{PREPARED_BY}} · 07</span></div>
+</section>
+
+<!-- 8 INTERFACE MOCK-UP (alternate theme). AGENT: delete this whole slide if the brand has one theme only. -->
+<section class="page page--alt">
+  <span class="kicker">07 · Interface mood · {{ALT_THEME_NAME}} theme</span>
+  <div class="mini" style="background:var(--alt-bg);border-color:var(--alt-line);color:var(--alt-fg)">
+    <div style="display:flex;justify-content:space-between;align-items:center;padding:18px 30px"><img src="{{LOGO_ON_ALT}}" width="190" alt=""><div class="mono" style="font-size:13px;letter-spacing:.12em;display:flex;gap:26px;align-items:center"><span>{{NAV_1}}</span><span>{{NAV_2}}</span><span>{{NAV_3}}</span><span class="btn btn--p" style="font-size:17px;padding:8px 18px">{{CTA_LABEL}}</span></div></div>
+    <div style="padding:10px 30px"><h2 style="font-size:54px;margin:0 0 14px">{{HERO_LINE_1}}<br><span style="color:var(--accent-alt)">{{HERO_LINE_2}}</span></h2><span class="btn btn--p">{{CTA_LABEL}}</span> &nbsp;<span class="btn btn--s">{{CTA_2_LABEL}}</span></div>
+    <div style="padding:14px 30px;display:grid;grid-template-columns:1fr 1fr 1fr 1.1fr;gap:18px">
+      <div class="card"><span class="tag">{{TAG_1}}</span><h3 style="margin-top:10px;font-size:26px">{{CARD_1}}</h3></div>
+      <div class="card"><span class="tag">{{TAG_2}}</span><h3 style="margin-top:10px;font-size:26px">{{CARD_2}}</h3></div>
+      <div class="card"><span class="tag">{{TAG_3}}</span><h3 style="margin-top:10px;font-size:26px">{{CARD_3}}</h3></div>
+      <div class="card" style="display:grid;gap:10px"><div class="field">{{FIELD_1}}</div><div class="field">{{FIELD_2}}</div><span class="btn btn--p" style="text-align:center">{{FORM_BUTTON}}</span></div>
+    </div>
+  </div>
+  <div class="foot"><span>Designed, not inverted: accents change to hold contrast</span><span>{{PREPARED_BY}} · 08</span></div>
+</section>
+
+<!-- 9 CONTRAST AND ACCESSIBILITY -->
+<section class="page">
+  <span class="kicker">08 · Contrast, motion &amp; shape</span>
+  <div class="cols c2" style="gap:48px;margin-top:6px">
+    <div>
+      <h3>Contrast (WCAG ratios, measured)</h3>
+      <!-- AGENT: one row per pair the site really uses, from `node tools/contrast.mjs`. Classes: pass (>=4.5), warn (3 to 4.5: large text and graphics only), fail (<3). Swatch = the pair itself. Mark any brand colour that fails for text with a [confirm] tag and name the proposed deeper partner. -->
+      <div class="cp">
+        <span class="dot" style="background:{{BG_A}};color:{{FG_A}}">Aa</span><span>{{PAIR_A}}</span><span class="pass">{{RATIO_A}} {{RATING_A}}</span>
+        <span class="dot" style="background:{{BG_B}};color:{{FG_B}}">Aa</span><span>{{PAIR_B}}</span><span class="warn">{{RATIO_B}} {{RATING_B}}</span>
+      </div>
+    </div>
+    <div style="display:grid;gap:22px;align-content:start">
+      <div><h3>Motion</h3><p style="font-size:16px">{{MOTION_PERSONALITY}} Movement only under <span class="mono">prefers-reduced-motion: no-preference</span>; with reduced motion, content simply appears.</p></div>
+      <div><h3>Shape &amp; icons</h3><p style="font-size:16px">{{SHAPE_NOTES}}</p></div>
+      <div><h3>Voice samples</h3><p style="font-size:16px">{{VOICE_SAMPLES}}</p></div>
+    </div>
+  </div>
+  <div class="foot"><span>Ratios calculated from the final hex values</span><span>{{PREPARED_BY}} · 09</span></div>
+</section>
+
+<!-- 10 DECISIONS NEEDED -->
+<section class="page">
+  <span class="kicker">09 · Decisions needed</span>
+  <h2>{{DECISIONS_HEADLINE}}</h2>
+  <!-- AGENT: the top contradictions, brand-colour fails, fonts, photography and legal checks that block the build, copied (shortened) from open-questions.md. Each with the working assumption used. -->
+  <div class="cols c2" style="gap:36px">
+    <div class="card"><h3 style="color:var(--primary)">Please confirm</h3><ul class="plain" style="font-size:15.5px"><li>{{DECISION_1}}</li><li>{{DECISION_2}}</li><li>{{DECISION_3}}</li><li>{{DECISION_4}}</li></ul></div>
+    <div class="card"><h3 style="color:var(--secondary)">Still to supply</h3><ul class="plain" style="font-size:15.5px"><li>{{SUPPLY_1}}</li><li>{{SUPPLY_2}}</li><li>{{SUPPLY_3}}</li><li>{{SUPPLY_4}}</li></ul></div>
+  </div>
+  <div class="foot"><span>Full list: open-questions.md</span><span>{{PREPARED_BY}} · 10</span></div>
+</section>
+
+</body>
+</html>

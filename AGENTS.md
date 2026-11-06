@@ -8,6 +8,7 @@ Static HTML + CSS sites, built and maintained by AI agents and edited by hand in
 |---|---|
 | Which token do I use? | [TOKENS.md](TOKENS.md) |
 | Which component exists? | [COMPONENTS.md](COMPONENTS.md) (live gallery: `components.html`) |
+| **Before the build:** client zips + PDFs -> brief, mood board, content JSON, icons, open questions (skill `new-site-plan`) | [docs/site-plan.md](docs/site-plan.md) |
 | Brand and design guide page for the site (template + skill) | [docs/brand-guide.md](docs/brand-guide.md) |
 | Semantics + accessibility rules and patterns | [docs/accessibility.md](docs/accessibility.md) |
 | Motion, `prefers-reduced-motion`, **GSAP effects (use <https://gsap.brxprod.com/> first)** | [docs/motion.md](docs/motion.md) |
@@ -89,7 +90,7 @@ _template.html                  source of the shared header/footer and the defau
 docs/                           guides (accessibility, motion, SEO, images, data-driven pages, workflows, fonts, vendor …)
 themes/*.css                    starting presets: copy one over public/css/theme.css
 templates/                      page templates that are filled and copied into public/ (brand-guide.template.html); never published
-tools/                          check.mjs, sync-shared.mjs, serve.mjs, build-sitemap.mjs, build-dist.mjs, check-dist.mjs, bundle-css.mjs, make-image-sizes.mjs, make-favicons.mjs, browser-checks.mjs
+tools/                          check.mjs, sync-shared.mjs, serve.mjs, build-sitemap.mjs, build-dist.mjs, check-dist.mjs, bundle-css.mjs, make-image-sizes.mjs, make-favicons.mjs, unpack-site-plan.mjs, contrast.mjs, md-to-brief-html.mjs, browser-checks.mjs
 .claude/ .vscode/ .editorconfig .gitignore
 
 public/                         the ONLY deployed folder; files are served exactly as written (no build step)
@@ -181,6 +182,9 @@ node tools/build-dist.mjs         # production: copy public/ -> dist/ with ONE m
 node tools/check-dist.mjs         # verify dist/: no @import, every url() resolves (build-dist runs it)
 node tools/make-image-sizes.mjs public/images/x.jpg --delete-original   # convert to WebP + interim sizes for srcset (file or folder; needs magick or cwebp)
 node tools/make-favicons.mjs [icon.svg|png] --bg "#fff"   # favicon.ico, apple-touch-icon, icon-192/512, maskable, manifest icons from one icon (needs magick); skill: generate-icons
+node tools/unpack-site-plan.mjs [folder]   # new-site-plan: safe unzip + PDF to text into site-plan/source/ (needs unzip, pdftotext)
+node tools/contrast.mjs --palette Name=#hex ... --md   # WCAG contrast matrix + OKLCH for brand colours; --suggest finds a text-safe partner
+node tools/md-to-brief-html.mjs brief.md --out brief.html   # brief.md -> print-ready HTML with a branded cover (print to PDF with Chrome)
 node tools/bundle-css.mjs [--min] # building block: public/css/main.css -> public/css/main.bundle.css (git-ignored)
 ```
 

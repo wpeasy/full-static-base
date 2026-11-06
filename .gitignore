@@ -6,3 +6,8 @@ public/css/main.bundle.css
 .wrangler/
 dist/
 dist-pages/
+
+# new-site-plan: the client's raw material (untrusted, may be large or confidential)
+site-plan/source/
+site-plan/*.zip
+site-plan/*.pdf

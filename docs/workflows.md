@@ -2,10 +2,14 @@
 
 Each workflow assumes you've read `AGENTS.md`. The Claude skills in `.claude/skills/` are thin pointers to these sections so Claude and Codex follow the same steps.
 
+## Site plan (before New site)
+
+When the client has supplied raw material (zips of assets, PDFs of answers) instead of a ready brief, run the `new-site-plan` skill first: it produces the brief, mood board, content JSON, icon set and open questions that step 1 of **New site** needs. Procedure, tools and rules: [site-plan.md](site-plan.md). Skip it when a finished brief already exists.
+
 ## New site
 
 0. **First build?** If `FIRST-BUILD.md` exists at the repo root, follow it now: it removes the sample pages from `public/` and deletes itself. Skip this step when the file is absent.
-1. Gather the brief: audience, brand colours/fonts (if any), tone, pages, content, imagery, required features.
+1. Gather the brief: audience, brand colours/fonts (if any), tone, pages, content, imagery, required features (from a site plan pack if one was made: `site-plan/brief.md`, `moodboard/`, `assets/content/`, `open-questions.md`).
 2. Pick a starting preset from `themes/` closest to the tone and copy it over `public/css/theme.css`; then tune brand colours (OKLCH), fonts, `--text-*` and `--space-*` sizes/ratios, `--radius-scale`, heading styles and component roles. Self-host fonts (`docs/fonts.md`).
 3. Open `index.html` (style guide) in both themes; fix anything that looks wrong at the theme level before building pages. Check contrast of brand colours (the `-a11y` pairs adapt automatically).
 4. Plan the sitemap; list each page's sections and the component per section; note gaps (AGENTS.md section 1 says how to fill them).
